@@ -1,0 +1,43 @@
+version: '3.5'
+
+services: 
+  iris:
+    build: 
+      context: .
+    hostname: iris
+    ports:
+    - 61773:51773
+    - 62773:52773
+    environment:
+    - TZ=JST-9
+    networks:
+    - iris-tier
+    volumes:
+    - /host_mnt/c/Users/iwamoto/git/iris-unixodbc/ext:/opt/iris/ext
+
+  postgres:
+    image: postgres:12.2-alpine
+    container_name: postgres
+    hostname: postgres
+    ports: 
+    - "5432:5432"
+    environment:
+    - TZ=JST-9
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    - PGPASSWORD=postgres
+    - POSTGRES_DB=demo
+    - DATABASE_HOST=localhost
+    networks:
+    - iris-tier
+    volumes:
+    - /host_mnt/c/Users/iwamoto/git/iris-unixodbc/db/init:/docker-entrypoint-initdb.d    
+    
+networks:
+  iris-tier:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.0.1.0/24
+      

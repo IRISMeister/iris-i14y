@@ -1,0 +1,40 @@
+/// SQL InboundAdapterは、各行に対してOnProcessInput()をコールする。
+/// 例えば一度のPollingの際のSELECT実行の結果が3行あれば、OnProcessInput()が3回コールされる。
+/// また、明示的にPollingの終了時に呼ばれるコールバック関数は無い。
+/// そのため、複数のテーブル行を、1つのCSVファイルにまとめるような処理を実行するには
+/// 本実装で示すような、仕組みが必要になる。
+Class Demo.Service.SQL2CSV Extends Ens.BusinessService [ Language = objectscript ]
+{
+
+Parameter ADAPTER = "EnsLib.SQL.InboundAdapter";
+
+Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %RegisteredObject) As %Status
+{
+	Set tSC=$$$OK
+	Try {
+	#; トリガテーブルからSELECT(１行分)したseq値を元に、取得対象のテーブルからレコード群をSELECTする
+	Set seq=pInput.Get("seq")
+	Do ..Adapter.ExecuteQuery(.tRS,"select * from jisseki where seq=? order by orderid",seq)
+	If tRS.%SQLCODE<0 {
+		$$$LOGERROR("SQL Failed : seq:"_seq_" SQLCODE:"_tRS.%SQLCODE)
+	}
+	Set header=##class(Demo.Req.JissekiHeader).%New()
+	While(tRS.Next()) {
+		Set record=##class(Demo.Req.Jisseki).%New()
+		Set record.orderid=tRS.Get("orderid")
+		Set record.data1=tRS.Get("data1")
+		Set record.data2=tRS.Get("data2")
+		Set record.csvseq=header
+		Set tSC=record.%Save()
+		$$$ThrowOnError(tSC)
+		$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2)
+	}
+	}
+	Catch e {
+		Set tSC=e.AsStatus()
+	}
+	
+	Return tSC
+}
+
+}

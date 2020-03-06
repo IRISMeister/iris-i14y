@@ -1,0 +1,46 @@
+ROUTINE init
+#include EnsConstants  
+#include %occStatus
+ w "Stopping production",!
+ W ##class(Ens.Director).StopProduction(100,1),! //wait 100secs, force to stop
+ Do ##class(Ens.Director).GetProductionStatus(.p1,.p2) 
+ If p2=$$$eProductionStateSuspended  {
+	 W "Production suspended, not stopped.",!
+	 Do DumpQueue
+	 Do ##class(Ens.Director).CleanProduction()
+ }
+ Do Cleanup
+ 
+ h 5
+ 
+ ;W !,"Not restarting",! Quit
+ Do ##class(Ens.Director).StartProduction("Demo.Production")
+ Quit
+
+Cleanup
+
+ ;Kill ^MyTask.NewClass
+ Do ##class(Demo.Req.Jisseki).%KillExtent()
+ Do ##class(Demo.Req.JissekiHeader).%KillExtent()
+
+ &SQL(delete FROM Ens_Alerting.ManagedAlert)
+ &SQL(delete FROM EnsLib_Workflow.Worklist)
+ Do ##class(Ens.Purge).KillGlobals(,,,1)   // for debug/dev environment only!!
+ k ^Ens.AppData
+ 
+ Quit
+
+DumpQueue
+		Set tRS = ##class(%ResultSet).%New("Ens.Queue:Enumerate")
+		Do tRS.Execute()
+		Set i=0  While tRS.Next(.tSC) && $$$ISOK(tSC) {
+			w tRS.Data("Name")," ",tRS.Data("Count")," ",tRS.Data("Created"),!	
+		}
+
+ Quit
+
+SetupEnv() public {
+	#; Credentialを追加/変更
+	Set tSC=##class(Ens.Config.Credentials).SetCredential("ftp","iwamoto","kureyon$",1)
+	w "Set Credentials:",tSC,!	
+}
