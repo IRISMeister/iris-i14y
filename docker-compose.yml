@@ -13,7 +13,7 @@ services:
     networks:
     - iris-tier
     volumes:
-    - /host_mnt/c/Users/iwamoto/git/iris-unixodbc/ext:/opt/iris/ext
+    - /host_mnt/c/Users/iwamoto/git/iris-interoperability/ext:/opt/iris/ext
 
   postgres:
     image: postgres:12.2-alpine
@@ -31,7 +31,7 @@ services:
     networks:
     - iris-tier
     volumes:
-    - /host_mnt/c/Users/iwamoto/git/iris-unixodbc/db/init:/docker-entrypoint-initdb.d    
+    - /host_mnt/c/Users/iwamoto/git/iris-interoperability/db/init:/docker-entrypoint-initdb.d    
     
 networks:
   iris-tier:
