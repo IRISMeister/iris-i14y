@@ -32,7 +32,12 @@ services:
     - iris-tier
     volumes:
     - /host_mnt/c/Users/iwamoto/git/iris-i14y/db/init:/docker-entrypoint-initdb.d    
+
+    # how to run sftp
+    # https://qiita.com/teruo-oshida/items/502e0202ac66cd7433f4
+    # https://qiita.com/nononote/items/97905699bea0d9092b0f
     
+
 networks:
   iris-tier:
     driver: bridge

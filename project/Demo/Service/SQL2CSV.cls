@@ -12,23 +12,33 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 {
 	Set tSC=$$$OK
 	Try {
-	#; トリガテーブルからSELECT(１行分)したseq値を元に、取得対象のテーブルからレコード群をSELECTする
-	Set seq=pInput.Get("seq")
-	Do ..Adapter.ExecuteQuery(.tRS,"select * from jisseki where seq=? order by orderid",seq)
-	If tRS.%SQLCODE<0 {
-		$$$LOGERROR("SQL Failed : seq:"_seq_" SQLCODE:"_tRS.%SQLCODE)
-	}
-	Set header=##class(Demo.Req.JissekiHeader).%New()
-	While(tRS.Next()) {
-		Set record=##class(Demo.Req.Jisseki).%New()
-		Set record.orderid=tRS.Get("orderid")
-		Set record.data1=tRS.Get("data1")
-		Set record.data2=tRS.Get("data2")
-		Set record.csvseq=header
-		Set tSC=record.%Save()
+		#; トリガテーブルからSELECT(１行分)したseq値を元に、取得対象のテーブルからレコード群をSELECTする
+		Set seq=pInput.Get("seq")
+		Do ..Adapter.ExecuteQuery(.tRS,"select * from report where seq=? order by orderid",seq)
+		If tRS.%SQLCODE<0 {
+			$$$LOGERROR("SQL Failed : seq:"_seq_" SQLCODE:"_tRS.%SQLCODE)
+		}
+		
+		//Set header=##class(Demo.Req.JissekiHeader).%New()
+		Set header=##class(User.Report.Batch).%New()
+		While(tRS.Next()) {
+			//Set record=##class(Demo.Req.Jisseki).%New()
+			Set record=##class(User.Report.Record).%New()
+			Set record.orderid=tRS.Get("orderid")
+			Set record.data1=tRS.Get("data1")
+			Set record.data2=tRS.Get("data2")
+			//Set record.csvseq=header
+			Set tSC=header.Records.Insert(record)
+			//Set tSC=record.%Save()
+			//$$$ThrowOnError(tSC)
+			$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2)
+		}
+		Set tSC=header.%Save()
 		$$$ThrowOnError(tSC)
-		$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2)
-	}
+		
+		Set tSC=..SendRequestSync("FTPReport",header,.tOutput)
+		$$$ThrowOnError(tSC)
+
 	}
 	Catch e {
 		Set tSC=e.AsStatus()

@@ -9,8 +9,11 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 <ruleDefinition alias="" context="EnsLib.MsgRouter.RoutingEngine" production="Demo.Production1">
 <ruleSet name="" effectiveBegin="" effectiveEnd="">
 <rule name="" disabled="false">
-<when condition="1">
-<send transform="" target="FTPTarget1,FTPTarget2"></send>
+<when condition="Document.OriginalFilename=&quot;source1_1.txt&quot;">
+<send transform="" target="FTPTarget1"></send>
+</when>
+<when condition="Document.OriginalFilename=&quot;source1_2.txt&quot;">
+<send transform="" target="FTPTarget2"></send>
 </when>
 </rule>
 </ruleSet>
