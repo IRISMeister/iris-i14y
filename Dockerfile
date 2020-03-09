@@ -2,7 +2,7 @@ FROM store/intersystems/iris-community:2020.1.0.199.0
 
 USER root
 RUN apt -y update \
- && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql \
+ && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openssh-server \
  && apt clean
 
 COPY odbc .
