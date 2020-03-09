@@ -20,8 +20,8 @@ ROUTINE init
 Cleanup
 
  ;Kill ^MyTask.NewClass
- Do ##class(Demo.Req.Jisseki).%KillExtent()
- Do ##class(Demo.Req.JissekiHeader).%KillExtent()
+ Do ##class(User.Order.Batch).%KillExtent()
+ Do ##class(User.Order.Record).%KillExtent()
 
  &SQL(delete FROM Ens_Alerting.ManagedAlert)
  &SQL(delete FROM EnsLib_Workflow.Worklist)

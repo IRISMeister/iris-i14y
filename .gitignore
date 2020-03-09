@@ -1,2 +1,5 @@
 ext
 src
+upload/demo/out_report/*
+upload/demo/out_target1/*
+upload/demo/out_target2/*
