@@ -49,7 +49,7 @@ XData ProductionDefinition
   <Item Name="FTPSource1" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_source1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
-    <Setting Target="Adapter" Name="ArchivePath">/home/irisowner/arc</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Host" Name="TargetConfigNames">FileTransfer</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -62,7 +62,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">Postgres1</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_order</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
-    <Setting Target="Adapter" Name="ArchivePath">/home/irisowner/arc</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
@@ -73,7 +73,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">Postgres1</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_order</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
-    <Setting Target="Adapter" Name="ArchivePath">/home/irisowner/arc</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
@@ -85,7 +85,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">Postgres1</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_process</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
-    <Setting Target="Adapter" Name="ArchivePath">/home/irisowner/arc</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
@@ -96,7 +96,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">Postgres1</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_process</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
-    <Setting Target="Adapter" Name="ArchivePath">/home/irisowner/arc</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
