@@ -1,5 +1,8 @@
 ext
 src
-upload/demo/out_report/*
-upload/demo/out_target1/*
-upload/demo/out_target2/*
+upload/demo/in_order/*.txt
+upload/demo/in_process/*.txt
+upload/demo/in_source1/*.txt
+upload/demo/out_report/Report*
+upload/demo/out_target1/*txt*
+upload/demo/out_target2/*txt*
