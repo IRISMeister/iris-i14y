@@ -1,4 +1,4 @@
-FROM store/intersystems/iris-community:2020.1.0.199.0
+FROM store/intersystems/iris-community:2020.1.0.202.0
 
 USER root
 RUN apt -y update \
@@ -7,7 +7,7 @@ RUN apt -y update \
 
 COPY odbc .
 
-# register psql data source and do some work to make it work
+# register psql data source. Doing some tricks to make it work
 RUN odbcinst -i -s -l -f odbc.ini \
  && mv $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini.org \
  && cp odbc.ini $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini \
@@ -24,7 +24,7 @@ USER irisowner
 ENV SRCDIR=src
 COPY project/ $SRCDIR/
 
-#; making archive path 777 because depending on how you start your production(via SMP or command line), it uses different O/S user irisuser/irisowner.
+#; making archive path 777 because depending on how you start your production(via SMP or command line), it uses different O/S user (irisuser/irisowner).
 RUN mkdir /var/tmp/arc ; chmod 777 /var/tmp/arc \
  && iris start $ISC_PACKAGE_INSTANCENAME quietly \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") Do ##class(Security.Users).UnExpireUserPasswords("*") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \

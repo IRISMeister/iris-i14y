@@ -6,38 +6,34 @@ services:
       context: .
     hostname: iris
     ports:
-    - 61773:51773
-    - 62773:52773
+    - 51773:51773
+    - 52773:52773
     environment:
     - TZ=JST-9
     networks:
     - iris-tier
     volumes:
     - ./ext:/opt/iris/ext
-    #- /host_mnt/c/Users/iwamoto/git/iris-i14y/ext:/opt/iris/ext
+    depends_on:
+    - postgres
+    - sftp
 
   postgres:
     image: postgres:12.2-alpine
-    container_name: postgres
     hostname: postgres
     ports: 
     - "5432:5432"
     environment:
     - TZ=JST-9
-    - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=postgres
+    - POSTGRES_USER=postgres
     - PGPASSWORD=postgres
     - POSTGRES_DB=demo
     - DATABASE_HOST=localhost
     networks:
     - iris-tier
     volumes:
-    - ./db/init:/docker-entrypoint-initdb.d    
-    #- /host_mnt/c/Users/iwamoto/git/iris-i14y/db/init:/docker-entrypoint-initdb.d    
-
-    # how to run sftp
-    # https://qiita.com/teruo-oshida/items/502e0202ac66cd7433f4
-    # https://qiita.com/nononote/items/97905699bea0d9092b0f
+    - ./postgres/initdb:/docker-entrypoint-initdb.d    
     
   sftp:
     image: atmoz/sftp
