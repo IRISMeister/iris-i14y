@@ -1,9 +1,0 @@
-{
-    "configurations": [
-        {
-            "name": "Win32",
-            "intelliSenseMode": "gcc-x64"
-        }
-    ],
-    "version": 4
-}

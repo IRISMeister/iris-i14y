@@ -48,3 +48,16 @@ CREATE TABLE public.reportTarget
     data1 Integer,
     data2 Integer
 );
+
+CREATE TABLE public.report2
+(
+    seq Integer,
+    orderid Integer,
+    data1 Integer,
+    data2 Integer,
+   PRIMARY KEY (orderid)
+);
+
+INSERT INTO report2 VALUES (1,1,10,10020);
+INSERT INTO report2 VALUES (1,2,11,10021);
+INSERT INTO report2 VALUES (1,3,12,10022);

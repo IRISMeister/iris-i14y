@@ -2,12 +2,32 @@
 InterSystems IRIS, postgresql, SFTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
-## 起動方法
+## 起動前提条件
+下記のイメージ実行が成功する環境であること。
 ```bash
-$ docker-compose up -d
+$ sudo docker run hello-world
 ```
+See https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+
+## 起動方法
+git clone直後の初回起動時は、DockerイメージのPull,ビルドが発生するため、若干の時間を要します。
+```bash
+$ git clone https://github.com/IRISMeister/iris-i14y.git
+$ cd iris-i14y
+$ docker-compose up -d
+$ docker-compose ps
+        Name                      Command                  State                             Ports
+-------------------------------------------------------------------------------------------------------------------------
+iris-i14y_iris_1       /iris-main                       Up (healthy)   0.0.0.0:51773->51773/tcp, 0.0.0.0:52773->52773/tcp
+iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up             0.0.0.0:5432->5432/tcp
+iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up             0.0.0.0:2222->22/tcp
+$
+```
+以下、コンテナを起動したホストのIPをlinuxとします。  
+
 ## 管理ポータルへのアクセス
-http://コンテナを起動したホストのIP:52773/csp/sys/%25CSP.Portal.Home.zen  
+http://linux:52773/csp/sys/%25CSP.Portal.Home.zen  
 ユーザ名:SuperUser  
 パスワード:SYS
 
@@ -19,10 +39,11 @@ $ docker-compose down -v
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
-|2|in_process/process.txt|1と同様の処理を実行します。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
+|2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行します。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
 |3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。RDB上のレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
 |5|reportテーブル| Postgresに対してSELECTを定期的に実行。Postgresに対してINSERT実行。|reportTargetレコード|レコードの複製処理を行います。この仕組みは、CSV出力のように複数メッセージをまとめる必要がある処理には向いていません。|
+|6|report2テーブル| Postgresに対してSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
@@ -43,6 +64,24 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |FTPTarget1PathThrough|BO|No|EnsLib.FTP.PassthroughOperation|FTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |FTPTarget2PathThrough|BO|No|EnsLib.FTP.PassthroughOperation|FTP|O|同上|4|
 |Postgres1|BO|Yes|Demo.Operation.SQL|SQL|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
+|SQLEntireTable|BS|Yes|Demo.Service.SQLEntireTable|SQL|I|report2レコード監視、reportレコード取得|6|
+|SQLEntireTableBulk|BS|Yes|Demo.Service.SQLEntireTableBulk|SQL|I|仮想レコード監視(select 1)、report2レコード取得|6|
+
+下記URLにて閲覧可能です。  
+http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
+http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
+
+## RecordMap一覧
+
+下記のRecordMapを定義・使用しています。  
+|RecordMap名|生成クラス|生成バッチクラス|用途|使用しているビジネスホスト名|
+|:--|:--|:--|:--|:--|
+|User.Order|User.Order.Record|User.Order.Batch|ユースケース1|FTPOrderInfo,FTPOrderInfoBatch,Postgres1|
+|User.Process|User.Process.Record|User.Process.Batch|ユースケース2|FTPProcess,FTPProcessBatch,Postgres1|
+|User.Report|User.Report.Record|User.Report.Batch|ユースケース1|SQLReport,SQLReportBatch,Postgres1|
+
+下記URLにて閲覧可能です。  
+http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
 
 ## FTP Inboud処理について
 FTP Inboundアダプタは下記の入力を受け付けます。  

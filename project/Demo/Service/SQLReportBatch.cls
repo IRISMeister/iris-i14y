@@ -3,7 +3,7 @@
 /// また、明示的にPollingの終了時に呼ばれるコールバック関数は無い。
 /// そのため、複数のテーブル行を、1つのCSVファイルにまとめるような処理を実行するには
 /// 本実装で示すような、仕組みが必要になる。
-Class Demo.Service.SQL2CSV Extends Ens.BusinessService [ Language = objectscript ]
+Class Demo.Service.SQLReportBatch Extends Ens.BusinessService [ Language = objectscript ]
 {
 
 Parameter ADAPTER = "EnsLib.SQL.InboundAdapter";
@@ -19,18 +19,14 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 			$$$LOGERROR("SQL Failed : seq:"_seq_" SQLCODE:"_tRS.%SQLCODE)
 		}
 		
-		//Set header=##class(Demo.Req.JissekiHeader).%New()
 		Set header=##class(User.Report.Batch).%New()
 		While(tRS.Next()) {
-			//Set record=##class(Demo.Req.Jisseki).%New()
 			Set record=##class(User.Report.Record).%New()
 			Set record.orderid=tRS.Get("orderid")
 			Set record.data1=tRS.Get("data1")
 			Set record.data2=tRS.Get("data2")
-			//Set record.csvseq=header
 			Set tSC=header.Records.Insert(record)
-			//Set tSC=record.%Save()
-			//$$$ThrowOnError(tSC)
+			$$$ThrowOnError(tSC)
 			$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2)
 		}
 		Set tSC=header.%Save()

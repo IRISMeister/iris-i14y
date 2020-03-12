@@ -6,13 +6,13 @@ XData ProductionDefinition
 <Production Name="Demo.Production" LogGeneralTraceEvents="false">
   <Description></Description>
   <ActorPoolSize>2</ActorPoolSize>
-  <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQL" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
     <Setting Target="Adapter" Name="Query">select * from report order by orderid</Setting>
     <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
     <Setting Target="Adapter" Name="DeleteQuery">delete from report where orderid=?</Setting>
   </Item>
-  <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQL2CSV" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
+  <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
     <Setting Target="Adapter" Name="Query">select * from reportTrigger order by seq</Setting>
     <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
@@ -109,6 +109,16 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Host" Name="RecordMap">Report</Setting>
+  </Item>
+  <Item Name="SQLEntireTable" Category="" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresql</Setting>
+    <Setting Target="Adapter" Name="Query">select * from report2 order by orderid</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName"></Setting>
+  </Item>
+  <Item Name="SQLEntireTableBulk" Category="" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresql</Setting>
+    <Setting Target="Adapter" Name="Query">select 1</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName"></Setting>
   </Item>
 </Production>
 }

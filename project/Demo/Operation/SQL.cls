@@ -62,7 +62,7 @@ Method ExecProcessBatch(pRequest As User.Process.Batch, Output pResponse As Ens.
 }
 
 /// SQL->SQLの例
-Method ExecReport(pRequest As %RegisteredObject, Output pResponse As Ens.Response) As %Status
+Method ExecReport(pRequest As User.Report.Record, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
 	Set sql="insert into reportTarget (orderid,data1,data2) values (?,?,?)"
