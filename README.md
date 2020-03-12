@@ -24,6 +24,15 @@ iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up             0.0.0.0:5
 iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up             0.0.0.0:2222->22/tcp
 $
 ```
+
+なお、既存のプロダクションレディなネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。
+```ObjectScript
+Windows
+DEMO>d $SYSTEM.OBJ.LoadDir("c:\temp\iris-i14y\project\","ck",.e,1)
+Linux
+DEMO>d $SYSTEM.OBJ.LoadDir("/var/tmp/iris-i14y/project/","ck",.e,1)
+```
+
 以下、コンテナを起動したホストのIPをlinuxとします。  
 
 ## 管理ポータルへのアクセス
