@@ -74,11 +74,11 @@ http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPA
 ## RecordMap一覧
 
 下記のRecordMapを定義・使用しています。  
-|RecordMap名|生成クラス|生成バッチクラス|用途|使用しているビジネスホスト名|
+|RecordMap名|生成クラス|生成バッチクラス|ユースケース|使用しているビジネスホスト名|
 |:--|:--|:--|:--|:--|
-|User.Order|User.Order.Record|User.Order.Batch|ユースケース1|FTPOrderInfo,FTPOrderInfoBatch,Postgres1|
-|User.Process|User.Process.Record|User.Process.Batch|ユースケース2|FTPProcess,FTPProcessBatch,Postgres1|
-|User.Report|User.Report.Record|User.Report.Batch|ユースケース1|SQLReport,SQLReportBatch,Postgres1|
+|User.Order|User.Order.Record|User.Order.Batch|1|FTPOrderInfo,FTPOrderInfoBatch,Postgres1|
+|User.Process|User.Process.Record|User.Process.Batch|2|FTPProcess,FTPProcessBatch,Postgres1|
+|User.Report|User.Report.Record|User.Report.Batch|3,5,6|SQLReport,SQLReportBatch,Postgres1|
 
 下記URLにて閲覧可能です。  
 http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
