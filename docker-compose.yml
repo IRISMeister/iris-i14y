@@ -42,6 +42,8 @@ services:
     - ./upload:/home/foo/upload
     ports:
     - "2222:22"
+    environment:
+    - TZ=JST-9
     command: foo:pass:1000:1000
     networks:
     - iris-tier

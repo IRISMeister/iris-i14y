@@ -39,7 +39,7 @@ $ docker-compose down -v
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
-|2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行します。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
+|2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
 |3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。RDB上のレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
 |5|reportテーブル| Postgresに対してSELECTを定期的に実行。Postgresに対してINSERT実行。|reportTargetレコード|レコードの複製処理を行います。この仕組みは、CSV出力のように複数メッセージをまとめる必要がある処理には向いていません。|
