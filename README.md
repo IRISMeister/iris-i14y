@@ -1,4 +1,4 @@
-# The simplest demo of IRIS Interoperability
+# InterSystems IRIS インターオペラビリティ機能の紹介
 InterSystems IRIS, postgresql, SFTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
