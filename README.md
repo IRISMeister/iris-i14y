@@ -40,8 +40,10 @@ http://linux:52773/csp/sys/%25CSP.Portal.Home.zen
 ユーザ名:SuperUser  
 パスワード:SYS
 
-## 停止/削除方法
+## 停止/再開/削除方法
 ```bash
+$ docker-compose stop
+$ docker-compose start
 $ docker-compose down -v
 ```
 ## ユースケース
