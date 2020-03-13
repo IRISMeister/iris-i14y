@@ -101,7 +101,6 @@ $ cp order.txt in_order/
 $ cp process.txt in_process/
 $ cp source1_1.txt in_source1/
 $ cp source1_2.txt in_source1/
-$ cp report.txt in_report/
 ```
 例えば、cp order.txt in_order/ を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。
 ```SQL
