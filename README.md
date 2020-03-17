@@ -31,7 +31,7 @@ iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      
 $
 ```
 
-なお、既存のプロダクションレディなネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、postgres,sftpコンテナへの接続、odbcドライバのインストールや設定は別途マニュアル操作で実施する必要があります。
+なお、既存のプロダクションレディなネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、postgres,sftp/ftpコンテナへの接続、odbcドライバのインストールや設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
 Windows
 DEMO>d $SYSTEM.OBJ.LoadDir("c:\temp\iris-i14y\project\","ck",.e,1)
@@ -142,14 +142,14 @@ SQL> [リターン押下で終了]
 $ 
 ```
 
-下記の設定を変更することで、受信元のサーバをSFTPからFTPに変更することが出来ます。
-FTPサーバ:SFTP->FTP
-接続の設定/Protocol:SFTP->FTP
+下記の設定を変更することで、受信元のサーバをSFTPからFTPに変更することが出来ます。  
+FTPサーバ:SFTP->FTP  
+接続の設定/Protocol:SFTP->FTP  
 
 ## FTP Outboud処理について
-下記の設定を変更することで、送信先のサーバをSFTPからFTPに変更することが出来ます。
-FTPサーバ:SFTP->FTP
-接続の設定/Protocol:SFTP->FTP
+下記の設定を変更することで、送信先のサーバをSFTPからFTPに変更することが出来ます。  
+FTPサーバ:SFTP->FTP  
+接続の設定/Protocol:SFTP->FTP  
 
 ## SQL Inboud処理について
 ### バッチ処理
