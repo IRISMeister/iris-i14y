@@ -1,5 +1,5 @@
 # The simplest demo of IRIS Interoperability
-InterSystems IRIS, postgresql, SFTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
+InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
 ## 起動前提条件
@@ -17,11 +17,17 @@ $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
 $ docker-compose up -d
 $ docker-compose ps
-        Name                      Command                  State                             Ports
--------------------------------------------------------------------------------------------------------------------------
-iris-i14y_iris_1       /iris-main                       Up (healthy)   0.0.0.0:51773->51773/tcp, 0.0.0.0:52773->52773/tcp
-iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up             0.0.0.0:5432->5432/tcp
-iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up             0.0.0.0:2222->22/tcp
+        Name                      Command                       State                                   Ports
+--------------------------------------------------------------------------------------------------------------------------------------
+iris-i14y_ftp_1        /bin/sh -c /run.sh -l pure ...   Up                      0.0.0.0:2121->21/tcp, 0.0.0.0:30000->30000/tcp,
+                                                                                0.0.0.0:30001->30001/tcp, 0.0.0.0:30002->30002/tcp,
+                                                                                0.0.0.0:30003->30003/tcp, 0.0.0.0:30004->30004/tcp,
+                                                                                0.0.0.0:30005->30005/tcp, 0.0.0.0:30006->30006/tcp,
+                                                                                0.0.0.0:30007->30007/tcp, 0.0.0.0:30008->30008/tcp,
+                                                                                0.0.0.0:30009->30009/tcp
+iris-i14y_iris_1       /iris-main                       Up (health: starting)   0.0.0.0:51773->51773/tcp, 0.0.0.0:52773->52773/tcp
+iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up                      0.0.0.0:5432->5432/tcp
+iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      0.0.0.0:2222->22/tcp
 $
 ```
 以下、コンテナを起動したホストのIPをlinuxとします。  
@@ -108,6 +114,15 @@ SQLRowCount returns 3
 3 rows fetched
 SQL>
 ```
+
+下記の設定を変更することで、受信元のサーバをSFTPからFTPに変更することが出来ます。
+FTPサーバ:SFTP->FTP
+接続の設定/Protocol:SFTP->FTP
+
+## FTP Outboud処理について
+下記の設定を変更することで、送信先のサーバをSFTPからFTPに変更することが出来ます。
+FTPサーバ:SFTP->FTP
+接続の設定/Protocol:SFTP->FTP
 
 ## SQL Inboud処理について
 ### バッチ処理
@@ -199,3 +214,14 @@ in_process  order.txt   out_target1  process.txt  source1_1.txt
 root@sftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/atmoz/sftp/
+
+FTPサーバ
+```bash
+$ docker-compose exec ftp bash
+root@ftp:/# cd /home/foo/upload/demo/
+root@ftp:/home/foo/upload/demo# ls
+in_order    in_source1  out_report   out_target2  report.txt     source1_2.txt
+in_process  order.txt   out_target1  process.txt  source1_1.txt
+root@ftp:/home/foo/upload/demo#
+```
+See https://hub.docker.com/r/stilliard/pure-ftpd/

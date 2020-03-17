@@ -47,6 +47,24 @@ services:
     command: foo:pass:1000:1000
     networks:
     - iris-tier
+
+  ftp:
+    image: stilliard/pure-ftpd
+    hostname: ftp
+    ports:
+    - "2121:21"
+    - "30000-30009:30000-30009"
+    volumes:
+    - ./upload:/home/foo/upload
+    environment:
+    - PUBLICHOST=ftp
+    - FTP_USER_NAME=foo
+    - FTP_USER_PASS=pass
+    - FTP_USER_HOME=/home/foo
+    - FTP_USER_UID=1000
+    - FTP_USER_GID=1000
+    networks:
+      - iris-tier
   
 networks:
   iris-tier:
