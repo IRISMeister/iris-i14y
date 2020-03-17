@@ -1,4 +1,4 @@
-# The simplest demo of IRIS Interoperability
+# InterSystems IRIS インターオペラビリティ機能の紹介
 InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
@@ -11,7 +11,7 @@ See https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
 
 ## 起動方法
-git clone直後の初回起動時は、DockerイメージのPull,ビルドが発生するため、若干の時間を要します。
+git clone直後の初回起動時は、DockerイメージのPull,ビルドが発生するため、若干(2,3分程度)の時間を要します。
 ```bash
 $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
@@ -30,6 +30,15 @@ iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up                      
 iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      0.0.0.0:2222->22/tcp
 $
 ```
+
+なお、既存のプロダクションレディなネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、postgres,sftpコンテナへの接続、odbcドライバのインストールや設定は別途マニュアル操作で実施する必要があります。
+```ObjectScript
+Windows
+DEMO>d $SYSTEM.OBJ.LoadDir("c:\temp\iris-i14y\project\","ck",.e,1)
+Linux
+DEMO>d $SYSTEM.OBJ.LoadDir("/var/tmp/iris-i14y/project/","ck",.e,1)
+```
+
 以下、コンテナを起動したホストのIPをlinuxとします。  
 
 ## 管理ポータルへのアクセス
@@ -37,8 +46,10 @@ http://linux:52773/csp/sys/%25CSP.Portal.Home.zen
 ユーザ名:SuperUser  
 パスワード:SYS
 
-## 停止/削除方法
+## 停止/再開/削除方法
 ```bash
+$ docker-compose stop
+$ docker-compose start
 $ docker-compose down -v
 ```
 ## ユースケース
@@ -74,7 +85,9 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |SQLEntireTableBulk|BS|Yes|Demo.Service.SQLEntireTableBulk|SQL|I|仮想レコード監視(select 1)、report2レコード取得|6|
 
 下記URLにて閲覧可能です。  
+プロダクション画面  
 http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
+インターフェースマップ  
 http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 ## RecordMap一覧
@@ -93,14 +106,27 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 FTP Inboundアダプタは下記の入力を受け付けます。  
 
 ```bash
+$ pwd
+/home/user1/git/iris-i14y
 $ cd upload/demo
 $ cp order.txt in_order/
 $ cp process.txt in_process/
 $ cp source1_1.txt in_source1/
 $ cp source1_2.txt in_source1/
-$ cp report.txt in_report/
 ```
-例えば、cp order.txt in_order/ を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。
+cp order.txt in_order/ を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。ファイルや対象フォルダなどが異なるだけで、ユースケース2も同様です。
+```bash
+$ docker-compose exec iris isql postgresql
++---------------------------------------+
+| Connected!                            |
+|                                       |
+| sql-statement                         |
+| help [tablename]                      |
+| quit                                  |
+|                                       |
++---------------------------------------+
+SQL>
+```
 ```SQL
 SQL> select * from orderinfo;
 +------------+------------+------------+
@@ -112,7 +138,8 @@ SQL> select * from orderinfo;
 +------------+------------+------------+
 SQLRowCount returns 3
 3 rows fetched
-SQL>
+SQL> [リターン押下で終了]
+$ 
 ```
 
 下記の設定を変更することで、受信元のサーバをSFTPからFTPに変更することが出来ます。
@@ -154,7 +181,7 @@ $
 ```
 
 ### 単独メッセージ処理
-SQLReportは下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportレコードは削除されます。
+SQLReport(初期状態では無効化[グレーアイコン]されています)は下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportレコードは削除されます。
 ```SQL
 SQL> INSERT INTO report VALUES (1,1,10,20);
 SQL> INSERT INTO report VALUES (1,2,11,21);

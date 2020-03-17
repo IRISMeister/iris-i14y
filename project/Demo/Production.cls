@@ -12,7 +12,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
     <Setting Target="Adapter" Name="DeleteQuery">delete from report where orderid=?</Setting>
   </Item>
-  <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
+  <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
     <Setting Target="Adapter" Name="Query">select * from reportTrigger order by seq</Setting>
     <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
