@@ -31,7 +31,7 @@ iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      
 $
 ```
 
-なお、既存のプロダクションレディなネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、postgres,sftp/ftpコンテナへの接続、odbcドライバのインストールや設定などは別途マニュアル操作で実施する必要があります。
+なお、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpコンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
 Windows
 DEMO>d $SYSTEM.OBJ.LoadDir("c:\temp\iris-i14y\project\","ck",.e,1)
@@ -90,8 +90,18 @@ http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAME
 インターフェースマップ  
 http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
-## RecordMap一覧
 
+## 認証情報一覧
+下記の認証情報を定義・使用しています。  
+|ID|ユーザ名|パスワード|ユースケース|使用しているビジネスホスト名|
+|:--|:--|:--|:--|:--|
+|ftp|foo|pass|1,2,3,4|FTP*|
+
+
+下記URLにて閲覧可能です。  
+http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
+
+## RecordMap一覧
 下記のRecordMapを定義・使用しています。  
 |RecordMap名|生成クラス|生成バッチクラス|ユースケース|使用しているビジネスホスト名|
 |:--|:--|:--|:--|:--|
