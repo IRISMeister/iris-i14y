@@ -93,9 +93,9 @@ http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPA
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
-|ID|ユーザ名|パスワード|ユースケース|使用しているビジネスホスト名|
-|:--|:--|:--|:--|:--|
-|ftp|foo|pass|1,2,3,4|FTP*|
+|ID|ユーザ名|パスワード|用途|
+|:--|:--|:--|:--|
+|ftp|foo|pass|SFTP/FTPサーバへのログイン|
 
 
 下記URLにて閲覧可能です。  
