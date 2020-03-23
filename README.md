@@ -9,6 +9,9 @@ $ sudo docker run hello-world
 ```
 See https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
+docker-composeを導入済みであること。  
+
+see https://docs.docker.com/compose/install/
 
 ## 起動方法
 git clone直後の初回起動時は、DockerイメージのPull,ビルドが発生するため、若干(2,3分程度)の時間を要します。
