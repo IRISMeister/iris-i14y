@@ -39,6 +39,20 @@ ClassMethod setup(ByRef tVars) As %Status
   Try {
 		If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src" }
 		$$$THROWONERROR(tSC,..setupMethod(.tVars))
+
+		; Add SQL Gateway connection for JDBC access to postgresql
+		New $NAMESPACE
+		Set $NAMESPACE="%SYS"
+		Set p=##class(%Library.SQLConnection).%New()
+		Set p.Name = "postgresqljdbc"
+		Set p.URL = "jdbc:postgresql://postgres:5432/demo"
+		Set p.Usr = "postgres"
+		Set p.classpath = "/home/irisowner/postgresql-42.2.11.jar"
+		Set p.driver = "org.postgresql.Driver"
+		Set p.isJDBC = 1
+		Set p.pwd = "postgres"
+		Set tSC=p.%Save()
+		$$$ThrowOnError(tSC)
   } Catch(e) {
 	  Set tSC=e.AsStatus()
   }

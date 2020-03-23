@@ -1,8 +1,8 @@
-FROM store/intersystems/iris-community:2020.1.0.202.0
+FROM store/intersystems/iris-community:2020.1.0.209.0
 
 USER root
 RUN apt -y update \
- && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql \
+ && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
  && apt clean
 
 COPY odbc .
@@ -20,6 +20,8 @@ RUN odbcinst -i -s -l -f odbc.ini \
  && ln -s /usr/lib/x86_64-linux-gnu/libldap-2.4.so.2 libldap-2.4.so.2 
 
 USER irisowner
+# download postgresql jdbc driver
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar
 
 ENV SRCDIR=src
 COPY project/ $SRCDIR/

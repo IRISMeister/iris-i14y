@@ -75,6 +75,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |FTPSource1PathThrough|BS|No|EnsLib.FTP.PassthroughService|FTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
 |SQLReport|BS|Yes|Demo.Service.SQL|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
 |SQLReportBatch|BS|Yes|Demo.Service.SQL2CSV|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
+|SQLReportBatchJG|BS|Yes|Demo.Service.SQL2CSV|SQL|I|SQLReportBatchのJDBC接続版。|3|
 |FileTransfer|BP|No|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |FileTransferCallBack|BP|Yes|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |FTPReport|BO|No|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
@@ -111,6 +112,16 @@ http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 
 下記URLにて閲覧可能です。  
 http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
+
+## SQL Gateway接続
+下記のSQL Gateway接続を定義・使用しています。  
+
+|接続名|ユースケース|使用しているビジネスホスト名|
+|:--|:--|:--|
+|postgresqljdbc|3|SQLReportBatchJG|
+
+
+http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ## FTP Inboud処理について
 FTP Inboundアダプタは下記の入力を受け付けます。  

@@ -18,6 +18,13 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
     <Setting Target="Adapter" Name="DeleteQuery">delete from reportTrigger where seq=?</Setting>
   </Item>
+  <Item Name="SQLReportBatchJG" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query">select * from reportTrigger order by seq</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery">delete from reportTrigger where seq=?</Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+  </Item>
   <Item Name="Postgres1" Category="custom,sql2sql,ftp2sql" ClassName="Demo.Operation.SQL" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
     <Setting Target="Host" Name="SkipHeader">1</Setting>
@@ -119,6 +126,8 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
     <Setting Target="Adapter" Name="Query">select 1</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
+  </Item>
+  <Item Name="EnsLib.JavaGateway.Service" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
 </Production>
 }
