@@ -69,24 +69,24 @@ $ docker-compose down -v
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
 カスタムとは、カスタムコーディングを伴うもの
 
-|ビジネスホスト名|BH|カスタム|クラス|アダプタ|I/O|処理概要|ユースケース|
-|:--|:--|:--|:--|:--|:--|:--|:--|
-|FTPOrderInfo|BS|No|EnsLib.RecordMap.Service.FTPService|FTP|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|1|
-|FTPOrderInfoBatch|BS|No|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_orderフォルダ監視、ファイル取得、バッチ用Orderメッセージ作成|1|
-|FTPProcess|BS|No|EnsLib.RecordMap.Service.FTPService|FTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
-|FTPProcessBatch|BS|No|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
-|FTPSource1PathThrough|BS|No|EnsLib.FTP.PassthroughService|FTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
-|SQLReport|BS|Yes|Demo.Service.SQL|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
-|SQLReportBatch|BS|Yes|Demo.Service.SQL2CSV|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|SQLReportBatchJG|BS|Yes|Demo.Service.SQL2CSV|SQL|I|SQLReportBatchのJDBC接続版。|3|
-|FileTransfer|BP|No|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
-|FileTransferCallBack|BP|Yes|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
-|FTPReport|BO|No|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
-|FTPTarget1PathThrough|BO|No|EnsLib.FTP.PassthroughOperation|FTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
-|FTPTarget2PathThrough|BO|No|EnsLib.FTP.PassthroughOperation|FTP|O|同上|4|
-|Postgres1|BO|Yes|Demo.Operation.SQL|SQL|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
-|SQLEntireTable|BS|Yes|Demo.Service.SQLEntireTable|SQL|I|report2レコード監視、reportレコード取得|6|
-|SQLEntireTableBulk|BS|Yes|Demo.Service.SQLEntireTableBulk|SQL|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|ビジネスホスト名|BH|クラス|アダプタ|I/O|処理概要|ユースケース|
+|:--|:--|:--|:--|:--|:--|:--|
+|FTPOrderInfo|BS|EnsLib.RecordMap.Service.FTPService|FTP|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|1|
+|FTPOrderInfoBatch|BS|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_orderフォルダ監視、ファイル取得、バッチ用Orderメッセージ作成|1|
+|FTPProcess|BS|EnsLib.RecordMap.Service.FTPService|FTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
+|FTPProcessBatch|BS|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
+|FTPSource1PathThrough|BS|EnsLib.FTP.PassthroughService|FTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
+|[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|BS|Demo.Service.SQLReport|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
+|[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|BS|Demo.Service.SQLReportBatch|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
+|[SQLReportBatchJG](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|BS|Demo.Service.SQLReportBatch|SQL|I|SQLReportBatchのJDBC接続版。|3|
+|FileTransfer|BP|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
+|[FileTransferCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferCallBack.cls)|BP|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
+|FTPReport|BO|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
+|FTPTarget1PathThrough|BO|EnsLib.FTP.PassthroughOperation|FTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
+|FTPTarget2PathThrough|BO|EnsLib.FTP.PassthroughOperation|FTP|O|同上|4|
+|[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|BO|Demo.Operation.SQL|SQL|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
+|[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|BS|Demo.Service.SQLEntireTable|SQL|I|report2レコード監視、reportレコード取得|6|
+|[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|BS|Demo.Service.SQLEntireTableBulk|SQL|I|仮想レコード監視(select 1)、report2レコード取得|6|
 
 下記URLにて閲覧可能です。  
 プロダクション画面  
