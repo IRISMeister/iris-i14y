@@ -79,7 +79,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
 |BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
 |BS/[SQLReportBatchJG](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|SQLReportBatchのJDBC接続版。|3|
-|BP/FileTransfer|BP|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
+|BP/FileTransfer|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BO/FTPReport|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|FTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
