@@ -12,7 +12,8 @@ CREATE TABLE public.orderinfo
 (
     orderid Integer,
     data1 Integer,
-    data2 Integer
+    data2 Integer,
+    memo VARCHAR(20)
 );
 
 CREATE TABLE public.process 
@@ -20,7 +21,8 @@ CREATE TABLE public.process
     orderid Integer,
     processid Integer,
     data1 Integer,
-    data2 Integer
+    data2 Integer,
+    memo VARCHAR(20)
 );
 
 CREATE TABLE public.report 
@@ -29,12 +31,13 @@ CREATE TABLE public.report
     orderid Integer,
     data1 Integer,
     data2 Integer,
-   PRIMARY KEY (orderid)
+    memo VARCHAR(20),
+    PRIMARY KEY (orderid)
 );
 
-INSERT INTO report VALUES (1,1,10,20);
-INSERT INTO report VALUES (1,2,11,21);
-INSERT INTO report VALUES (1,3,12,22);
+INSERT INTO report VALUES (1,1,10,20,'abc');
+INSERT INTO report VALUES (1,2,11,21,'日本語');
+INSERT INTO report VALUES (1,3,12,22,'ｱｲｳｴｵ');
 
 CREATE TABLE public.reportTrigger
 (
@@ -46,7 +49,8 @@ CREATE TABLE public.reportTarget
 (
     orderid Integer,
     data1 Integer,
-    data2 Integer
+    data2 Integer,
+    memo VARCHAR(20)
 );
 
 CREATE TABLE public.report2
@@ -55,9 +59,10 @@ CREATE TABLE public.report2
     orderid Integer,
     data1 Integer,
     data2 Integer,
-   PRIMARY KEY (orderid)
+    memo VARCHAR(20),
+    PRIMARY KEY (orderid)
 );
 
-INSERT INTO report2 VALUES (1,1,10,10020);
-INSERT INTO report2 VALUES (1,2,11,10021);
-INSERT INTO report2 VALUES (1,3,12,10022);
+INSERT INTO report2 VALUES (1,1,10,10020,'abc');
+INSERT INTO report2 VALUES (1,2,11,10021,'日本語');
+INSERT INTO report2 VALUES (1,3,12,10022,'ｱｲｳｴｵ');

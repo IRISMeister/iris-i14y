@@ -1,4 +1,5 @@
 # InterSystems IRIS インターオペラビリティ機能の紹介
+## 概要
 InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
@@ -11,13 +12,18 @@ See https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
 docker-composeを導入済みであること。  
 
-see https://docs.docker.com/compose/install/
+See https://docs.docker.com/compose/install/
 
 ## 起動方法
-git clone直後の初回起動時は、DockerイメージのPull,ビルドが発生するため、若干(2,3分程度)の時間を要します。
+初回起動時のみイメージpullのために`docker-compose pull`を実行します。若干(2,3分程度)の時間を要します。  
+注)明示的にpullせずにupすると、IRIS関連のイメージのビルドが実行されます。proxy設定など、正しく構成されたdocker環境であれば、ビルドは正常に完了します。デモ実行目的であればビルドは必要ありません。
 ```bash
 $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
+$ docker-compose pull
+```
+2回目以降の起動時
+```bash
 $ docker-compose up -d
 $ docker-compose ps
         Name                      Command                       State                                   Ports
@@ -42,7 +48,7 @@ Linux
 DEMO>d $SYSTEM.OBJ.LoadDir("/var/tmp/iris-i14y/project/","ck",.e,1)
 ```
 
-以下、コンテナを起動したホストのIPをlinuxとします。  
+以下、コンテナを起動した環境のホスト名をlinuxとします。  
 
 ## 管理ポータルへのアクセス
 http://linux:52773/csp/sys/%25CSP.Portal.Home.zen  
@@ -78,7 +84,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|FTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
 |BS/[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
 |BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|BS/[SQLReportBatchJG](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|SQLReportBatchのJDBC接続版。|3|
+|BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|SQLReportBatchのODBC接続版。|3|
 |BP/FileTransfer|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BO/FTPReport|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
@@ -140,7 +146,7 @@ $ cp source1_2.txt in_source1/
 ```
 cp order.txt in_order/ を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。ファイルや対象フォルダなどが異なるだけで、ユースケース2も同様です。
 ```bash
-$ docker-compose exec iris isql postgresql
+$ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
 | Connected!                            |
 |                                       |
@@ -153,13 +159,13 @@ SQL>
 ```
 ```SQL
 SQL> select * from orderinfo;
-+------------+------------+------------+
-| orderid    | data1      | data2      |
-+------------+------------+------------+
-| 1          | 100        | 200        |
-| 2          | 101        | 201        |
-| 3          | 102        | 202        |
-+------------+------------+------------+
++------------+------------+------------+---------------------+
+| orderid    | data1      | data2      | memo                |
++------------+------------+------------+---------------------+
+| 1          | 100        | 200        | abc                 |
+| 2          | 101        | 201        | 日本語           |
+| 3          | 102        | 202        | ｱｲｳｴｵ     |
++------------+------------+------------+---------------------+
 SQLRowCount returns 3
 3 rows fetched
 SQL> [リターン押下で終了]
@@ -179,7 +185,7 @@ FTPサーバ:SFTP->FTP
 ### バッチ処理
 SQLReportBatchは下記の入力を受け付けます。このレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportTriggerレコードは削除されます。
 ```bash
-$ docker-compose exec iris isql postgresql
+$ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
 | Connected!                            |
 |                                       |
@@ -198,18 +204,18 @@ SQL> INSERT INTO reportTrigger VALUES (1);
 $ ls out_report/
 Report-2020-03-11_14.43.35.468.txt
 $ cat out_report/Report-2020-03-11_14.43.35.468.txt
-1       10      20
-2       11      21
-3       12      22
+1       10      20      abc
+2       11      21      日本語
+3       12      22      ｱｲｳｴｵ
 $
 ```
 
 ### 単独メッセージ処理
 SQLReport(初期状態では無効化[グレーアイコン]されています)は下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportレコードは削除されます。
 ```SQL
-SQL> INSERT INTO report VALUES (1,1,10,20);
-SQL> INSERT INTO report VALUES (1,2,11,21);
-SQL> INSERT INTO report VALUES (1,3,12,22);
+SQL> INSERT INTO report VALUES (1,4,10,20,'aaa');
+SQL> INSERT INTO report VALUES (1,5,11,21,'bbb');
+SQL> INSERT INTO report VALUES (1,6,12,22,'ccc');
 ```
 これでユースケース5が動作します。その結果,postgresql上にreportTargetレコードがINSERTされます。  
 
@@ -242,11 +248,11 @@ psql (12.2)
 Type "help" for help.
 
 demo=# select * from report;
- seq | orderid | data1 | data2
------+---------+-------+-------
-   1 |       1 |    10 |    20
-   1 |       2 |    11 |    21
-   1 |       3 |    12 |    22
+ seq | orderid | data1 | data2 |  memo
+-----+---------+-------+-------+--------
+   1 |       1 |    10 |    20 | abc
+   1 |       2 |    11 |    21 | 日本語
+   1 |       3 |    12 |    22 | ｱｲｳｴｵ
 (3 rows)
 
 demo=#
@@ -264,6 +270,7 @@ in_order    in_source1  out_report   out_target2  report.txt     source1_2.txt
 in_process  order.txt   out_target1  process.txt  source1_1.txt
 root@sftp:/home/foo/upload/demo#
 ```
+本SFTPサーバは、ASCIIモードをサポートしていないため、日本語文字を含むファイルの処理は、パススルーを除き、不向きです。  
 See https://hub.docker.com/r/atmoz/sftp/
 
 FTPサーバ

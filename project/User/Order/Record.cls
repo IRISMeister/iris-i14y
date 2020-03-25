@@ -1,6 +1,6 @@
 /// RECORDMAP: Generated from RecordMap 'User.Order'
-/// on 2020-03-05 at 19:47:49.030 [2020-03-05 10:47:49.030 UTC]
-/// by user _SYSTEM
+/// on 2020-03-25 at 17:33:19.670 [2020-03-25 08:33:19.670 UTC]
+/// by user SuperUser
 Class User.Order.Record Extends (%Persistent, %XML.Adaptor, Ens.Request, EnsLib.RecordMap.Base) [ Inheritance = right, ProcedureBlock ]
 {
 
@@ -11,6 +11,8 @@ Property orderid As %String [ SqlColumnNumber = 2 ];
 Property data1 As %String [ SqlColumnNumber = 3 ];
 
 Property data2 As %String [ SqlColumnNumber = 4 ];
+
+Property memo As %String [ SqlColumnNumber = 5 ];
 
 Parameter RECORDMAPGENERATED = 1;
 
@@ -34,10 +36,13 @@ Storage Default
 <Value>data2</Value>
 </Value>
 <Value name="5">
-<Value>data1</Value>
+<Value>memo</Value>
 </Value>
 <Value name="6">
 <Value>%ParentBatch</Value>
+</Value>
+<Value name="7">
+<Value>data1</Value>
 </Value>
 </Data>
 <DataLocation>^User.Order.RecordD</DataLocation>

@@ -9,7 +9,8 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 	Set req.orderid=pInput.Get("orderid")
 	Set req.data1=pInput.Get("data1")
 	Set req.data2=pInput.Get("data2")
-	$$$TRACE("orderid:"_req.orderid_" data1:"_req.data1_" data2:"_req.data2)
+	Set req.memo=pInput.Get("memo")
+	$$$TRACE("orderid:"_req.orderid_" data1:"_req.data1_" data2:"_req.data2_" memo:"_req.memo)
 	Set tSC=..SendRequestSync("Postgres1",req,.pOutput)
 	Return $$$OK
 }

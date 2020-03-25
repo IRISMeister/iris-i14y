@@ -1,6 +1,6 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'User.Order'
-/// on 2020-03-05 at 19:47:49.068 [2020-03-05 10:47:49.068 UTC]
-/// by user _SYSTEM
+/// on 2020-03-25 at 17:33:19.688 [2020-03-25 08:33:19.688 UTC]
+/// by user SuperUser
 Class User.Order Extends EnsLib.RecordMap.RecordMap
 {
 
@@ -77,7 +77,7 @@ ClassMethod GetRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	Set tStatus = $$$OK
 	If pLabelFound { Set tRecLabel = "" } 
 	Else { Set tRecLabel = "" } 
-	Set tStatus = ..chunkRecord(pStream, .tRecordData, .tCharCount, "", pTimeout, $char(13,10), tRecLabel, .pLookAhead, "")
+	Set tStatus = ..chunkRecord(pStream, .tRecordData, .tCharCount, "", pTimeout, $char(10), tRecLabel, .pLookAhead, "")
 	If $$$ISERR(tStatus) Quit tStatus
 	Set tMaxLocal = $$$MaxLocalLength
 	Set tRecordData("charcount") = +$get(tCharCount)
@@ -112,6 +112,13 @@ ClassMethod GetRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	If pGetTopFields {
 		Set pObject.data2 = tCurrString
 	}
+	If '$data(tRecordData(tCurrChunk, "block")) {
+		Set tCurrString = $piece(tRecordData(tCurrChunk), $char(9), tTopPiece)
+	}
+	Do ..checkMerge(.tCurrChunk, .tRecordData, .tCurrString, $char(9), .tTopPiece)
+	If pGetTopFields {
+		Set pObject.memo = tCurrString
+	}
 	Quit tStatus
 }
 
@@ -122,7 +129,8 @@ ClassMethod PutRecord(pStream As %IO.DeviceStream, pObject As %RegisteredObject,
 	Do pStream.Write($select(pHasTopFields: pObject.orderid,1: ""),0)
 	Do pStream.Write($char(9) _ $select(pHasTopFields: pObject.data1,1: ""),0)
 	Do pStream.Write($char(9) _ $select(pHasTopFields: pObject.data2,1: ""),0)
-	Do pStream.Write($char(13,10), 0, .tStatus)
+	Do pStream.Write($char(9) _ $select(pHasTopFields: pObject.memo,1: ""),0)
+	Do pStream.Write($char(10), 0, .tStatus)
 	If $$$ISERR(tStatus) Quit tStatus
 	Quit tStatus
 }
@@ -148,7 +156,7 @@ ClassMethod getType() As EnsLib.RecordMap.Model.DataType.RecordType [ CodeMode =
 
 XData RecordMap [ XMLNamespace = "http://www.intersystems.com/Ensemble/RecordMap" ]
 {
-<Record xmlns="http://www.intersystems.com/Ensemble/RecordMap" name="User.Order" type="delimited" char_encoding="UTF-8" targetClassname="User.Order.Record" batchClass="User.Order.Batch" complexBatchManaged="0" padFromLeft="0" recordTerminator="\x0d\x0a" allowEarlyTerminator="0">
+<Record xmlns="http://www.intersystems.com/Ensemble/RecordMap" name="User.Order" type="delimited" char_encoding="UTF-8" targetClassname="User.Order.Record" batchClass="User.Order.Batch" complexBatchManaged="0" padFromLeft="0" recordTerminator="\x0a" allowEarlyTerminator="0">
   <Separators>
     <Separator>\x09</Separator>
   </Separators>
@@ -157,6 +165,8 @@ XData RecordMap [ XMLNamespace = "http://www.intersystems.com/Ensemble/RecordMap
   <Field name="data1" datatype="%String" sqlColumn="3">
   </Field>
   <Field name="data2" datatype="%String" sqlColumn="4">
+  </Field>
+  <Field name="memo" datatype="%String" sqlColumn="5">
   </Field>
 </Record>
 }

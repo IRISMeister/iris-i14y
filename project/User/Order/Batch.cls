@@ -1,6 +1,6 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'User.Order'
-/// on 2020-03-05 at 19:47:49.056 [2020-03-05 10:47:49.056 UTC]
-/// by user _SYSTEM
+/// on 2020-03-25 at 17:33:19.677 [2020-03-25 08:33:19.677 UTC]
+/// by user SuperUser
 Class User.Order.Batch Extends (%Library.Persistent, EnsLib.RecordMap.SimpleBatch)
 {
 

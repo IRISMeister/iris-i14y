@@ -25,9 +25,12 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 			Set record.orderid=tRS.Get("orderid")
 			Set record.data1=tRS.Get("data1")
 			Set record.data2=tRS.Get("data2")
+			#; On UnixODBC, you may have to convert charset manually to handle Japanese characters....
+			#;Set record.memo=$ZCVT(tRS.Get("memo"),"I","UTF8")
+			Set record.memo=tRS.Get("memo")
 			Set tSC=header.Records.Insert(record)
 			$$$ThrowOnError(tSC)
-			$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2)
+			$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2_" memo:"_record.memo)
 		}
 		Set tSC=header.%Save()
 		$$$ThrowOnError(tSC)

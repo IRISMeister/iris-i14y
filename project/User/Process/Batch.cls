@@ -1,6 +1,6 @@
 /// RECORDMAP: Modified during compilation of RecordMap 'User.Process'
-/// on 2020-03-06 at 12:33:18.491 [2020-03-06 03:33:18.491 UTC]
-/// by user _SYSTEM
+/// on 2020-03-25 at 17:16:53.741 [2020-03-25 08:16:53.741 UTC]
+/// by user SuperUser
 Class User.Process.Batch Extends (%Library.Persistent, EnsLib.RecordMap.SimpleBatch)
 {
 

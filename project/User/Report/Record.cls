@@ -1,6 +1,6 @@
 /// RECORDMAP: Generated from RecordMap 'User.Report'
-/// on 2020-03-06 at 14:16:26.128 [2020-03-06 05:16:26.128 UTC]
-/// by user _SYSTEM
+/// on 2020-03-25 at 17:18:38.433 [2020-03-25 08:18:38.433 UTC]
+/// by user SuperUser
 Class User.Report.Record Extends (%Persistent, %XML.Adaptor, Ens.Request, EnsLib.RecordMap.Base) [ Inheritance = right, ProcedureBlock ]
 {
 
@@ -12,11 +12,7 @@ Property data1 As %String [ SqlColumnNumber = 3 ];
 
 Property data2 As %String [ SqlColumnNumber = 4 ];
 
-Parameter RECORDMAPGENERATED = 1;
-
-Relationship %ParentBatch As User.Report.Batch [ Cardinality = one, Inverse = Records ];
-
-Index %ParentBatchIdx On %ParentBatch;
+Property memo As %String [ SqlColumnNumber = 5 ];
 
 Storage Default
 {
@@ -39,6 +35,9 @@ Storage Default
 <Value name="6">
 <Value>data1</Value>
 </Value>
+<Value name="7">
+<Value>memo</Value>
+</Value>
 </Data>
 <DataLocation>^User.Report.RecordD</DataLocation>
 <DefaultData>RecordDefaultData</DefaultData>
@@ -48,5 +47,11 @@ Storage Default
 <StreamLocation>^User.Report.RecordS</StreamLocation>
 <Type>%Storage.Persistent</Type>
 }
+
+Parameter RECORDMAPGENERATED = 1;
+
+Relationship %ParentBatch As User.Report.Batch [ Cardinality = one, Inverse = Records ];
+
+Index %ParentBatchIdx On %ParentBatch;
 
 }

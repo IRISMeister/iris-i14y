@@ -1,8 +1,13 @@
 FROM store/intersystems/iris-community:2020.1.0.209.0
 
 USER root
+
+# Japanese language pack (optional)
 RUN apt -y update \
- && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
+ && DEBIAN_FRONTEND=noninteractive apt -y install language-pack-ja-base language-pack-ja ibus-mozc 
+
+# odbc/jdbc related 
+RUN DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
  && apt clean
 
 COPY odbc .
@@ -21,7 +26,8 @@ RUN odbcinst -i -s -l -f odbc.ini \
 
 USER irisowner
 # download postgresql jdbc driver
-RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar \
+ && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc && echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc
 
 ENV SRCDIR=src
 COPY project/ $SRCDIR/

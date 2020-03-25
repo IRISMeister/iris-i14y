@@ -1,4 +1,4 @@
-orderid	processid 	data1	data2
-1	1	100	200
-1	2	101	201
-2	1	102	202
+orderid	processid 	data1	data2	memo
+1	1	100	200	abc
+1	2	101	201	日本語
+2	1	102	202	ｱｲｳｴｵ

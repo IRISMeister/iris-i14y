@@ -15,7 +15,7 @@ Parameter SETTINGS = "SkipHeader";
 Method ExecOrderBatch(pRequest As User.Order.Batch, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
-	Set sql="insert into orderinfo (orderid,data1,data2) values (?,?,?)"
+	Set sql="insert into orderinfo (orderid,data1,data2,memo) values (?,?,?,?)"
 	
 	Try {
 		Set pResponse=##class(Ens.Response).%New()
@@ -24,7 +24,7 @@ Method ExecOrderBatch(pRequest As User.Order.Batch, Output pResponse As Ens.Resp
 		Set start=1 If (..SkipHeader) { Set start=2 } 
 		For i=start:1:reccnt { 
 			Set rec=pRequest.Records.GetAt(i)
-			Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,rec.orderid,rec.data1,rec.data2)
+			Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,rec.orderid,rec.data1,rec.data2,rec.memo)
 			$$$ThrowOnError(tSC)
 			$$$TRACE("Inserted "_nrows_" rows")	
 		}
@@ -40,7 +40,7 @@ Method ExecOrderBatch(pRequest As User.Order.Batch, Output pResponse As Ens.Resp
 Method ExecProcessBatch(pRequest As User.Process.Batch, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
-	Set sql="insert into process (orderid,processid,data1,data2) values (?,?,?,?)"
+	Set sql="insert into process (orderid,processid,data1,data2,memo) values (?,?,?,?,?)"
 	
 	Try {
 		Set pResponse=##class(Ens.Response).%New()
@@ -49,7 +49,7 @@ Method ExecProcessBatch(pRequest As User.Process.Batch, Output pResponse As Ens.
 		Set start=1 If (..SkipHeader) { Set start=2 } 
 		For i=start:1:reccnt { 
 			Set rec=pRequest.Records.GetAt(i)
-			Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,rec.orderid,rec.processid,rec.data1,rec.data2)
+			Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,rec.orderid,rec.processid,rec.data1,rec.data2,rec.memo)
 			$$$ThrowOnError(tSC)
 			$$$TRACE("Inserted "_nrows_" rows")	
 		}
@@ -65,10 +65,10 @@ Method ExecProcessBatch(pRequest As User.Process.Batch, Output pResponse As Ens.
 Method ExecReport(pRequest As User.Report.Record, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
-	Set sql="insert into reportTarget (orderid,data1,data2) values (?,?,?)"
+	Set sql="insert into reportTarget (orderid,data1,data2,memo) values (?,?,?,?)"
 	Try {
 		Set pResponse=##class(Ens.Response).%New()
-		Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,pRequest.orderid,pRequest.data1,pRequest.data2)
+		Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,pRequest.orderid,pRequest.data1,pRequest.data2,pRequest.memo)
 		$$$ThrowOnError(tSC)
 		$$$TRACE("Inserted "_nrows_" rows")	
 	}
