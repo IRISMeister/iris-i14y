@@ -173,14 +173,7 @@ SQL> [リターン押下で終了]
 $ 
 ```
 
-下記の設定を変更することで、受信元のサーバをSFTPからFTPに変更することが出来ます。  
-FTPサーバ:SFTP->FTP  
-接続の設定/Protocol:SFTP->FTP  
-
 ## FTP Outboud処理について
-下記の設定を変更することで、送信先のサーバをSFTPからFTPに変更することが出来ます。  
-FTPサーバ:SFTP->FTP  
-接続の設定/Protocol:SFTP->FTP  
 
 ## SQL Inboud処理について
 ### バッチ処理
@@ -224,7 +217,7 @@ SQL> INSERT INTO report VALUES (1,6,12,22,'ccc');
 ### プロダクションの初期化
 下記のコマンドで、プロダクションを、初期化した上で再起動することができます。ポータルでの起動・停止と異なり、プロダクションの状態のリセット、蓄積したメッセージ、ログを削除します。
 ```bash
-docker-compose exec iris iris session iris -U demo init
+$ docker-compose exec iris iris session iris -U demo init
 ```
 ### 各コンテナへのアクセス方法
 
