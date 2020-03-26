@@ -125,12 +125,13 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 ## SQL Gateway接続
 下記のSQL Gateway接続を定義・使用しています。  
 
-|接続名|ユースケース|使用しているビジネスホスト名|
-|:--|:--|:--|
-|postgresqljdbc|3|SQLReportBatchJG|
-
-
+|接続名|備考|
+|:--|:--|
+|postgresqljdbc|JDBC接続情報|
 http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
+
+ODBC接続については、[直接データソース定義](https://github.com/IRISMeister/iris-i14y/blob/master/odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
+
 
 ## FTP Inboud処理について
 FTP Inboundアダプタは下記の入力を受け付けます。  
