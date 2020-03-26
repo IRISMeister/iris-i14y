@@ -1,7 +1,6 @@
 /// SQL InboundAdapterは、各行に対してOnProcessInput()をコールする。
 /// 例えば一度のPollingの際のSELECT実行の結果が3行あれば、OnProcessInput()が3回コールされる。
-/// また、明示的にPollingの終了時に呼ばれるコールバック関数は無い。
-/// そのため、複数のテーブル行を、1つのCSVファイルにまとめるような処理を実行するには
+/// 明示的にPollingの終了時に呼ばれるコールバック関数は無いため、複数のテーブル行を、1つのCSVファイルにまとめるような処理を実行するには
 /// 本実装で示すような、仕組みが必要になる。
 Class Demo.Service.SQLReportBatch Extends Ens.BusinessService [ Language = objectscript ]
 {
@@ -25,9 +24,11 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 			Set record.orderid=tRS.Get("orderid")
 			Set record.data1=tRS.Get("data1")
 			Set record.data2=tRS.Get("data2")
-			#; On UnixODBC, you may have to convert charset manually to handle Japanese characters....
-			#;Set record.memo=$ZCVT(tRS.Get("memo"),"I","UTF8")
-			Set record.memo=tRS.Get("memo")
+			#; Linux+UnixODBCの場合、日本語は明示的にUTF8->Unicode変換を行う必要がある
+			If ($this.Adapter.JGService="")&($SYSTEM.Version.GetOS()="UNIX") {
+				Set record.memo=$ZCVT(tRS.Get("memo"),"I","UTF8")
+			}
+			Else { Set record.memo=tRS.Get("memo") }
 			Set tSC=header.Records.Insert(record)
 			$$$ThrowOnError(tSC)
 			$$$TRACE("orderid:"_record.orderid_" data1:"_record.data1_" data2:"_record.data2_" memo:"_record.memo)
