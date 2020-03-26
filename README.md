@@ -1,6 +1,6 @@
 # InterSystems IRIS インターオペラビリティ機能の紹介
 ## 概要
-InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。  
+InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。使用するファイルはUTF8エンコードを前提にしています。  
 Ubuntu 18.04 LTS 上にて動作確認済み。
 
 ## 起動前提条件
@@ -79,20 +79,20 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |:--|:--|:--|:--|:--|:--|
 |BS/FTPOrderInfo|EnsLib.RecordMap.Service.FTPService|FTP|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|1|
 |BS/FTPOrderInfoBatch|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_orderフォルダ監視、ファイル取得、バッチ用Orderメッセージ作成|1|
-|BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|FTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
-|BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
-|BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|FTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
-|BS/[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|SQL|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
-|BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|SQL|I|SQLReportBatchのODBC接続版。|3|
+|BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|SFTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
+|BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
+|BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
+|BS/[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
+|BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
+|BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
 |BP/FileTransfer|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
-|BO/FTPReport|EnsLib.RecordMap.Operation.BatchFTPOperation|FTP|O|Reportファイルの作成、FTP出力|3|
-|BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|FTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
-|BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|FTP|O|同上|4|
-|BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|SQL|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
-|BS/[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|SQL|I|report2レコード監視、reportレコード取得|6|
-|BS/[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|SQL|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BO/FTPReport|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
+|BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
+|BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
+|BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
+|BS/[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
+|BS/[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
 
 下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -270,8 +270,11 @@ in_order    in_source1  out_report   out_target2  report.txt     source1_2.txt
 in_process  order.txt   out_target1  process.txt  source1_1.txt
 root@sftp:/home/foo/upload/demo#
 ```
-本SFTPサーバは、ASCIIモードをサポートしていないため、日本語文字を含むファイルの処理は、パススルーを除き、不向きです。  
 See https://hub.docker.com/r/atmoz/sftp/
+
+SFTPサーバにおける文字エンコードの制限
+SFTPで扱うファイルの文字エンコードはUTF8に統一するのが好ましいですが、WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、カスタムコーディング([Demo.Service.MyFTPService](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/MyFTPService.cls))、あるいは、システムロケールの変更が必要になります。  
+パススルー処理(ユースケース4)は、このような文字エンコードによる制限を受けません。
 
 FTPサーバ
 ```bash

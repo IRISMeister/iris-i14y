@@ -98,10 +98,10 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
     <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
-    <Setting Target="Adapter" Name="FTPServer">ftp</Setting>
-    <Setting Target="Adapter" Name="Protocol">FTP</Setting>
+    <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
+    <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Host" Name="HeaderCount">1</Setting>
-    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="Charset">@UTF8</Setting>
   </Item>
   <Item Name="FTPProcessBatch" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.BatchFTPService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Process</Setting>
@@ -110,11 +110,11 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
     <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
-    <Setting Target="Adapter" Name="FTPServer">ftp</Setting>
-    <Setting Target="Adapter" Name="Protocol">FTP</Setting>
+    <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
+    <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Host" Name="BatchClass">User.Process.Batch</Setting>
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
-    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
+    <Setting Target="Adapter" Name="Charset">@UTF8</Setting>
   </Item>
   <Item Name="FTPReport" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.BatchFTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -124,13 +124,13 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">Report</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
   </Item>
-  <Item Name="SQLEntireTable" Category="" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select * from report2 order by orderid</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
   </Item>
-  <Item Name="SQLEntireTableBulk" Category="" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLEntireTableBulk" Category="custom" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select 1</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
