@@ -1,7 +1,7 @@
 # InterSystems IRIS インターオペラビリティ機能の紹介
 ## 概要
 InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。使用するファイルはUTF8エンコードを前提にしています。  
-Ubuntu 18.04 LTS 上にて動作確認済み。
+Ubuntu 18.04 LTS + Docker CE 19.03.7, Windows10 + Docker Desdktop 2.2.0.4(43472) にて動作確認済み。
 
 ## 起動前提条件
 下記のイメージ実行が成功する環境であること。
@@ -16,12 +16,13 @@ See https://docs.docker.com/compose/install/
 
 ## 起動方法
 初回起動時のみイメージpullのために`docker-compose pull`を実行します。若干(2,3分程度)の時間を要します。  
-注)明示的にpullせずにupすると、IRIS関連のイメージのビルドが実行されます。proxy設定など、正しく構成されたdocker環境であれば、ビルドは正常に完了します。デモ実行目的であればビルドは必要ありません。
 ```bash
 $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
 $ docker-compose pull
 ```
+注)明示的にpullせずにupすると、IRIS関連のイメージのビルドが実行されます。proxy設定など、正しく構成されたdocker環境であれば、ビルドは正常に完了します。デモ実行目的であればビルドは必要ありません。
+
 2回目以降の起動時
 ```bash
 $ docker-compose up -d
@@ -127,7 +128,8 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 
 |接続名|備考|
 |:--|:--|
-|postgresqljdbc|JDBC接続情報|
+|postgresqljdbc|postgresqlへのJDBC接続情報|
+
 http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ODBC接続については、[直接データソース定義](https://github.com/IRISMeister/iris-i14y/blob/master/odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
@@ -137,8 +139,6 @@ ODBC接続については、[直接データソース定義](https://github.com/
 FTP Inboundアダプタは下記の入力を受け付けます。  
 
 ```bash
-$ pwd
-/home/user1/git/iris-i14y
 $ cd upload/demo
 $ cp order.txt in_order/
 $ cp process.txt in_process/
