@@ -6,6 +6,8 @@ services:
     image: dpmeister/iris-i14y
     build: 
       context: .
+      args:
+        COMMIT_ID: ${COMMIT_ID}
     hostname: iris
     ports:
     - 51773:51773

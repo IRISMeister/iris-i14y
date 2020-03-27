@@ -39,3 +39,16 @@ RUN mkdir /var/tmp/arc ; chmod 777 /var/tmp/arc \
  && printf 'Set tSC=$system.OBJ.Load("'$HOME/$SRCDIR'/MyInstallerPackage/Installer.cls","ck") Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \
  && printf 'Set tSC=##class(MyInstallerPackage.Installer).setup() Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly
+
+RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
+ && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") h\n" | iris session $ISC_PACKAGE_INSTANCENAME -B | cat \
+ && iris stop $ISC_PACKAGE_INSTANCENAME quietly bypass \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal.log \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/IRIS.WIJ \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/iris.ids \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/alerts.log \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal/* \
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log
+
+ARG COMMIT_ID="unknown"
+RUN echo $COMMIT_ID > $HOME/commit.txt

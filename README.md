@@ -44,9 +44,9 @@ $
 なお、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpコンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
 Windows
-DEMO>d $SYSTEM.OBJ.LoadDir("c:\temp\iris-i14y\project\","ck",.e,1)
+DEMO>d $SYSTEM.OBJ.ImportDir("C:\temp\iris-i14y\project\","*","ck",.e,1)
 Linux
-DEMO>d $SYSTEM.OBJ.LoadDir("/var/tmp/iris-i14y/project/","ck",.e,1)
+DEMO>d $SYSTEM.OBJ.ImportDir("/var/tmp/iris-i14y/project/","*","ck",.e,1)
 ```
 
 以下、コンテナを起動した環境のホスト名をlinuxとします。  
@@ -233,6 +233,12 @@ DEMO>D ^init
 ```
 See https://hub.docker.com/_/intersystems-iris-data-platform  
 See https://docs.intersystems.com/iris20191j/csp/docbook/DocBook.UI.Page.cls?KEY=AFL_containers
+
+下記にて、本イメージに対応するgitのコミットIDを確認できます。
+```bash
+irisowner@iris:~$ cat commit.txt
+588bb28703223be6fc91a04e41549e7d683c70c4
+```
 
 PostgreSQL
 ```bash
