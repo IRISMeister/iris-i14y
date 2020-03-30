@@ -272,9 +272,9 @@ root@sftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/atmoz/sftp/
 
-SFTPサーバにおける文字エンコードの制限
-SFTPで扱うファイルの文字エンコードはUTF8に統一するのが好ましいですが、WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、カスタムコーディング([Demo.Service.MyFTPService](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/MyFTPService.cls))、あるいは、システムロケールの変更が必要になります。  
-パススルー処理(ユースケース4)は、このような文字エンコードによる制限を受けません。
+SFTPサーバにおける文字エンコードの制限  
+SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/MyFTPService.cls))が必要になります。  
+パススルー処理(ユースケース4)は、このような文字エンコードによる影響を受けません。
 
 FTPサーバ
 ```bash
