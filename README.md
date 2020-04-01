@@ -94,6 +94,8 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
 |BS/[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
 |BS/[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成||
+|BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成||
 
 下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -212,6 +214,15 @@ SQL> INSERT INTO report VALUES (1,5,11,21,'bbb');
 SQL> INSERT INTO report VALUES (1,6,12,22,'ccc');
 ```
 これでユースケース5が動作します。その結果,postgresql上にreportTargetレコードがINSERTされます。  
+
+## File Inboud処理について
+BSのFileOrderInfoはFile Inboundアダプタを使用しており、下記の入力を受け付けます。  
+```bash
+$ cd upload/local
+$ cp order.txt in_order/
+```
+結果はBOのFileOrderInfoOutを通じてファイルに出力されます。  
+注)このBOでは出力ファイル名として%f(元のファイル名)を使用しています。そのため、入力ファイル名が同一であれば、メッセージが複数に分かれていても、同じ出力ファイルにアペンドされていきます。
 
 ## その他
 ### プロダクションの初期化

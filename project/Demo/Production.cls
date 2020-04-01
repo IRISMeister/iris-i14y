@@ -138,6 +138,19 @@ XData ProductionDefinition
   </Item>
   <Item Name="EnsLib.JavaGateway.Service" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
+  <Item Name="FileOrderInfo" Category="local2local" ClassName="EnsLib.RecordMap.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="RecordMap">Order</Setting>
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/local/in_order/</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">FileOrderInfoOut</Setting>
+    <Setting Target="Host" Name="HeaderCount">1</Setting>
+  </Item>
+  <Item Name="FileOrderInfoOut" Category="local2local" ClassName="EnsLib.RecordMap.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/local/out_order/</Setting>
+    <Setting Target="Host" Name="RecordMap">Order</Setting>
+    <Setting Target="Adapter" Name="Charset">Binary</Setting>
+    <Setting Target="Host" Name="Filename">%f</Setting>
+  </Item>
 </Production>
 }
 

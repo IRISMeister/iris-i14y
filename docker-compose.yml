@@ -18,6 +18,7 @@ services:
     - iris-tier
     volumes:
     - ./ext:/opt/iris/ext
+    - ./upload:/home/irisowner/upload
     depends_on:
     - postgres
     - sftp
