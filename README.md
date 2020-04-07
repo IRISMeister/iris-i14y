@@ -43,9 +43,6 @@ $
 
 なお、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpコンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
-Windows
-DEMO>d $SYSTEM.OBJ.ImportDir("C:\temp\iris-i14y\project\","*","ck",.e,1)
-Linux
 DEMO>d $SYSTEM.OBJ.ImportDir("/var/tmp/iris-i14y/project/","*","ck",.e,1)
 ```
 
@@ -86,9 +83,10 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/[SQLReport](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
 |BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
 |BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
-|BP/FileTransfer|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
-|BP/[FileTransferCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
-|BO/FTPReport|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
+|BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
+|BP/[FileTransferRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
+|BP/[ReportRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト||
+|BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
 |BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|

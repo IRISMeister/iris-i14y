@@ -36,7 +36,7 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 		Set tSC=header.%Save()
 		$$$ThrowOnError(tSC)
 		
-		Set tSC=..SendRequestSync("FTPReport",header,.tOutput)
+		Set tSC=..SendRequestSync("FTPReportBatch",header,.tOutput)
 		$$$ThrowOnError(tSC)
 
 	}

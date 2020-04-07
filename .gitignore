@@ -4,6 +4,9 @@ upload/demo/in_order/*.txt
 upload/demo/in_process/*.txt
 upload/demo/in_source1/*.txt
 upload/demo/out_report/*
+upload/demo/out_report1/*
+upload/demo/out_report2/*
+upload/demo/out_report3/*
 upload/demo/out_target1/*
 upload/demo/out_target2/*
 upload/local/in_order/*

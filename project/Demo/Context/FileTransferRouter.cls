@@ -1,4 +1,4 @@
-Class Demo.Context.FileTransfer Extends Ens.BP.Context
+Class Demo.Context.FileTransferRouter Extends Ens.BP.Context
 {
 
 Method CheckResponseStatus(process) As %Status

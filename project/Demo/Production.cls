@@ -12,6 +12,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
     <Setting Target="Adapter" Name="DeleteQuery">delete from report where orderid=?</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
   </Item>
   <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
@@ -49,22 +50,22 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">FileGroup</Setting>
   </Item>
-  <Item Name="FileTransfer" Category="ftp2ftp" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.FileTransfer</Setting>
+  <Item Name="FileTransferRouter" Category="ftp2ftp" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.FileTransferRouter</Setting>
     <Setting Target="Host" Name="ForceSyncSend">0</Setting>
     <Setting Target="Host" Name="ResponseFrom">+FTPTarget1,FTPTarget2</Setting>
-    <Setting Target="Host" Name="ResponseTargetConfigNames">FileTransferCallBack</Setting>
+    <Setting Target="Host" Name="ResponseTargetConfigNames">FileTransferRouterCallBack</Setting>
   </Item>
   <Item Name="FTPSource1PathThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_source1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
     <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
-    <Setting Target="Host" Name="TargetConfigNames">FileTransfer</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">FileTransferRouter</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
   </Item>
-  <Item Name="FileTransferCallBack" Category="custom,ftp2ftp" ClassName="Demo.Process.FileTransferCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="FileTransferRouterCallBack" Category="custom,ftp2ftp" ClassName="Demo.Process.FileTransferRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
   <Item Name="FTPOrderInfo" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.FTPService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Order</Setting>
@@ -116,10 +117,34 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="Charset">@UTF8</Setting>
   </Item>
-  <Item Name="FTPReport" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.BatchFTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="FTPReportBatch" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.BatchFTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report</Setting>
+    <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
+    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="Filename">Report-%Q</Setting>
+  </Item>
+  <Item Name="FTPReport1" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
+    <Setting Target="Adapter" Name="Credentials">ftp</Setting>
+    <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report1</Setting>
+    <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
+    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="Filename">Report-%Q</Setting>
+  </Item>
+  <Item Name="FTPReport2" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
+    <Setting Target="Adapter" Name="Credentials">ftp</Setting>
+    <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report2</Setting>
+    <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
+    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="Filename">Report-%Q</Setting>
+  </Item>
+  <Item Name="FTPReport3" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
+    <Setting Target="Adapter" Name="Credentials">ftp</Setting>
+    <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report3</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Host" Name="RecordMap">Report</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
@@ -150,6 +175,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">Order</Setting>
     <Setting Target="Adapter" Name="Charset">Binary</Setting>
     <Setting Target="Host" Name="Filename">%f</Setting>
+  </Item>
+  <Item Name="ReportRouter" Category="" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.ReportRouter</Setting>
+    <Setting Target="Host" Name="ResponseTargetConfigNames">ReportRouterCallBack</Setting>
+    <Setting Target="Host" Name="ResponseFrom">+FTPReport1,FTPReport2,FTPReport3</Setting>
+  </Item>
+  <Item Name="ReportRouterCallBack" Category="" ClassName="Demo.Process.ReportRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Host" Name="target">Postgres1</Setting>
   </Item>
 </Production>
 }

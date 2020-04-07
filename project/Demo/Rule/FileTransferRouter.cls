@@ -1,5 +1,5 @@
 /// 
-Class Demo.Rule.FileTransfer Extends Ens.Rule.Definition
+Class Demo.Rule.FileTransferRouter Extends Ens.Rule.Definition
 {
 
 Parameter RuleAssistClass = "EnsLib.MsgRouter.RuleAssist";
