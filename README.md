@@ -71,7 +71,7 @@ $ docker-compose down -v
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|orderinfoレコード|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
-ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの
+ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの  
 
 |ビジネスホスト名|クラス|アダプタ|I/O|処理概要|ユースケース|
 |:--|:--|:--|:--|:--|:--|
@@ -106,13 +106,20 @@ http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAME
 http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
+## プロダクション画面上には表示されない要素  
+CTX:BPコンテキストスーパークラス
+
+|ビジネスホスト名|クラス|処理概要|ユースケース|
+|:--|:--|:--|:--|
+|CTX/[ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Context/ReportRouter.cls)|Demo.Context.ReportRouter|[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
+
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
 
-|ルール名|備考|
-|:--|:--|
-|[Demo.Rule.FileTransferRouter](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|ファイル送信先を決定|
-|[Demo.Rule.ReportRouter](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|ファイル送信先を決定|
+|ルール名|備考|Link|
+|:--|:--|:--|
+|Demo.Rule.FileTransferRouter|ファイル送信先を決定|[Link](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|
+|Demo.Rule.ReportRouter|ファイル送信先を決定|[Link](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
