@@ -106,12 +106,12 @@ http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAME
 http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
-## プロダクション画面上には表示されない要素  
+## ビジネスホスト以外の主な構成要素  
 CTX:BPコンテキストスーパークラス
 
-|ビジネスホスト名|クラス|処理概要|ユースケース|
+|要素|クラス|処理概要|ユースケース|
 |:--|:--|:--|:--|
-|CTX/[ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Context/ReportRouter.cls)|Demo.Context.ReportRouter|[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
+|CTX|[Demo.Context.ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
 
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
