@@ -6,11 +6,11 @@ XData ProductionDefinition
 <Production Name="Demo.Production" LogGeneralTraceEvents="false">
   <Description></Description>
   <ActorPoolSize>2</ActorPoolSize>
-  <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query">select * from report order by orderid</Setting>
+    <Setting Target="Adapter" Name="Query">select * from report3 order by orderid</Setting>
     <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
-    <Setting Target="Adapter" Name="DeleteQuery">delete from report where orderid=?</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery">delete from report3 where orderid=?</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
   </Item>
@@ -182,7 +182,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="ResponseFrom">+FTPReport1,FTPReport2,FTPReport3</Setting>
   </Item>
   <Item Name="ReportRouterCallBack" Category="" ClassName="Demo.Process.ReportRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
-    <Setting Target="Host" Name="target">Postgres1</Setting>
+    <Setting Target="Host" Name="TargetConfigName">Postgres1</Setting>
   </Item>
 </Production>
 }

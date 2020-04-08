@@ -1,7 +1,7 @@
 Class Demo.Service.SQLReport Extends Ens.BusinessService [ Language = objectscript ]
 {
 
-Property TargetConfigName As %String(MAXLEN = 1000);
+Property TargetConfigName As %String(MAXLEN = 128);
 
 Parameter SETTINGS = "TargetConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}";
 

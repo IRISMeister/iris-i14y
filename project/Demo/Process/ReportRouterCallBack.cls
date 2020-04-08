@@ -2,9 +2,17 @@
 Class Demo.Process.ReportRouterCallBack Extends Ens.BusinessProcessBPL [ ClassType = persistent, DependsOn = Demo.Context.ReportRouter, ProcedureBlock ]
 {
 
-Property target As %String;
+Property TargetConfigName As %String(MAXLEN = 128);
 
-Parameter SETTINGS = "target:Additional:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}";
+Parameter SETTINGS = "TargetConfigName:Additional:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}";
+
+ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
+{
+	Do ##super(.pArray,pItem)
+	If pItem.GetModifiedSetting("TargetConfigName",.tValue) {
+		Set pArray(tValue)="" 
+	}
+}
 
 /// BPL Definition
 XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
@@ -27,7 +35,7 @@ Storage Default
 <Data name="ReportRouterCallBackDefaultData">
 <Subscript>"ReportRouterCallBack"</Subscript>
 <Value name="1">
-<Value>target</Value>
+<Value>TargetConfigName</Value>
 </Value>
 </Data>
 <DefaultData>ReportRouterCallBackDefaultData</DefaultData>

@@ -76,6 +76,23 @@ Method ExecReport(pRequest As User.Report.Record, Output pResponse As Ens.Respon
 		Set tSC=e.AsStatus()
 	}
 
+	Return tSCResult
+}
+
+Method ExecReportResult(pRequest As Demo.Request.ReportResult, Output pResponse As Ens.Response) As %Status
+{
+	Set tSC=$$$OK
+	Set sql="insert into reportResult (logtimestamp,target,orderid,data1,result) values (current_timestamp,?,?,?,?)"
+	Try {
+		Set pResponse=##class(Ens.Response).%New()
+		Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,pRequest.TargetConfigName,pRequest.Body.orderid,pRequest.Body.data1,'pRequest.Result)
+		$$$ThrowOnError(tSC)
+		$$$TRACE("Inserted "_nrows_" rows")	
+	}
+	Catch e {
+		Set tSC=e.AsStatus()
+	}
+
 	Return tSC
 }
 
@@ -90,6 +107,9 @@ XData MessageMap
 	</MapItem>
 	<MapItem MessageType="User.Process.Batch"> 
 		<Method>ExecProcessBatch</Method>
+	</MapItem>
+	<MapItem MessageType="Demo.Request.ReportResult"> 
+		<Method>ExecReportResult</Method>
 	</MapItem>
 	
 </MapItems>

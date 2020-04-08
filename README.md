@@ -64,11 +64,11 @@ $ docker-compose down -v
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
 |2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
-|3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。RDB上のレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
+|3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
-|5|reportテーブル| Postgresに対してSELECTを定期的に実行。Postgresに対してINSERT実行。|reportTargetレコード|レコードの複製処理を行います。この仕組みは、CSV出力のように複数メッセージをまとめる必要がある処理には向いていません。|
+|5|report3テーブル| Postgresに対してSELECTを定期的に実行。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Ruleを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
 |6|report2テーブル| Postgresに対してSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
-
+|7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|orderinfoレコード|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
 ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの
@@ -85,29 +85,40 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
-|BP/[ReportRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.FileTransferCallBack||I/O|(オプション)オペレーションからの戻り値のテスト||
+|BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
+|BP/[ReportRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.ReportRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
 |BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
 |BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
 |BS/[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
 |BS/[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
-|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成||
-|BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成||
+|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
+|BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
+|BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
+|BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
+|BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 
-下記URLにて閲覧可能です。  
+プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
 http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
 インターフェースマップ  
 http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
+## ビジネスルール一覧
+下記のビジネスルールを定義・使用しています。  
+
+|ルール名|備考|
+|:--|:--|
+|[Demo.Rule.FileTransferRouter](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|ファイル送信先を決定|
+|[Demo.Rule.ReportRouter](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|ファイル送信先を決定|
+
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
 |ID|ユーザ名|パスワード|用途|
 |:--|:--|:--|:--|
 |ftp|foo|pass|SFTP/FTPサーバへのログイン|
-
 
 下記URLにて閲覧可能です。  
 http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
@@ -159,7 +170,7 @@ $ docker-compose exec iris isql postgresql -v
 SQL>
 ```
 ```SQL
-SQL> select * from orderinfo;
+SQL> SELECT * FROM orderinfo;
 +------------+------------+------------+---------------------+
 | orderid    | data1      | data2      | memo                |
 +------------+------------+------------+---------------------+
@@ -205,13 +216,25 @@ $
 ```
 
 ### 単独メッセージ処理
-SQLReport(初期状態では無効化[グレーアイコン]されています)は下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportレコードは削除されます。
+SQLReportは下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。
 ```SQL
-SQL> INSERT INTO report VALUES (1,4,10,20,'aaa');
-SQL> INSERT INTO report VALUES (1,5,11,21,'bbb');
-SQL> INSERT INTO report VALUES (1,6,12,22,'ccc');
+SQL> INSERT INTO report3 VALUES (1,4,10,20,'aaa');
+SQL> INSERT INTO report3 VALUES (1,5,11,21,'bbb');
+SQL> INSERT INTO report3 VALUES (1,6,12,22,'ccc');
 ```
-これでユースケース5が動作します。その結果,postgresql上にreportTargetレコードがINSERTされます。  
+これでユースケース5が動作します。その結果,postgresql上にreportresultレコードがINSERTされます。  
+```SQL
+SQL> SELECT * FROM reportresult
++---------------------------+-----------------+------------+------------+------------+
+| logtimestamp              | target          | orderid    | data1      | result     |
++---------------------------+-----------------+------------+------------+------------+
+| 2020-04-08 13:48:38.307145| FTPReport1      | 4          | 10         | 1          |
+| 2020-04-08 13:48:38.3138  | FTPReport3      | 4          | 10         | 1          |
+| 2020-04-08 13:48:38.341635| FTPReport2      | 4          | 10         | 1          |
++---------------------------+-----------------+------------+------------+------------+
+SQLRowCount returns 3
+3 rows fetched
+```
 
 ## File Inboud処理について
 BSのFileOrderInfoはFile Inboundアダプタを使用しており、下記の入力を受け付けます。  
