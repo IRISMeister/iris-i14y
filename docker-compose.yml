@@ -39,7 +39,7 @@ services:
     - iris-tier
     volumes:
     - ./postgres/initdb:/docker-entrypoint-initdb.d    
-    
+
   sftp:
     image: atmoz/sftp
     hostname: sftp

@@ -7,9 +7,9 @@ XData setup [ XMLNamespace = INSTALLER ]
 <Var Name="DataBaseDir" Value="/home/irisowner/database/"/> 
 <Var Name="ProductionName" Value="Demo.Production"/>
 
-<Namespace Name="demo" Create="overwrite" Code="demo" Data="demo">
+<Namespace Name="${NAMESPACE}" Create="overwrite" Code="${NAMESPACE}" Data="${NAMESPACE}">
 	<Configuration>
-	<Database Name="demo" Create="overwrite" Dir="${DataBaseDir}demo" InitialSize="1"/>
+	<Database Name="${NAMESPACE}" Create="overwrite" Dir="${DataBaseDir}${NAMESPACE}" InitialSize="1"/>
 	</Configuration>
 	<Invoke Class="%SYSTEM.OBJ" Method="ImportDir" CheckStatus="true">
 		<Arg Value="${SRCDIR}" />
@@ -38,6 +38,7 @@ ClassMethod setup(ByRef tVars) As %Status
   Set tSC='$$$OK
   Try {
 		If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src" }
+		If '$D(tVars("NAMESPACE")) { Set tVars("NAMESPACE")="demo" }
 		$$$THROWONERROR(tSC,..setupMethod(.tVars))
 
 		; Add SQL Gateway connection for JDBC access to postgresql
@@ -53,6 +54,18 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set p.pwd = "postgres"
 		Set tSC=p.%Save()
 		$$$ThrowOnError(tSC)
+
+		; Add SQL Gateway connection for JDBC access to oracle
+		Set p=##class(%Library.SQLConnection).%New()
+		Set p.Name = "oraclejdbc"
+		Set p.URL = "jdbc:oracle:thin:@//oracle:1521/ORCLPDB1"
+		Set p.Usr = "demo"
+		Set p.classpath = "/home/irisowner/ojdbc8.jar"
+		Set p.driver = "oracle.jdbc.OracleDriver"
+		Set p.isJDBC = 1
+		Set p.pwd = "demo"
+		Set tSC=p.%Save()
+
   } Catch(e) {
 	  Set tSC=e.AsStatus()
   }

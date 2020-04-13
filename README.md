@@ -40,10 +40,20 @@ iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up                      
 iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      0.0.0.0:2222->22/tcp
 $
 ```
+非docker環境への適用  
+非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/以下にcloneしたと仮定します。  
+注)IRIS for Windowsの場合も同様です。パス指定方法をWindowsスタイルに読み替えてください。  
 
-なお、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの要素だけをインポートしたい場合、第１引数(ファイルパス)をgit cloneを実施した場所に読み替えた上で、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpコンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
-DEMO>d $SYSTEM.OBJ.ImportDir("/var/tmp/iris-i14y/project/","*","ck",.e,1)
+USER>d $SYSTEM.OBJ.Load("/home/user1/git/iris-i14y/project/MyInstallerPackage/Installer.cls","ck")
+USER>Set tVars("SRCDIR")="/home/user1/git/iris-i14y/project"
+USER>d ##class(MyInstallerPackage.Installer).setup(.tVars) 
+```
+
+あるいは、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの構成要素だけをインポートしたい場合、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpなど各コンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
+```ObjectScript
+USER>zn "DEMO"
+DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 ```
 
 以下、コンテナを起動した環境のホスト名をlinuxとします。  
@@ -325,3 +335,27 @@ in_process  order.txt   out_target1  process.txt  source1_1.txt
 root@ftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/stilliard/pure-ftpd/
+
+Oracle データベースサーバ  
+事前準備  
+起動方法  
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml up -d
+```
+アクセス方法  
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml exec oracle bash
+[oracle@oracle ~]$ sqlplus demo/demo@//localhost:1521/ORCLPDB1
+SQL> select * from report;
+       SEQ    ORDERID      DATA1      DATA2 MEMO
+---------- ---------- ---------- ---------- ---------------------
+         1          1         10         20 abc
+         1          2         11         21 NoJapanesePreset
+         1          3         12         22 NoJapanesePreset2
+SQL>
+```
+
+コンテナDBへの接続  
+```
+[oracle@oracle ~]$ sqlplus sys/SYS@//localhost:1521/ORCLCDB as sysdba
+```

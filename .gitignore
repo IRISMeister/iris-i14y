@@ -11,3 +11,5 @@ upload/demo/out_target1/*
 upload/demo/out_target2/*
 upload/local/in_order/*
 upload/local/out_order/*
+oracle/oradata/*
+jars/*.jar
