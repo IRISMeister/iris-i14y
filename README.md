@@ -157,6 +157,7 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 |接続名|備考|
 |:--|:--|
 |postgresqljdbc|postgresqlへのJDBC接続情報|
+|oraclejdbc|oracleへのJDBC接続情報|
 
 http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
