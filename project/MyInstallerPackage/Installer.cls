@@ -7,10 +7,14 @@ XData setup [ XMLNamespace = INSTALLER ]
 <Var Name="DataBaseDir" Value="/home/irisowner/database/"/> 
 <Var Name="ProductionName" Value="Demo.Production"/>
 
-<Namespace Name="${NAMESPACE}" Create="overwrite" Code="${NAMESPACE}" Data="${NAMESPACE}">
-	<Configuration>
-	<Database Name="${NAMESPACE}" Create="overwrite" Dir="${DataBaseDir}${NAMESPACE}" InitialSize="1"/>
-	</Configuration>
+<If Condition='(##class(Config.Namespaces).Exists("${NAMESPACE}")=0)'>
+	<Namespace Name="${NAMESPACE}" Create="overwrite" Code="${NAMESPACE}" Data="${NAMESPACE}">
+		<Configuration>
+		<Database Name="${NAMESPACE}" Create="overwrite" Dir="${DataBaseDir}${NAMESPACE}" InitialSize="1"/>
+		</Configuration>
+	</Namespace>
+</If>
+<Namespace Name="${NAMESPACE}" Create="no">
 	<Invoke Class="%SYSTEM.OBJ" Method="ImportDir" CheckStatus="true">
 		<Arg Value="${SRCDIR}" />
 		<Arg Value="" />
@@ -19,9 +23,11 @@ XData setup [ XMLNamespace = INSTALLER ]
 		<Arg Value="1" />
 	</Invoke>
 	<Production Name="${ProductionName}" AutoStart="1">
-	<Credential Name="ftp" Username="foo" Password="pass" Overwrite="0"/>
+	<Credential Name="ftp" Username="foo" Password="pass" Overwrite="1"/>
 	</Production>
 </Namespace>
+
+
 </Manifest>
 }
 
