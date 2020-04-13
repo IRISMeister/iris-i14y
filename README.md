@@ -50,7 +50,7 @@ USER>Set tVars("SRCDIR")="/home/user1/git/iris-i14y/project"
 USER>d ##class(MyInstallerPackage.Installer).setup(.tVars) 
 ```
 
-あるいは、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの構成要素だけをインポートしたい場合、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpなど各コンテナへの接続情報、odbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
+あるいは、既存のプロダクションが有効なネームスペース環境(以下の実行例ではDEMO)に、IRISの構成要素だけをインポートしたい場合、下記のコマンドを実行してください。この場合、認証情報の作成,postgres,sftp/ftpなど各サービスへの接続情報、odbc/jdbcドライバのインストールやDSN作成/設定などは別途マニュアル操作で実施する必要があります。
 ```ObjectScript
 USER>zn "DEMO"
 DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
