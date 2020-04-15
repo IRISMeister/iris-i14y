@@ -76,7 +76,7 @@ $ docker-compose down -v
 |2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
 |3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
-|5|report3テーブル| Postgresに対してSELECTを定期的に実行。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Ruleを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
+|5|report3テーブル| Postgresに対してSELECTを定期的に実行。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
 |6|report2テーブル| Postgresに対してSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|orderinfoレコード|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 ## ビジネスホスト一覧
@@ -117,11 +117,13 @@ http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPA
 
 
 ## ビジネスホスト以外の主な構成要素  
-CTX:BPコンテキストスーパークラス
+CTX:BPコンテキストスーパークラス, DTL:データ変換, Rule:ルール
 
 |要素|クラス|処理概要|ユースケース|
 |:--|:--|:--|:--|
 |CTX|[Demo.Context.ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
+|Rule|[Demo.Rule.ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。|5|
+|DTL|[Demo.DTL.Report2ReportExtra](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
 
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
@@ -147,6 +149,7 @@ http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 |User.Order|User.Order.Record|User.Order.Batch|1|FTPOrderInfo,FTPOrderInfoBatch,Postgres1|
 |User.Process|User.Process.Record|User.Process.Batch|2|FTPProcess,FTPProcessBatch,Postgres1|
 |User.Report|User.Report.Record|User.Report.Batch|3,5,6|SQLReport,SQLReportBatch,Postgres1|
+|User.ReportExtra|User.Report.RecordExtra|User.ReportExtra.Batch|5|FTPReport1,FTPReport2,FTPReport3|
 
 下記URLにて閲覧可能です。  
 http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
@@ -157,12 +160,12 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 |接続名|備考|
 |:--|:--|
 |postgresqljdbc|postgresqlへのJDBC接続情報|
+|mysqljdbc|MySQLへのJDBC接続情報|
 |oraclejdbc|oracleへのJDBC接続情報|
 
 http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ODBC接続については、[直接データソース定義](https://github.com/IRISMeister/iris-i14y/blob/master/odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
-
 
 ## FTP Inboud処理について
 FTP Inboundアダプタは下記の入力を受け付けます。  
@@ -295,6 +298,21 @@ bash-5.0# psql -U postgres demo
 psql (12.2)
 Type "help" for help.
 
+demo-# \dt
+             List of relations
+ Schema |     Name      | Type  |  Owner
+--------+---------------+-------+----------
+ public | mytable       | table | postgres
+ public | orderinfo     | table | postgres
+ public | process       | table | postgres
+ public | report        | table | postgres
+ public | report2       | table | postgres
+ public | report3       | table | postgres
+ public | reportresult  | table | postgres
+ public | reporttarget  | table | postgres
+ public | reporttrigger | table | postgres
+(9 rows)
+
 demo=# select * from report;
  seq | orderid | data1 | data2 |  memo
 -----+---------+-------+-------+--------
@@ -333,33 +351,6 @@ root@ftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/stilliard/pure-ftpd/
 
-* Oracle データベースサーバ  
-
-事前準備  
-下記の方法で、事前にイメージをビルドしておく必要があります。選択したEditionに相当するイメージ名をdocker-compose-oracle.ymlに反映してください。
-https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md
-
-起動方法  
-```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml up -d
-```
-アクセス方法  
-```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml exec oracle bash
-[oracle@oracle ~]$ sqlplus demo/demo@//localhost:1521/ORCLPDB1
-SQL> select * from report;
-       SEQ    ORDERID      DATA1      DATA2 MEMO
----------- ---------- ---------- ---------- ---------------------
-         1          1         10         20 abc
-         1          2         11         21 NoJapanesePreset
-         1          3         12         22 NoJapanesePreset2
-SQL>
-```
-コンテナDBへの接続  
-```
-[oracle@oracle ~]$ sqlplus sys/SYS@//localhost:1521/ORCLCDB as sysdba
-```
-
 * MySQL  
 
 起動方法  
@@ -388,3 +379,31 @@ mysql>
 ```
 See https://hub.docker.com/_/mysql  
 注) 本イメージは起動時にデータベース保存エリアとして、ホストシステムの./mysql/dataを使用します。
+
+* Oracle データベースサーバ  
+
+事前準備  
+下記の方法で、事前にイメージをビルドしておく必要があります。選択したEditionに相当するイメージ名をdocker-compose-oracle.ymlに反映してください。  
+https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md
+Oracle JDBC Driver(ojdbc8.jarなど)をjars/直下に配置してください。
+
+起動方法  
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml up -d
+```
+アクセス方法  
+```bash
+$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml exec oracle bash
+[oracle@oracle ~]$ sqlplus demo/demo@//localhost:1521/ORCLPDB1
+SQL> select * from report;
+       SEQ    ORDERID      DATA1      DATA2 MEMO
+---------- ---------- ---------- ---------- ---------------------
+         1          1         10         20 abc
+         1          2         11         21 NoJapanesePreset
+         1          3         12         22 NoJapanesePreset2
+SQL>
+```
+コンテナDBへの接続  
+```
+[oracle@oracle ~]$ sqlplus sys/SYS@//localhost:1521/ORCLCDB as sysdba
+```

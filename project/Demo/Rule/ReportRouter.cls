@@ -10,7 +10,7 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 <ruleSet name="" effectiveBegin="" effectiveEnd="">
 <rule name="">
 <when condition="1">
-<send transform="" target="FTPReport1,FTPReport2,FTPReport3"></send>
+<send transform="Demo.DTL.Report2ReportExtra" target="FTPReport1,FTPReport2,FTPReport3"></send>
 <return></return>
 </when>
 </rule>

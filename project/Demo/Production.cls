@@ -130,7 +130,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report1</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
-    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
   </Item>
   <Item Name="FTPReport2" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
@@ -138,7 +138,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report2</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
-    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
   </Item>
   <Item Name="FTPReport3" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
@@ -146,7 +146,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_report3</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
-    <Setting Target="Host" Name="RecordMap">Report</Setting>
+    <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
   </Item>
   <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
