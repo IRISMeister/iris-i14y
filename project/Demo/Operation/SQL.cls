@@ -76,7 +76,7 @@ Method ExecReport(pRequest As User.Report.Record, Output pResponse As Ens.Respon
 		Set tSC=e.AsStatus()
 	}
 
-	Return tSCResult
+	Return tSC
 }
 
 Method ExecReportResult(pRequest As Demo.Request.ReportResult, Output pResponse As Ens.Response) As %Status
