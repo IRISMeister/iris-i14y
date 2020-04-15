@@ -56,10 +56,10 @@ USER>zn "DEMO"
 DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 ```
 
-以下、コンテナを起動した環境のホスト名をlinuxとします。  
+以下、コンテナを起動した環境のホスト名をirishostとします。  
 
 ## 管理ポータルへのアクセス
-http://linux:52773/csp/sys/%25CSP.Portal.Home.zen  
+http://irishost:52773/csp/sys/%25CSP.Portal.Home.zen  
 ユーザ名:SuperUser  
 パスワード:SYS
 
@@ -91,18 +91,18 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
 |BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
 |BS/[SQLReport](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
-|BS/[SQLReportBatch](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|BS/[SQLReportBatchODBC](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
+|BS/[SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
+|BS/[SQLReportBatchODBC](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
-|BP/[FileTransferRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
+|BP/[FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
-|BP/[ReportRouterCallBack](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.ReportRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
+|BP/[ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.ReportRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
 |BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
-|BO/[Postgres1](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
-|BS/[SQLEntireTable](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
-|BS/[SQLEntireTableBulk](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BO/[Postgres1](project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
+|BS/[SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
+|BS/[SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
 |BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
 |BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
 |BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
@@ -111,9 +111,9 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
-http://linux:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
+http://irishost:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
 インターフェースマップ  
-http://linux:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
+http://irishost:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
 ## ビジネスホスト以外の主な構成要素  
@@ -121,17 +121,17 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換, Rule:ルー�
 
 |要素|クラス|処理概要|ユースケース|
 |:--|:--|:--|:--|
-|CTX|[Demo.Context.ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
-|Rule|[Demo.Rule.ReportRouter](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。|5|
-|DTL|[Demo.DTL.Report2ReportExtra](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
+|CTX|[Demo.Context.ReportRouter](project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
+|Rule|[Demo.Rule.ReportRouter](project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。|5|
+|DTL|[Demo.DTL.Report2ReportExtra](project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
 
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
 
 |ルール名|備考|Link|
 |:--|:--|:--|
-|Demo.Rule.FileTransferRouter|ファイル送信先を決定|[Link](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|
-|Demo.Rule.ReportRouter|ファイル送信先を決定|[Link](http://linux:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|
+|Demo.Rule.FileTransferRouter|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|
+|Demo.Rule.ReportRouter|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
@@ -140,7 +140,7 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換, Rule:ルー�
 |ftp|foo|pass|SFTP/FTPサーバへのログイン|
 
 下記URLにて閲覧可能です。  
-http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
+http://irishost:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 
 ## RecordMap一覧
 下記のRecordMapを定義・使用しています。  
@@ -152,7 +152,7 @@ http://linux:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 |User.ReportExtra|User.Report.RecordExtra|User.ReportExtra.Batch|5|FTPReport1,FTPReport2,FTPReport3|
 
 下記URLにて閲覧可能です。  
-http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
+http://irishost:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
 
 ## SQL Gateway接続
 下記のSQL Gateway接続を定義・使用しています。  
@@ -163,9 +163,9 @@ http://linux:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE
 |mysqljdbc|MySQLへのJDBC接続情報|
 |oraclejdbc|oracleへのJDBC接続情報|
 
-http://linux:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
+http://irishost:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
-ODBC接続については、[直接データソース定義](https://github.com/IRISMeister/iris-i14y/blob/master/odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
+ODBC接続については、[直接データソース定義](odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
 
 ## FTP Inboud処理について
 FTP Inboundアダプタは下記の入力を受け付けます。  
@@ -337,7 +337,7 @@ root@sftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/atmoz/sftp/  
 SFTPサーバにおける文字エンコードの制限  
-SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](https://github.com/IRISMeister/iris-i14y/blob/master/project/Demo/Service/MyFTPService.cls))が必要になります。  
+SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](project/Demo/Service/MyFTPService.cls))が必要になります。  
 パススルー処理(ユースケース4)は、このような文字エンコードによる影響を受けません。
 
 * FTPサーバ
