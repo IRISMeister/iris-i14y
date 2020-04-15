@@ -1,0 +1,19 @@
+version: '3.7'
+
+services: 
+  mysql:
+    init: true
+    image: mysql:8.0.19
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    hostname: mysql
+    ports:
+    - 3306:3306
+    environment:
+    - TZ=JST-9
+    - MYSQL_ROOT_PASSWORD=SYS
+    - MYSQL_DATABASE=demo
+    networks:
+    - iris-tier
+    volumes:
+    - ./mysql/initdb:/docker-entrypoint-initdb.d
+    - ./mysql/data:/var/lib/mysql

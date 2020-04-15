@@ -13,4 +13,5 @@ upload/local/in_order/*
 upload/local/out_order/*
 oracle/oradata/ORCLCDB
 oracle/oradata/dbconfig
+mysql/data/*
 jars/*.jar

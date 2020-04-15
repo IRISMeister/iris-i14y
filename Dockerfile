@@ -25,9 +25,10 @@ RUN odbcinst -i -s -l -f odbc.ini \
  && ln -s /usr/lib/x86_64-linux-gnu/libldap-2.4.so.2 libldap-2.4.so.2 
 
 USER irisowner
-# download postgresql jdbc driver
+# download postgresql/mysql jdbc driver and place them under /home/irisowner 
 RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar \
- && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc && echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc
+ && wget -O - https://cdn.mysql.com//Downloads/Connector-J/mysql-connector-java-5.1.48.tar.gz | tar xvfzC - . \
+ && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc && echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc 
 
 ENV SRCDIR=src
 COPY project/ $SRCDIR/

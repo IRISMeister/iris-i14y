@@ -72,6 +72,18 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set p.pwd = "demo"
 		Set tSC=p.%Save()
 
+		; Add SQL Gateway connection for JDBC access to mysql
+		Set p=##class(%Library.SQLConnection).%New()
+		Set p.Name = "mysqljdbc"
+		Set p.URL = "jdbc:mysql://mysql/demo"
+		Set p.Usr = "demo"
+		Set p.classpath = "/home/irisowner/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48-bin.jar"
+		Set p.driver = "com.mysql.jdbc.Driver"
+		Set p.isJDBC = 1
+		Set p.pwd = "demo"
+		Set tSC=p.%Save()
+
+
   } Catch(e) {
 	  Set tSC=e.AsStatus()
   }
