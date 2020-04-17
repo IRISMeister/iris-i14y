@@ -41,9 +41,7 @@ iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      
 $
 ```
 非docker環境への適用  
-非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/以下にcloneしたと仮定します。  
-注)IRIS for Windowsの場合も同様です。パス指定方法をWindowsスタイルに読み替えてください。  
-
+非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/(Winodwsの場合、c:\home\user1\git\)下にcloneしたと仮定します。  
 ```ObjectScript
 USER>d $SYSTEM.OBJ.Load("/home/user1/git/iris-i14y/project/MyInstallerPackage/Installer.cls","ck")
 USER>Set tVars("SRCDIR")="/home/user1/git/iris-i14y/project"
@@ -172,17 +170,13 @@ http://irishost:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&
 
 ODBC接続については、[直接データソース定義](odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
 
-## FTP Inboud処理について
-FTP Inboundアダプタは下記の入力を受け付けます。  
-
+## ユースケース1,2の実行方法
+ftp/sftpコンテナ内のフォルダは、ローカルホストのupload/demoフォルダにボリュームマウントしてありますので、下記の実行例のようにローカルのフォルダへの読み書きによる操作・確認が可能です。
 ```bash
 $ cd upload/demo
-$ cp order.txt in_order/
-$ cp process.txt in_process/
-$ cp source1_1.txt in_source1/
-$ cp source1_2.txt in_source1/
+cp order.txt in_order/ 
 ```
-cp order.txt in_order/ を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。ファイルや対象フォルダなどが異なるだけで、ユースケース2も同様です。
+を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンドにて確認可能です。
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -209,12 +203,28 @@ SQLRowCount returns 3
 SQL> [リターン押下で終了]
 $ 
 ```
-
-## FTP Outboud処理について
-
-## SQL Inboud処理について
-### バッチ処理
-SQLReportBatchは下記の入力を受け付けます。このレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportTriggerレコードは削除されます。
+ファイル、入力フォルダ、出力先テーブル名が異なるだけで、ユースケース2も同様です。
+```bash
+cp process.txt in_process/ 
+```
+```SQL
+SQL> SELECT * FROM orderinfo;
+```
+## ユースケース4の実行方法
+```bash
+$ cd upload/demo
+$ cp source1_1.txt in_source1/
+$ cp source1_2.txt in_source1/
+```
+を実行することで、ユースケース4が動作します。その結果、out_target1/もしくはout_target2/直下にファイルがputされます。下記コマンドにて確認可能です。
+```bash
+$ ls out_target1/
+source1_1.txt_2020-04-17_17.45.05.230
+$ ls out_target2/
+source1_2.txt_2020-04-17_17.45.35.278
+$
+```
+## ユースケース3の実行方法
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -230,7 +240,8 @@ SQL>
 ```SQL
 SQL> INSERT INTO reportTrigger VALUES (1);
 ```
-これでユースケース3が動作します。その結果、sftp上(ホストにボリュームマウントしてあるのでout_report/下)にファイルが作成されます。
+を実行することで、ユースケース3が動作します。このレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportTriggerレコードは削除されます。その結果、out_report/直下にファイルが作成されます。下記コマンドにて確認可能です。
+
 ```bash
 $ ls out_report/
 Report-2020-03-11_14.43.35.468.txt
@@ -240,15 +251,21 @@ $ cat out_report/Report-2020-03-11_14.43.35.468.txt
 3       12      22      ｱｲｳｴｵ
 $
 ```
-
-### 単独メッセージ処理
-SQLReportは下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。
+```SQL
+SQL> SELECT * FROM reportTrigger;
++------------+
+| seq        |
++------------+
++------------+
+SQLRowCount returns 0
+```
+## ユースケース5の実行方法
 ```SQL
 SQL> INSERT INTO report3 VALUES (1,4,10,20,'aaa');
 SQL> INSERT INTO report3 VALUES (1,5,11,21,'bbb');
 SQL> INSERT INTO report3 VALUES (1,6,12,1000,'ccc');
 ```
-これでユースケース5が動作します。その結果,postgresql上にreportresultレコードがINSERTされます。  
+を実行することで、ユースケース5が動作します。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。その結果,postgresql上にreportresultレコードがINSERTされます。下記コマンドにて確認可能です。
 ```SQL
 SQL> SELECT * FROM reportresult;
 +---------------------------+----------------+------------+------------+------------+
@@ -266,16 +283,41 @@ SQL> SELECT * FROM reportresult;
 +---------------------------+----------------+------------+------------+------------+
 SQLRowCount returns 9
 9 rows fetched
+SQL> SELECT * FROM report3;
++------------+------------+------------+------------+---------------------+
+| seq        | orderid    | data1      | data2      | memo                |
++------------+------------+------------+------------+---------------------+
++------------+------------+------------+------------+---------------------+
+SQLRowCount returns 0
 ```
 
-## File Inboud処理について
-BSのFileOrderInfoはFile Inboundアダプタを使用しており、下記の入力を受け付けます。  
+## ユースケース7の実行方法
+FTP/SFTPの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
 ```bash
 $ cd upload/local
 $ cp order.txt in_order/
 ```
-結果はBOのFileOrderInfoOutを通じてファイルに出力されます。  
-注)このBOでは出力ファイル名として%f(元のファイル名)を使用しています。そのため、入力ファイル名が同一であれば、メッセージが複数に分かれていても、同じ出力ファイルにアペンドされていきます。
+を実行することで、ユースケース7が動作します。その結果、out_order/直下にファイルが作成されます。下記コマンドにて確認可能です。
+```bash
+$ ls out_order/
+order.txt
+$ cat out_order/order.txt
+1       100     200     abc
+2       101     201     日本語
+3       102     202     ｱｲｳｴｵ
+$
+```
+注)この例では出力ファイル名として%f(元のファイル名)を使用しています。そのため、入力ファイル名が同一であれば、メッセージが複数に分かれていても、同じ出力ファイルにアペンドされていきます。
+```bash
+$ cp order.txt in_order/
+$ cat out_order/order.txt
+1       100     200     abc
+2       101     201     日本語
+3       102     202     ｱｲｳｴｵ
+1       100     200     abc
+2       101     201     日本語
+3       102     202     ｱｲｳｴｵ
+```
 
 ## その他
 ### プロダクションの初期化
