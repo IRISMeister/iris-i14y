@@ -72,9 +72,9 @@ $ docker-compose down -v
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
 |2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
-|3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
-|4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
-|5|report3テーブル| Postgresに対してSELECTを定期的に実行。取得したレコードは、再取得されないよう[削除クエリ]によりDELETEする例。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
+|3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/|バッチによる処理を行います。|
+|4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/,<br>out_target2/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
+|5|report3テーブル| Postgresに対してSELECTを定期的に実行。取得したレコードは、再取得されないよう[削除クエリ]によりDELETEする例。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/,<br>out_report2/,<br>out_report3/,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
 |5a|report4テーブル| 5と同じ。取得したレコードは、再取得されないよう、[削除クエリ]によりUPDATEする例。|||
 |5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
 |6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
