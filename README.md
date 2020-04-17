@@ -292,7 +292,7 @@ SQLRowCount returns 0
 ```
 
 ## ユースケース7の実行方法
-FTP/SFTPの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
+ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
 ```bash
 $ cd upload/local
 $ cp order.txt in_order/
