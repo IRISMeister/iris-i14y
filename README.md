@@ -76,8 +76,10 @@ $ docker-compose down -v
 |2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
 |3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/*|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
-|5|report3テーブル| Postgresに対してSELECTを定期的に実行。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
-|6|report2テーブル| Postgresに対してSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
+|5|report3テーブル| Postgresに対してSELECTを定期的に実行。取得したレコードは、再取得されないよう[削除クエリ]によりDELETEする例。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/*,<br>out_report2/*,<br>out_report3/*,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
+|5a|report4テーブル| 5と同じ。取得したレコードは、再取得されないよう、[削除クエリ]によりUPDATEする例。|||
+|5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
+|6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|orderinfoレコード|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
@@ -90,9 +92,14 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|SFTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
 |BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
 |BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
-|BS/[SQLReport](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|reportレコード監視、reportレコード取得、Reportメッセージ作成|5|
+|BS/[SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、report2レコード取得|6|
+|BS/[SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BS/[SQLReport](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|5|
+|BS/[SQLReport_update](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|5a|
+|BS/[SQLReport_lastkey](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
 |BS/[SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
 |BS/[SQLReportBatchODBC](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
+|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
@@ -101,9 +108,6 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
 |BO/[Postgres1](project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
-|BS/[SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、reportレコード取得|6|
-|BS/[SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
-|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
 |BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
 |BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|

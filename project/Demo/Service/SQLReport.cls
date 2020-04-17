@@ -9,6 +9,8 @@ Parameter ADAPTER = "EnsLib.SQL.InboundAdapter";
 
 Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %RegisteredObject) As %Status
 {
+	$$$TRACE("%LastKey was "_..Adapter.GetPersistentValue(..%ConfigName,"%LastKey"))
+	
 	Set req=##class(User.Report.Record).%New()
 	Set req.orderid=pInput.Get("orderid")
 	Set req.data1=pInput.Get("data1")
@@ -26,6 +28,13 @@ ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
 	If pItem.GetModifiedSetting("TargetConfigName",.tValue) {
 		Set pArray(tValue)="" 
 	}
+}
+
+Method OnInit() As %Status
+{
+   #; initialize persistent last key value
+   Do ..Adapter.InitializePersistentValue(..%ConfigName,,0)
+   Quit $$$OK
 }
 
 }

@@ -184,6 +184,23 @@ XData ProductionDefinition
   <Item Name="ReportRouterCallBack" Category="" ClassName="Demo.Process.ReportRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="TargetConfigName">Postgres1</Setting>
   </Item>
+  <Item Name="SQLReport_update" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query">select * from report4 where done=false order by orderid;</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery">update report4 Set done=true where orderid=?</Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
+  </Item>
+  <Item Name="SQLReport_lastkey" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query"><![CDATA[select * from report5 where seq>? order by seq]]></Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery"></Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
+    <Setting Target="Adapter" Name="Parameters"><![CDATA[&%LastKey]]></Setting>
+  </Item>
 </Production>
 }
 

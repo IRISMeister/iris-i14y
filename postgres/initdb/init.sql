@@ -62,6 +62,33 @@ CREATE TABLE public.report3
     PRIMARY KEY (orderid)
 );
 
+CREATE TABLE public.report4
+(
+    seq Integer,
+    orderid Integer,
+    data1 Integer,
+    data2 Integer,
+    memo VARCHAR(20),
+    done Boolean,
+    PRIMARY KEY (orderid)
+);
+INSERT INTO report4 VALUES (1,1,10,10020,'abc',false);
+INSERT INTO report4 VALUES (1,2,11,10021,'def',false);
+INSERT INTO report4 VALUES (1,3,12,10022,'ABC',false);
+
+CREATE TABLE public.report5
+(
+    seq Integer,
+    orderid Integer,
+    data1 Integer,
+    data2 Integer,
+    memo VARCHAR(20),
+    PRIMARY KEY (orderid)
+);
+INSERT INTO report5 VALUES (1,1,10,10020,'abc');
+INSERT INTO report5 VALUES (2,2,11,10021,'def');
+INSERT INTO report5 VALUES (3,3,12,10022,'ABC');
+
 CREATE TABLE public.reportTrigger
 (
    seq Integer,
