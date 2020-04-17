@@ -30,6 +30,7 @@ ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
 	}
 }
 
+/// %LastKeyの永続化領域に初期値を設定
 Method OnInit() As %Status
 {
    #; initialize persistent last key value

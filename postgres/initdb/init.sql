@@ -85,9 +85,9 @@ CREATE TABLE public.report5
     memo VARCHAR(20),
     PRIMARY KEY (orderid)
 );
-INSERT INTO report5 VALUES (1,1,10,10020,'abc');
-INSERT INTO report5 VALUES (2,2,11,10021,'def');
-INSERT INTO report5 VALUES (3,3,12,10022,'ABC');
+INSERT INTO report5 VALUES (1000,1,10,10020,'abc');
+INSERT INTO report5 VALUES (1001,2,11,10021,'def');
+INSERT INTO report5 VALUES (1002,3,12,10022,'ABC');
 
 CREATE TABLE public.reportTrigger
 (

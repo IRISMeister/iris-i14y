@@ -99,7 +99,8 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/[SQLReport_lastkey](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
 |BS/[SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
 |BS/[SQLReportBatchODBC](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
-|BS/FileOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
+|BS/FILEOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
+|BS/[AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)|Demo.Service.AccessLocalDB||N/A|一定時間間隔でローカルデータベースをアクセスする例。||
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/[FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
@@ -108,7 +109,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
 |BO/[Postgres1](project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
-|BO/FileOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
+|BO/FILEOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
 |BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
@@ -243,9 +244,9 @@ $
 ### 単独メッセージ処理
 SQLReportは下記の入力を受け付けます。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。
 ```SQL
-SQL> INSERT INTO report3 VALUES (1,4,10,20,'aaa');
-SQL> INSERT INTO report3 VALUES (1,5,11,21,'bbb');
-SQL> INSERT INTO report3 VALUES (1,6,12,22,'ccc');
+SQL> INSERT INTO report3 VALUES (1,1,10,20,'aaa');
+SQL> INSERT INTO report3 VALUES (1,2,11,21,'bbb');
+SQL> INSERT INTO report3 VALUES (1,3,12,22,'ccc');
 ```
 これでユースケース5が動作します。その結果,postgresql上にreportresultレコードがINSERTされます。  
 ```SQL
@@ -253,9 +254,9 @@ SQL> SELECT * FROM reportresult
 +---------------------------+-----------------+------------+------------+------------+
 | logtimestamp              | target          | orderid    | data1      | result     |
 +---------------------------+-----------------+------------+------------+------------+
-| 2020-04-08 13:48:38.307145| FTPReport1      | 4          | 10         | 1          |
-| 2020-04-08 13:48:38.3138  | FTPReport3      | 4          | 10         | 1          |
-| 2020-04-08 13:48:38.341635| FTPReport2      | 4          | 10         | 1          |
+| 2020-04-08 13:48:38.307145| FTPReport1      | 1          | 10         | 1          |
+| 2020-04-08 13:48:38.3138  | FTPReport3      | 1          | 10         | 1          |
+| 2020-04-08 13:48:38.341635| FTPReport2      | 1          | 10         | 1          |
 +---------------------------+-----------------+------------+------------+------------+
 SQLRowCount returns 3
 3 rows fetched
