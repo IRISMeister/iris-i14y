@@ -85,7 +85,7 @@ Method ExecReportResult(pRequest As Demo.Request.ReportResult, Output pResponse 
 	Set sql="insert into reportResult (logtimestamp,target,orderid,data1,result) values (current_timestamp,?,?,?,?)"
 	Try {
 		Set pResponse=##class(Ens.Response).%New()
-		Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,pRequest.TargetConfigName,pRequest.Body.orderid,pRequest.Body.data1,'pRequest.Result)
+		Set tSC = ..Adapter.ExecuteUpdate(.nrows,sql,pRequest.TargetConfigName,pRequest.Body.orderid,pRequest.Body.data1,pRequest.Result)
 		$$$ThrowOnError(tSC)
 		$$$TRACE("Inserted "_nrows_" rows")	
 	}

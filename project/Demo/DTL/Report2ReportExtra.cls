@@ -16,7 +16,14 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='source.memo' property='target.memo' action='set' />
 <assign value='source.%Source' property='target.%Source' action='set' />
 <assign value='..Length(source.memo)' property='target.Extra1' action='set' />
-<assign value='..CurrentDateTime()' property='target.Extra2' action='set' />
+<if condition='source.data2&lt;100' >
+<true>
+<assign value='"Small number"' property='target.Extra2' action='set' />
+</true>
+<false>
+<assign value='"Large number"' property='target.Extra2' action='set' />
+</false>
+</if>
 </transform>
 }
 

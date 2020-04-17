@@ -1,7 +1,7 @@
 Class Demo.Request.ReportResult Extends Ens.Request
 {
 
-Property Body As User.Report.Record;
+Property Body As User.ReportExtra.Record;
 
 Property TargetConfigName As %String(MAXLEN = 128);
 

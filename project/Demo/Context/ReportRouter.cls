@@ -26,6 +26,7 @@ Method CheckResponseStatus(process As Demo.Process.ReportRouterCallBack) As %Sta
 			#;BOに送られたメッセージのクラス名とIDを取得
 			Set bodycls=req.MessageBodyClassName, reqbodyid=req.MessageBodyId
 
+			$$$TRACE("Opening classname:"_bodycls_" Id:"_reqbodyid)
 			#;興味の対象となるプロパティ値を取得するためにオブジェクトをOpen
 			Set reqbody=$CLASSMETHOD(bodycls,"%OpenId",reqbodyid)
 
@@ -53,7 +54,7 @@ Method SendRequest(process, src, obj, reqbody) As %Status
 		#;メッセージ作成
 		Set tRequest=##class(Demo.Request.ReportResult).%New()
 		Set tRequest.TargetConfigName=src
-		Set tRequest.Result=obj.IsError
+		Set tRequest.Result='obj.IsError   ; Result=1:OK, 0:NG
 		Set tRequest.Body=reqbody
 		#; 外部DB更新用のBOを呼び出す
 		Set tSC=process.SendRequestSync(process.TargetConfigName,tRequest,.tResponse)

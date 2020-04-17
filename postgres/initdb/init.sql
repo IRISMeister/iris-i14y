@@ -37,7 +37,7 @@ CREATE TABLE public.report
 
 INSERT INTO report VALUES (1,1,10,20,'abc');
 INSERT INTO report VALUES (1,2,11,21,'日本語');
-INSERT INTO report VALUES (1,3,12,22,'ｱｲｳｴｵ');
+INSERT INTO report VALUES (1,3,12,1000,'ｱｲｳｴｵ');
 
 CREATE TABLE public.report2
 (
@@ -48,9 +48,9 @@ CREATE TABLE public.report2
     memo VARCHAR(20),
     PRIMARY KEY (orderid)
 );
-INSERT INTO report2 VALUES (1,1,10,10020,'abc');
-INSERT INTO report2 VALUES (1,2,11,10021,'日本語');
-INSERT INTO report2 VALUES (1,3,12,10022,'ｱｲｳｴｵ');
+INSERT INTO report2 VALUES (1,1,10,20,'abc');
+INSERT INTO report2 VALUES (1,2,11,21,'日本語');
+INSERT INTO report2 VALUES (1,3,12,1000,'ｱｲｳｴｵ');
 
 CREATE TABLE public.report3
 (
@@ -61,6 +61,9 @@ CREATE TABLE public.report3
     memo VARCHAR(20),
     PRIMARY KEY (orderid)
 );
+INSERT INTO report3 VALUES (1,1,10,20,'abc');
+INSERT INTO report3 VALUES (1,2,11,21,'def');
+INSERT INTO report3 VALUES (1,3,12,1000,'ABC');
 
 CREATE TABLE public.report4
 (
@@ -72,9 +75,9 @@ CREATE TABLE public.report4
     done Boolean,
     PRIMARY KEY (orderid)
 );
-INSERT INTO report4 VALUES (1,1,10,10020,'abc',false);
-INSERT INTO report4 VALUES (1,2,11,10021,'def',false);
-INSERT INTO report4 VALUES (1,3,12,10022,'ABC',false);
+INSERT INTO report4 VALUES (1,1,10,20,'abc',false);
+INSERT INTO report4 VALUES (1,2,11,21,'def',false);
+INSERT INTO report4 VALUES (1,3,12,1000,'ABC',false);
 
 CREATE TABLE public.report5
 (
@@ -85,9 +88,9 @@ CREATE TABLE public.report5
     memo VARCHAR(20),
     PRIMARY KEY (orderid)
 );
-INSERT INTO report5 VALUES (1000,1,10,10020,'abc');
-INSERT INTO report5 VALUES (1001,2,11,10021,'def');
-INSERT INTO report5 VALUES (1002,3,12,10022,'ABC');
+INSERT INTO report5 VALUES (1000,1,10,20,'abc');
+INSERT INTO report5 VALUES (1001,2,11,21,'def');
+INSERT INTO report5 VALUES (1002,3,12,1000,'ABC');
 
 CREATE TABLE public.reportTrigger
 (
