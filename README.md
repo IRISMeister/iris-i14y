@@ -111,6 +111,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
+|BO/[FTPCustom](project/Demo/Operation/FTPCustom.cls)|Demo.Operation.FTPCustom|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例||
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -437,7 +438,7 @@ See https://hub.docker.com/_/mysql
 
 事前準備  
 下記の方法で、事前にイメージをビルドしておく必要があります。選択したEditionに相当するイメージ名をdocker-compose-oracle.ymlに反映してください。  
-https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md
+https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md  
 Oracle JDBC Driver(ojdbc8.jarなど)をjars/直下に配置してください。
 
 起動方法  

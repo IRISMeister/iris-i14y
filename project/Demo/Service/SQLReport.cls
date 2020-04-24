@@ -11,14 +11,22 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 {
 	$$$TRACE("%LastKey was "_..Adapter.GetPersistentValue(..%ConfigName,"%LastKey"))
 	
-	Set req=##class(User.Report.Record).%New()
-	Set req.orderid=pInput.Get("orderid")
-	Set req.data1=pInput.Get("data1")
-	Set req.data2=pInput.Get("data2")
-	Set req.memo=pInput.Get("memo")
-	$$$TRACE("orderid:"_req.orderid_" data1:"_req.data1_" data2:"_req.data2_" memo:"_req.memo)
-	Set tSC=..SendRequestSync(..TargetConfigName,req,.pOutput)
-	Return $$$OK
+	Set tSC=$$$OK
+	Try {
+		Set req=##class(User.Report.Record).%New()
+		Set req.orderid=pInput.Get("orderid")
+		Set req.data1=pInput.Get("data1")
+		Set req.data2=pInput.Get("data2")
+		Set req.memo=pInput.Get("memo")
+		$$$TRACE("orderid:"_req.orderid_" data1:"_req.data1_" data2:"_req.data2_" memo:"_req.memo)
+		Set tSC=..SendRequestSync(..TargetConfigName,req,.pOutput)
+		$$$ThrowOnError(tSC)
+	}
+	Catch e {
+		Set tSC=e.AsStatus()
+	}
+	
+	Return tSC
 }
 
 /// プロダクション画面の接続線の描画ロジック

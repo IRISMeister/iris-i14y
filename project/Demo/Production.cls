@@ -3,7 +3,7 @@ Class Demo.Production Extends Ens.Production
 
 XData ProductionDefinition
 {
-<Production Name="Demo.Production" LogGeneralTraceEvents="false">
+<Production Name="Demo.Production" TestingEnabled="true" LogGeneralTraceEvents="false">
   <Description></Description>
   <ActorPoolSize>2</ActorPoolSize>
   <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
@@ -202,6 +202,12 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Parameters"><![CDATA[&%LastKey]]></Setting>
   </Item>
   <Item Name="AccessLocalDB" Category="" ClassName="Demo.Service.AccessLocalDB" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  </Item>
+  <Item Name="FTPCustom" Category="" ClassName="Demo.Operation.FTPCustom" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="Credentials">ftp</Setting>
+    <Setting Target="Adapter" Name="FTPServer">ftp</Setting>
+    <Setting Target="Adapter" Name="FilePath">/upload/demo/out_custom</Setting>
+    <Setting Target="Adapter" Name="Charset">utf-8</Setting>
   </Item>
 </Production>
 }

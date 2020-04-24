@@ -9,6 +9,7 @@ upload/demo/out_report2/*
 upload/demo/out_report3/*
 upload/demo/out_target1/*
 upload/demo/out_target2/*
+upload/demo/out_custom/*
 upload/local/in_order/*
 upload/local/out_order/*
 oracle/oradata/ORCLCDB
