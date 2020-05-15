@@ -1,0 +1,12 @@
+[IRISDriver]
+UsageCount       = 1
+Description      = InterSystems IRIS ODBC driver
+Driver           = /usr/irissys/bin/libirisodbcur6435.so
+Setup            = /usr/irissys/bin/libirisodbcur6435.so
+SQLLevel         = 1
+FileUsage        = 0
+DriverODBCVer    = 03.52
+ConnectFunctions = YYN
+APILevel         = 1
+DEBUG            = 1
+CPTimeout        = <not pooled>

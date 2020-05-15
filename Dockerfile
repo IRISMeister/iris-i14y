@@ -12,6 +12,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openj
 
 COPY jars .
 COPY odbc .
+
+# register IRIS driver
+RUN odbcinst -i -d -f iris.driver.template
 # register psql data source. Doing some tricks to make it work
 RUN odbcinst -i -s -l -f odbc.ini \
  && mv $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini.org \
