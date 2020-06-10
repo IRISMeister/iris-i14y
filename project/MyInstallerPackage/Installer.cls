@@ -26,8 +26,6 @@ XData setup [ XMLNamespace = INSTALLER ]
 	<Credential Name="ftp" Username="foo" Password="pass" Overwrite="1"/>
 	</Production>
 </Namespace>
-
-
 </Manifest>
 }
 
@@ -71,6 +69,7 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set p.isJDBC = 1
 		Set p.pwd = "demo"
 		Set tSC=p.%Save()
+		$$$ThrowOnError(tSC)
 
 		; Add SQL Gateway connection for JDBC access to mysql
 		Set p=##class(%Library.SQLConnection).%New()
@@ -82,7 +81,13 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set p.isJDBC = 1
 		Set p.pwd = "demo"
 		Set tSC=p.%Save()
+		$$$ThrowOnError(tSC)
 
+		Set $NAMESPACE=tVars("NAMESPACE")
+		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/order.xsd")
+		$$$ThrowOnError(tSC)
+		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/person.xsd")
+		$$$ThrowOnError(tSC)
 
   } Catch(e) {
 	  Set tSC=e.AsStatus()

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>Peters,George W.</Name>
+	<SSN>979-98-8380</SSN>
+	<DOB>1931-09-03</DOB>
+	<Home>
+		<Street>5592 Elm Street</Street>
+		<City>Albany</City>
+		<State>GA</State>
+		<Zip>82099</Zip>
+	</Home>
+	<Office>
+		<Street>6286 Franklin Drive</Street>
+		<City>Newton</City>
+		<State>OH</State>
+		<Zip>99118</Zip>
+	</Office>
+	<FavoriteColors>
+		<FavoriteColorsItem>Blue</FavoriteColorsItem>
+		<FavoriteColorsItem>Green</FavoriteColorsItem>
+	</FavoriteColors>
+	<Age>86</Age>
+</Person>

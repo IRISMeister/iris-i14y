@@ -54,7 +54,7 @@ USER>zn "DEMO"
 DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 ```
 
-以下、コンテナを起動した環境のホスト名をirishostとします。  
+以下、コンテナを起動した環境のホスト名を***irishost***と仮定します。プロダクションへのリンクは、このホスト名を使用しています。
 
 ## 管理ポータルへのアクセス
 http://irishost:52773/csp/sys/%25CSP.Portal.Home.zen  
@@ -78,7 +78,10 @@ $ docker-compose down -v
 |5a|report4テーブル| 5と同じ。取得したレコードは、再取得されないよう、[削除クエリ]によりUPDATEする例。|||
 |5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
 |6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
-|7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|orderinfoレコード|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
+|7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|local/out_order/|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
+|8|xmlvdoc/in_order/order.xml|VDOCを使用したフォルダ監視及びXMLファイルの取得。内容をフォルダに対して出力|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
+|8a|xmlvdoc/in_person/person.xml|8と同じ。|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
+|8b|xmlvdoc/in_order/order.xml,<br>xmlvdoc/in_person/person.xml,<br>xmlvdoc/in_person/person-noschema.xml,|8と同じ。|xmlvdoc/out/,<br>xmlvdoc/ignored/|スキーマ定義が無いXMLファイルのハンドリング|
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
 ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの  
@@ -90,28 +93,35 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|SFTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
 |BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
 |BS/FTPSource1PathThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
-|BS/[SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|Demo.Service.SQLEntireTable|JDBC|I|report2レコード監視、report2レコード取得|6|
-|BS/[SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|Demo.Service.SQLEntireTableBulk|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
-|BS/[SQLReport](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|5|
-|BS/[SQLReport_update](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|5a|
-|BS/[SQLReport_lastkey](project/Demo/Service/SQLReport.cls)|Demo.Service.SQLReport|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
-|BS/[SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|BS/[SQLReportBatchODBC](project/Demo/Service/SQLReportBatch.cls)|Demo.Service.SQLReportBatch|ODBC|I|SQLReportBatchのODBC接続版。|3|
+|BS/SQLEntireTable|[Demo.Service.SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|6|
+|BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BS/SQLReport|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|5|
+|BS/SQLReport_update|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|5a|
+|BS/SQLReport_lastkey|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
+|BS/SQLReportBatch|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
+|BS/SQLReportBatchODBC|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|ODBC|I|SQLReportBatchのODBC接続版。|3|
 |BS/FILEOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
-|BS/[AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)|Demo.Service.AccessLocalDB||N/A|一定時間間隔でローカルデータベースをアクセスする例。||
+|BS/XMLOrder|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_orderフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8|
+|BS/XMLPerson|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_personフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8a|
+|BS/XMLNoSchema|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_noschemaフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8b|
+|BS/AccessLocalDB|[Demo.Service.AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)||N/A|一定時間間隔でローカルデータベースをアクセスする例。||
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
-|BP/[FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)|Demo.Process.FileTransferRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト|4|
+|BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
-|BP/[ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)|Demo.Process.ReportRouterCallBack||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
+|BP/ReportRouterCallBack|[Demo.Process.ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
+|BP/XMLVDocRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8,8a|
+|BP/XMLVDocNoSchemaRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8b|
 |BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PathThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
-|BO/[Postgres1](project/Demo/Operation/SQL.cls)|Demo.Operation.SQL|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
+|BO/Postgres1|[Demo.Operation.SQL](project/Demo/Operation/SQL.cls)|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
 |BO/FILEOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
+|BO/XMLOut|EnsLib.EDI.XML.Operation.FileOperation|File|O|O\order.xml,person.xmlファイルの作成|8,8a,8b|
+|BO/XMLIgnored|EnsLib.EDI.XML.Operation.FileOperation|File|O|order.xml,person.xml,person-noschema.xmlファイルの作成|8b|
 |BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
-|BO/[FTPCustom](project/Demo/Operation/FTPCustom.cls)|Demo.Operation.FTPCustom|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例||
+|BO/FTPCustom|[Demo.Operation.FTPCustom](project/Demo/Operation/FTPCustom.cls)|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例||
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -121,21 +131,28 @@ http://irishost:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAME
 
 
 ## ビジネスホスト以外の主な構成要素  
-CTX:BPコンテキストスーパークラス, DTL:データ変換, Rule:ルール
+CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 |要素|クラス|処理概要|ユースケース|
 |:--|:--|:--|:--|
 |CTX|[Demo.Context.ReportRouter](project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
-|Rule|[Demo.Rule.ReportRouter](project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。|5|
 |DTL|[Demo.DTL.Report2ReportExtra](project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
 
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
 
-|ルール名|備考|Link|
-|:--|:--|:--|
-|Demo.Rule.FileTransferRouter|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)|
-|Demo.Rule.ReportRouter|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|
+|ルール名|用途|Link|ユースケース|
+|:--|:--|:--|:--|
+|[Demo.Rule.FileTransferRouter](project/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
+|[Demo.Rule.ReportRouter](project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
+|[Demo.Rule.VDocRoutingEngineRoutingRule](project/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|スキーマ依存パスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
+|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](project/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|DOMスタイルパスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
+
+
+スキーマ依存パスについて  
+https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_schema_path  
+DOMスタイルパスについて  
+https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_dom_path
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
@@ -167,9 +184,21 @@ http://irishost:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAM
 |mysqljdbc|MySQLへのJDBC接続情報|
 |oraclejdbc|oracleへのJDBC接続情報|
 
+下記URLにて閲覧可能です。  
 http://irishost:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ODBC接続については、[直接データソース定義](odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
+
+## XMLスキーマ
+下記のXMLスキーマを定義・使用しています。  
+
+|カテゴリ|用途|xsd|
+|:--|:--|:--|
+|order|ファイル入力時のXMLバリデーション及び、ルール内でのスキーマ依存パスの使用|[order.xsd](resources/order.xsd)|
+|person|ファイル入力時のXMLバリデーション及び、ルール内でのスキーマ依存パスの使用|[person.xsd](resources/person.xsd)|
+
+下記URLにて閲覧可能です。  
+http://irishost:52773/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
 
 ## ユースケース1,2の実行方法
 ftp/sftpコンテナ内のフォルダは、ローカルホストのupload/demoフォルダにボリュームマウントしてありますので、下記の実行例のようにローカルのフォルダへの読み書きによる操作・確認が可能です。
@@ -318,6 +347,43 @@ $ cat out_order/order.txt
 1       100     200     abc
 2       101     201     日本語
 3       102     202     ｱｲｳｴｵ
+```
+## ユースケース8の実行方法
+ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
+
+スキーマ定義を伴う(EnsLib.EDI.XML.Service.FileServiceにおいてDocSchemaCategoryの指定がある)例。(8,8a)
+```bash
+$ cd upload/xmlvdoc
+$ cp order.xml in_order/
+$ cp person.xml in_person/
+```
+を実行することで、ユースケースXが動作します。その結果、out/直下にファイルが作成されます。下記コマンドにて確認可能です。
+```bash
+$ ls out/
+order.xml_2020-06-09_16.34.37.521  person.xml_2020-06-09_17.06.59.279
+$
+```
+また、これらのスキーマがValidであることを下記コマンドにて確認できます。
+```bash
+$ xmllint --schema ../../resources/order.xsd order.xml -noout
+$ xmllint --schema ../../resources/person.xsd person.xml -noout
+```
+
+スキーマ定義を伴わない例。(8b)
+```bash
+$ cd upload/xmlvdoc
+$ cp order.xml in_noschema/
+$ cp person.xml in_noschema/
+$ cp person-noschema.xml in_noschema/
+```
+を実行することで、ユースケースXが動作します。その結果、out/もしくはignored/直下にファイルが作成されます。どちらのフォルダに保存されるかは、ルールにて決定されます。  
+下記コマンドにて確認可能です。
+```bash
+$ ls out/
+person-noschema.xml_2020-06-09_17.49.21.605  person.xml_2020-06-09_17.47.36.666
+$ ls ignored/
+order.xml_2020-06-09_17.48.01.563
+$
 ```
 
 ## その他

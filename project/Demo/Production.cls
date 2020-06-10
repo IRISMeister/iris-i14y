@@ -209,7 +209,53 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_custom</Setting>
     <Setting Target="Adapter" Name="Charset">utf-8</Setting>
   </Item>
-</Production>
+  <Item Name="XMLPerson" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="DocSchemaCategory">person</Setting>
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/in_person</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.xml</Setting>
+    <Setting Target="Adapter" Name="Charset">UTF-8</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">XMLVDocRouter</Setting>
+    <Setting Target="Host" Name="Validation">1</Setting>
+  </Item>
+  <Item Name="XMLOrder" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="Person=personの意味は...ルートノード&lt;Person&gt;をxml schema category &apos;person&apos;にマッピングするの意" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="DocSchemaCategory">order</Setting>
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/in_order</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.xml</Setting>
+    <Setting Target="Adapter" Name="Charset">UTF-8</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">XMLVDocRouter</Setting>
+    <Setting Target="Host" Name="Validation">1</Setting>
+  </Item>
+  <Item Name="XMLNoSchema" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="DocSchemaCategory"></Setting>
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/in_noschema</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.xml</Setting>
+    <Setting Target="Adapter" Name="Charset">UTF-8</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">XMLVDocNoSchemaRouter</Setting>
+  </Item>
+  <Item Name="XMLVDocRouter" Category="xmlvdoc" ClassName="EnsLib.MsgRouter.VDocRoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="Validation">dm</Setting>
+    <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.VDocRoutingEngineRoutingRule</Setting>
+    <Setting Target="Host" Name="ResponseTargetConfigNames"></Setting>
+  </Item>
+  <Item Name="XMLVDocNoSchemaRouter" Category="xmlvdoc" ClassName="EnsLib.MsgRouter.VDocRoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="Validation">m</Setting>
+    <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema</Setting>
+    <Setting Target="Host" Name="ResponseTargetConfigNames"></Setting>
+    <Setting Target="Host" Name="RuleLogging">r</Setting>
+  </Item>
+  <Item Name="XMLOut" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/out/</Setting>
+    <Setting Target="Adapter" Name="Charset">!UTF-8</Setting>
+    <Setting Target="Host" Name="Filename">%f_%Q</Setting>
+    <Setting Target="Host" Name="Format">n</Setting>
+  </Item>
+  <Item Name="XMLIgnored" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/ignored/</Setting>
+    <Setting Target="Adapter" Name="Charset">!UTF-8</Setting>
+    <Setting Target="Host" Name="Filename">%f_%Q</Setting>
+    <Setting Target="Host" Name="Format">n</Setting>
+  </Item>
+  </Production>
 }
 
 }

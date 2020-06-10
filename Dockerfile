@@ -10,12 +10,13 @@ RUN apt -y update \
 RUN DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
  && apt clean
 
+# jdbc driver(s) and odbc ini files, if any
 COPY jars .
 COPY odbc .
 
-# register IRIS driver
+# register IRIS odbc driver
 RUN odbcinst -i -d -f iris.driver.template
-# register psql data source. Doing some tricks to make it work
+# register odbc data sources. Doing some tricks to make it work
 RUN odbcinst -i -s -l -f odbc.ini \
  && mv $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini.org \
  && cp odbc.ini $ISC_PACKAGE_INSTALLDIR/mgr/irisodbc.ini \
@@ -35,8 +36,9 @@ RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar \
 
 ENV SRCDIR=src
 COPY project/ $SRCDIR/
+COPY resources/ resources/
 
-#; making archive path 777 because depending on how you start your production(via SMP or command line), it uses different O/S user (irisuser/irisowner).
+# making archive path 777 because depending on how you start your production(via SMP or command line), it uses different O/S user (irisuser/irisowner).
 RUN mkdir /var/tmp/arc ; chmod 777 /var/tmp/arc \
  && iris start $ISC_PACKAGE_INSTANCENAME quietly \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") Do ##class(Security.Users).UnExpireUserPasswords("*") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
@@ -44,6 +46,7 @@ RUN mkdir /var/tmp/arc ; chmod 777 /var/tmp/arc \
  && printf 'Set tSC=##class(MyInstallerPackage.Installer).setup() Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly
 
+# clean up
 RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") h\n" | iris session $ISC_PACKAGE_INSTANCENAME -B | cat \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly bypass \

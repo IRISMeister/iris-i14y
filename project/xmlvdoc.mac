@@ -1,0 +1,45 @@
+ROUTINE xmlvdoc
+#include %occStatus
+
+Order() public {
+	Set d=##class(EnsLib.EDI.XML.Document).ImportFromFile("/home/irisowner/upload/xmlvdoc/order.xml")
+	Set d.DocType="order:Order"
+	w d.GetValueAt("OrderItems(1).Name"),!
+	; 商品名ABC
+	w d.GetValueAt("OrderItems(2).Ship-to.Family"),!
+	;佐藤
+
+	Return 
+}
+ 
+Person() public {
+	; Schema-dependant Style
+	Set d= ##class(EnsLib.EDI.XML.Document).ImportFromFile("/home/irisowner/upload/xmlvdoc/person.xml",,.sc)
+	Set d.DocType="person:Person"
+	w "Validation:"_d.Validate(),!
+	w d.GetValueAt("Name"),!
+	w d.GetValueAt("Home.Street"),!
+	w d.GetValueAt("FavoriteColors(*)"),!
+	w d.GetValueAt("FavoriteColors(1)"),!
+	Set zip=d.GetValueAt("Home.Zip")
+	Set tSC=d.SetValueAt(1234567,"Home.Zip")
+	zw tSC
+	w "Validation:",! Set tSC=d.Validate() 
+	zw tSC  //should be error because value '1234567' has length '7'
+	Set tSC=d.SetValueAt(zip,"Home.Zip")
+	w "Validation:"_d.Validate(),!
+
+	Set d="" Set d= ##class(EnsLib.EDI.XML.Document).ImportFromFile("/home/irisowner/upload/xmlvdoc/person.xml",,.sc)
+	; DOM Style
+	w d.GetValueAt("/Person/Name/"),!
+	; Peters,George W.
+	w d.GetValueAt("/Person/FavoriteColors/[1]"),!
+	; Blue
+	w d.GetValueAt("/Person/Home/Zip"),!
+	; 82099
+	Set tSC=d.SetValueAt(1234567,"/Person/Home/Zip") 
+	w "Validation:",! Set tSC=d.Validate() 
+	zw tSC	// should be error because no schema is present
+
+	Return 
+}
