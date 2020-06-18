@@ -8,12 +8,12 @@ Method CheckResponseStatus(process As Demo.Process.ReportRouterCallBack) As %Sta
 	Set WasError=0
 	Try {
 		#;BOからの戻り値を参照するために、それら複数のメッセージID(List形式)を取得
-		Set MessageBodyId=process.%PrimaryRequestHeader.MessageBodyId
+		Set MessageHeaderIds=process.%PrimaryRequestHeader.MessageBodyId
 		#;メッセージIDの個数を取得
-		Set LL=$LL(MessageBodyId)
-		$$$TRACE("Number of MessageBodyId:"_LL)
+		Set LL=$LL(MessageHeaderIds)
+		$$$TRACE("Number of MessageHeaderIds:"_LL)
 		For i=1:1:LL {
-			Set id=$LIST(MessageBodyId,i)
+			Set id=$LIST(MessageHeaderIds,i)
 			Set obj=##class(Ens.MessageHeader).%OpenId(id)
 			#;ここにBOの構成名が保存されている。名称がSourceになっているのは、このメッセージはBOが発生源になっているため。
 			Set src=obj.SourceConfigName

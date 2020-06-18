@@ -7,10 +7,11 @@ Method CheckResponseStatus(process) As %Status
 	Set tSC=$$$OK
 	Set WasError=0
 	Try {
-		Set MessageBodyId=process.%PrimaryRequestHeader.MessageBodyId
-		Set LL=$LL(MessageBodyId)
+		// contains list of MessageHeader IDs.
+		Set MessageHeaderIds=process.%PrimaryRequestHeader.MessageBodyId
+		Set LL=$LL(MessageHeaderIds)
 		For i=1:1:LL {
-			Set obj=##class(Ens.MessageHeader).%OpenId($LIST(MessageBodyId,i))
+			Set obj=##class(Ens.MessageHeader).%OpenId($LIST(MessageHeaderIds,i))
 			If obj.IsError=1 { Set WasError=1 }
 			zw obj        ; for debug
 		}
