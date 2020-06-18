@@ -53,7 +53,7 @@ XData ProductionDefinition
   <Item Name="FileTransferRouter" Category="ftp2ftp" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.FileTransferRouter</Setting>
     <Setting Target="Host" Name="ForceSyncSend">0</Setting>
-    <Setting Target="Host" Name="ResponseFrom">+FTPTarget1,FTPTarget2</Setting>
+    <Setting Target="Host" Name="ResponseFrom">+FTPTarget1PathThrough,FTPTarget2PathThrough</Setting>
     <Setting Target="Host" Name="ResponseTargetConfigNames">FileTransferRouterCallBack</Setting>
   </Item>
   <Item Name="FTPSource1PathThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
