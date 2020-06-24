@@ -482,6 +482,29 @@ $ docker-compose -f docker-compose.yml -f docker-compose-mysql.yml up -d
 $ docker-compose -f docker-compose.yml -f docker-compose-mysql.yml exec mysql bash
 root@mysql:/# mysql -u root -p
 Enter password:SYS
+mysql> SHOW VARIABLES LIKE '%char%';
++--------------------------+--------------------------------+
+| Variable_name            | Value                          |
++--------------------------+--------------------------------+
+| character_set_client     | utf8                           |
+| character_set_connection | utf8                           |
+| character_set_database   | utf8                           |
+| character_set_filesystem | binary                         |
+| character_set_results    | utf8                           |
+| character_set_server     | utf8                           |
+| character_set_system     | utf8                           |
+| character_sets_dir       | /usr/share/mysql-8.0/charsets/ |
++--------------------------+--------------------------------+
+8 rows in set (0.27 sec)
+mysql> show global VARIABLES like '%buffer_pool%size';
++-------------------------------+----------+
+| Variable_name                 | Value    |
++-------------------------------+----------+
+| innodb_buffer_pool_chunk_size | 33554432 |
+| innodb_buffer_pool_size       | 33554432 |
++-------------------------------+----------+
+2 rows in set (0.00 sec)
+mysql>
 mysql>
 root@mysql:/# mysql -u demo -p demo
 Enter password:demo

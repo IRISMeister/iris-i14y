@@ -40,8 +40,8 @@ CREATE TABLE report
 );
 
 INSERT INTO report VALUES (1,1,10,20,'abc');
-INSERT INTO report VALUES (1,2,11,21,'NoJapanesePreset');
-INSERT INTO report VALUES (1,3,12,1000,'NoJapanesePreset2');
+INSERT INTO report VALUES (1,2,11,21,'日本語');
+INSERT INTO report VALUES (1,3,12,1000,'ｱｲｳｴｵ');
 
 CREATE TABLE report2
 (
@@ -53,8 +53,8 @@ CREATE TABLE report2
     PRIMARY KEY (orderid)
 );
 INSERT INTO report2 VALUES (1,1,10,20,'abc');
-INSERT INTO report2 VALUES (1,2,11,21,'NoJapanesePreset');
-INSERT INTO report2 VALUES (1,3,12,1000,'NoJapanesePreset2');
+INSERT INTO report2 VALUES (1,2,11,21,'日本語');
+INSERT INTO report2 VALUES (1,3,12,1000,'ｱｲｳｴｵ');
 
 CREATE TABLE report3
 (
