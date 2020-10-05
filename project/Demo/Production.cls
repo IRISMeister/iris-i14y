@@ -258,6 +258,9 @@ XData ProductionDefinition
   <Item Name="Demo.Operation.SendMail" Category="" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="TargetConfigName">FileTransferRouter</Setting>
+    <Setting Target="Host" Name="PersistInProcData">0</Setting>
+    <Setting Target="Host" Name="KeepCSPPartition">0</Setting>
   </Item>
   </Production>
 }
