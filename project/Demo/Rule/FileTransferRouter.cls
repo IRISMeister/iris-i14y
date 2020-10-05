@@ -10,15 +10,20 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 <ruleSet name="" effectiveBegin="" effectiveEnd="">
 <rule name="" disabled="false">
 <when condition="Document.OriginalFilename=&quot;source1_1.txt&quot;">
-<send transform="" target="FTPTarget1PathThrough"></send>
-</when>
-<when condition="Document.OriginalFilename=&quot;source1_2.txt&quot;">
-<send transform="" target="FTPTarget2PathThrough"></send>
-</when>
-<when condition="Document.OriginalFilename=&quot;source1_3.txt&quot;">
-<send transform="" target="FTPTarget1PathThrough,FTPTarget2PathThrough"></send>
+<send transform="" target="FTPTarget1PassThrough"></send>
 <return></return>
 </when>
+<when condition="MyFunction(Document.OriginalFilename,Source)">
+<send transform="" target="FTPTarget2PassThrough"></send>
+<return></return>
+</when>
+<when condition="Document.OriginalFilename=&quot;source1_3.txt&quot;">
+<send transform="" target="FTPTarget1PassThrough,FTPTarget2PassThrough"></send>
+<return></return>
+</when>
+<otherwise>
+<send transform="" target="Demo.Operation.SendMail"></send>
+</otherwise>
 </rule>
 </ruleSet>
 </ruleDefinition>

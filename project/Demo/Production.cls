@@ -32,7 +32,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="SkipHeader">1</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
   </Item>
-  <Item Name="FTPTarget1PathThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="FTPTarget1PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="FTPPort"></Setting>
@@ -41,7 +41,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">FileGroup</Setting>
   </Item>
-  <Item Name="FTPTarget2PathThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="FTPTarget2PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="FTPPort"></Setting>
@@ -53,10 +53,10 @@ XData ProductionDefinition
   <Item Name="FileTransferRouter" Category="ftp2ftp" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.FileTransferRouter</Setting>
     <Setting Target="Host" Name="ForceSyncSend">0</Setting>
-    <Setting Target="Host" Name="ResponseFrom">+FTPTarget1PathThrough,FTPTarget2PathThrough</Setting>
+    <Setting Target="Host" Name="ResponseFrom">+FTPTarget1PassThrough,FTPTarget2PassThrough</Setting>
     <Setting Target="Host" Name="ResponseTargetConfigNames">FileTransferRouterCallBack</Setting>
   </Item>
-  <Item Name="FTPSource1PathThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="FTPSource1PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/upload/demo/in_source1</Setting>
     <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
     <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
@@ -254,6 +254,10 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">!UTF-8</Setting>
     <Setting Target="Host" Name="Filename">%f_%Q</Setting>
     <Setting Target="Host" Name="Format">n</Setting>
+  </Item>
+  <Item Name="Demo.Operation.SendMail" Category="" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   </Production>
 }
