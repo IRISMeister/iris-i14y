@@ -83,6 +83,14 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set tSC=p.%Save()
 		$$$ThrowOnError(tSC)
 
+		; Create New REST App for EnsLib.REST.GenericService(RESTPassThrough)
+		Kill prop
+		Set prop("NameSpace")="DEMO"
+		Set prop("DispatchClass")="EnsLib.REST.GenericService"
+		Set prop("AutheEnabled")=$$$AutheUnauthenticated
+		Set prop("MatchRoles")=":%All"
+		Set tSC = ##Class(Security.Applications).Create("/csp/demo/restpassthrough",.prop)		
+
 		Set $NAMESPACE=tVars("NAMESPACE")
 		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/order.xsd")
 		$$$ThrowOnError(tSC)
