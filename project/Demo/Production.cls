@@ -14,7 +14,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
@@ -23,7 +22,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="DeleteQuery">delete from reportTrigger where seq=?</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="SQLReportBatchODBC" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="false" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresql</Setting>
@@ -31,14 +29,12 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
     <Setting Target="Adapter" Name="DeleteQuery">delete from reportTrigger where seq=?</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="Postgres1" Category="custom,sql2sql,ftp2sql" ClassName="Demo.Operation.SQL" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Host" Name="SkipHeader">1</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPTarget1PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
@@ -47,7 +43,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_target1</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPTarget2PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
@@ -56,7 +51,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_target2</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="FileTransferRouter" Category="ftp2ftp" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.FileTransferRouter</Setting>
@@ -73,7 +67,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
     <Setting Target="Adapter" Name="Protocol">SFTP</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FileTransferRouterCallBack" Category="custom,ftp2ftp" ClassName="Demo.Process.FileTransferRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
@@ -89,7 +82,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="HeaderCount">1</Setting>
     <Setting Target="Adapter" Name="Charset">utf-8</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPOrderInfoBatch" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.BatchFTPService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Order</Setting>
@@ -104,7 +96,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="Charset">utf-8</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPProcess" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.FTPService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Process</Setting>
@@ -118,7 +109,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="HeaderCount">1</Setting>
     <Setting Target="Adapter" Name="Charset">@UTF8</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPProcessBatch" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.BatchFTPService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Process</Setting>
@@ -133,7 +123,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="BatchHandling">Whole</Setting>
     <Setting Target="Adapter" Name="Charset">@UTF8</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPReportBatch" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.BatchFTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -143,7 +132,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">Report</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="FTPReport1" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -153,8 +141,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
-    <Setting Target="Host" Name="ReplyCodeActions">E=D</Setting>
   </Item>
   <Item Name="FTPReport2" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -164,8 +150,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
-    <Setting Target="Host" Name="ReplyCodeActions">E=D</Setting>
   </Item>
   <Item Name="FTPReport3" Category="sql2ftp" ClassName="EnsLib.RecordMap.Operation.FTPOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FTPServer">sftp</Setting>
@@ -175,8 +159,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="RecordMap">ReportExtra</Setting>
     <Setting Target="Host" Name="Filename">Report-%Q</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
-    <Setting Target="Host" Name="ReplyCodeActions">E=D</Setting>
   </Item>
   <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
@@ -184,7 +166,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="SQLEntireTableBulk" Category="custom" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
@@ -192,11 +173,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="EnsLib.JavaGateway.Service" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FILEOrderInfo" Category="local2local" ClassName="EnsLib.RecordMap.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Order</Setting>
@@ -205,7 +184,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">FILEOrderInfoOut</Setting>
     <Setting Target="Host" Name="HeaderCount">1</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="FILEOrderInfoOut" Category="local2local" ClassName="EnsLib.RecordMap.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/local/out_order/</Setting>
@@ -213,7 +191,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">Binary</Setting>
     <Setting Target="Host" Name="Filename">%f</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="ReportRouter" Category="" ClassName="EnsLib.MsgRouter.RoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="BusinessRuleName">Demo.Rule.ReportRouter</Setting>
@@ -231,7 +208,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="SQLReport_lastkey" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
@@ -242,7 +218,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
     <Setting Target="Adapter" Name="Parameters"><![CDATA[&%LastKey]]></Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="AccessLocalDB" Category="" ClassName="Demo.Service.AccessLocalDB" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
@@ -252,7 +227,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_custom</Setting>
     <Setting Target="Adapter" Name="Charset">utf-8</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="XMLPerson" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="DocSchemaCategory">person</Setting>
@@ -262,7 +236,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">XMLVDocRouter</Setting>
     <Setting Target="Host" Name="Validation">1</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="XMLOrder" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="Person=personの意味は...ルートノード&lt;Person&gt;をxml schema category &apos;person&apos;にマッピングするの意" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="DocSchemaCategory">order</Setting>
@@ -272,7 +245,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigNames">XMLVDocRouter</Setting>
     <Setting Target="Host" Name="Validation">1</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="XMLNoSchema" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="DocSchemaCategory"></Setting>
@@ -281,7 +253,6 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Charset">UTF-8</Setting>
     <Setting Target="Host" Name="TargetConfigNames">XMLVDocNoSchemaRouter</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="XMLVDocRouter" Category="xmlvdoc" ClassName="EnsLib.MsgRouter.VDocRoutingEngine" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="Validation">dm</Setting>
@@ -300,7 +271,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="Filename">%f_%Q</Setting>
     <Setting Target="Host" Name="Format">n</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="XMLIgnored" Category="xmlvdoc" ClassName="EnsLib.EDI.XML.Operation.FileOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="FilePath">/home/irisowner/upload/xmlvdoc/ignored/</Setting>
@@ -308,7 +278,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="Filename">%f_%Q</Setting>
     <Setting Target="Host" Name="Format">n</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertRetryGracePeriod">120</Setting>
   </Item>
   <Item Name="Demo.Operation.SendMail" Category="" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
@@ -317,7 +286,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="PersistInProcData">0</Setting>
     <Setting Target="Host" Name="KeepCSPPartition">0</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGracePeriod">120</Setting>
   </Item>
   <Item Name="Ens.Alert" Category="" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
