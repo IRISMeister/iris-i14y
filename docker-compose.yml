@@ -74,7 +74,8 @@ services:
       - iris-tier
   
   smtp:
-    image: catatnight/postfix
+    build: 
+      context: smtp
     hostname: postfix
     ports:
     - 25:25

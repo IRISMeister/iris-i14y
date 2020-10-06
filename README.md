@@ -200,6 +200,10 @@ ODBC接続については、[直接データソース定義](odbc/odbc.ini)を�
 下記URLにて閲覧可能です。  
 http://irishost:52773/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
 
+## アラート管理
+下記URLにて閲覧可能です。  
+http://irishost:52773/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
+
 ## ユースケース1,2の実行方法
 ftp/sftpコンテナ内のフォルダは、ローカルホストのupload/demoフォルダにボリュームマウントしてありますので、下記の実行例のようにローカルのフォルダへの読み書きによる操作・確認が可能です。
 ```bash
@@ -473,8 +477,10 @@ See https://hub.docker.com/r/stilliard/pure-ftpd/
 
 * SMTPサーバ
 ```bash
-$ docker-compose exec smtp cat /var/mail/root | nkf -mQ
+$ docker-compose exec smtp cat /var/mail/netteam | nkf -mQ
 ```
+アラートメッセージの送信先。netteam, osteamなど複数の宛先ユーザが存在。[Dockerfile](smtp/Dockerfile)を参照。  
+本文がquoted-printableでエンコードされているので、特に日本語の判読にはnkfが必要。  
 See https://github.com/catatnight/docker-postfix
 
 * MySQL  
