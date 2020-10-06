@@ -23,6 +23,7 @@ services:
     - postgres
     - sftp
     - ftp
+    - smtp
 
   postgres:
     image: postgres:12.2-alpine
@@ -72,13 +73,13 @@ services:
     networks:
       - iris-tier
   
-  postfix:
+  smtp:
     image: catatnight/postfix
     hostname: postfix
     ports:
     - 25:25
     environment:
-      - maildomain=example.com
+      - maildomain=mail.example.com
       - smtp_user=foo:pass
     networks:
       - iris-tier

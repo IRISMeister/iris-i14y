@@ -471,6 +471,12 @@ root@ftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/stilliard/pure-ftpd/
 
+* SMTPサーバ
+```bash
+$ docker-compose exec smtp cat /var/mail/root | nkf -mQ
+```
+See https://github.com/catatnight/docker-postfix
+
 * MySQL  
 
 起動方法  

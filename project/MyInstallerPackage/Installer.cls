@@ -24,6 +24,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 	</Invoke>
 	<Production Name="${ProductionName}" AutoStart="1">
 	<Credential Name="ftp" Username="foo" Password="pass" Overwrite="1"/>
+	<Credential Name="smtp" Username="foo" Password="pass" Overwrite="1"/>
 	</Production>
 </Namespace>
 </Manifest>
