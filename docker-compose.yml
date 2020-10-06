@@ -72,6 +72,17 @@ services:
     networks:
       - iris-tier
   
+  postfix:
+    image: catatnight/postfix
+    hostname: postfix
+    ports:
+    - 25:25
+    environment:
+      - maildomain=example.com
+      - smtp_user=foo:pass
+    networks:
+      - iris-tier
+
 networks:
   iris-tier:
     driver: bridge
