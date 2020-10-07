@@ -12,7 +12,7 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 <when condition="IsRecentManagedAlert(AlertRequest,600,1)">
 <return>0</return>
 </when>
-<when condition="AlertGroups=&quot;NotImportantAlertGroup&quot;">
+<when condition="AlertGroups=&quot;&quot;">
 <return>0</return>
 </when>
 <otherwise>

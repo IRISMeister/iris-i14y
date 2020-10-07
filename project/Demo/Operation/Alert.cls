@@ -1,4 +1,4 @@
-Class Demo.Operation.DefaultAlert Extends Ens.Alerting.NotificationOperation
+Class Demo.Operation.Alert Extends Ens.BusinessOperation
 {
 
 Parameter INVOCATION = "Queue";

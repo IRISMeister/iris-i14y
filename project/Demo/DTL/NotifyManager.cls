@@ -16,6 +16,7 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='"appteam@localhost"' property='app' action='set' />
 <assign value='"sqlteam@localhost"' property='sql' action='set' />
 <assign value='"EnsLib.EMail.AlertOperation"' property='target.Targets.(1).TargetConfigName' action='set' />
+<assign value='"Alert"' property='target.Targets.(2).TargetConfigName' action='set' />
 <assign value='1' property='target.Notify' action='set' />
 <assign value='evrything' property='target.Targets.(1).AlertDestinations' action='append' />
 <if condition='..Contains(source.ManagedAlert.AlertGroups,"NET")' >

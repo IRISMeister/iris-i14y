@@ -7,7 +7,7 @@ XData ProductionDefinition
   <Description></Description>
   <ActorPoolSize>2</ActorPoolSize>
   <Setting Target="Adapter" Name="AlertNotificationManager">Ens.Alerting.NotificationManager</Setting>
-  <Setting Target="Adapter" Name="AlertNotificationOperation">Demo.Operation.DefaultAlert</Setting>
+  <Setting Target="Adapter" Name="AlertNotificationOperation">AlertDefault</Setting>
   <Setting Target="Adapter" Name="AlertNotificationRecipients">bot@localhost</Setting>
 
   <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
@@ -311,7 +311,12 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
   </Item>
-  <Item Name="Demo.Operation.SendMail" Category="" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SendMail" Category="mail" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="SMTPPort">25</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
+    <Setting Target="Adapter" Name="Credentials">smtp</Setting>
+    <Setting Target="Adapter" Name="From">iris</Setting>
+    <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
   </Item>
   <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigName">FileTransferRouter</Setting>
@@ -320,25 +325,24 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">NET</Setting>
   </Item>
-  <Item Name="EnsLib.EMail.AlertOperation" Category="" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="EnsLib.EMail.AlertOperation" Category="alert,mail" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
     <Setting Target="Adapter" Name="Credentials">smtp</Setting>
     <Setting Target="Adapter" Name="From">iris</Setting>
-    <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
     <Setting Target="Host" Name="IncludeDetails">1</Setting>
     <Setting Target="Host" Name="IncludeNodeinSubject">1</Setting>
   </Item>
-
-  <Item Name="Ens.Alert" Category="" ClassName="Ens.Alerting.AlertManager" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Ens.Alert" Category="alert" ClassName="Ens.Alerting.AlertManager" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="CreateManagedAlertRule">Demo.Rule.ManagedAlert</Setting>
     <Setting Target="Host" Name="AlertGroups"></Setting>
   </Item>
-  <Item Name="Ens.Alerting.NotificationManager" Category="" ClassName="Ens.Alerting.NotificationManager" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Ens.Alerting.NotificationManager" Category="alert" ClassName="Ens.Alerting.NotificationManager" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="NotificationTransform">Demo.DTL.NotifyManager</Setting>
   </Item>
-
-  <Item Name="Demo.Operation.DefaultAlert" Category="" ClassName="Demo.Operation.DefaultAlert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="AlertDefault" Category="alert" ClassName="Demo.Operation.AlertDefault" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Alert" Category="alert" ClassName="Demo.Operation.Alert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   </Production>
 }

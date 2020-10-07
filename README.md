@@ -27,17 +27,20 @@ $ docker-compose pull
 ```bash
 $ docker-compose up -d
 $ docker-compose ps
-        Name                      Command                       State                                   Ports
---------------------------------------------------------------------------------------------------------------------------------------
-iris-i14y_ftp_1        /bin/sh -c /run.sh -l pure ...   Up                      0.0.0.0:2121->21/tcp, 0.0.0.0:30000->30000/tcp,
-                                                                                0.0.0.0:30001->30001/tcp, 0.0.0.0:30002->30002/tcp,
-                                                                                0.0.0.0:30003->30003/tcp, 0.0.0.0:30004->30004/tcp,
-                                                                                0.0.0.0:30005->30005/tcp, 0.0.0.0:30006->30006/tcp,
-                                                                                0.0.0.0:30007->30007/tcp, 0.0.0.0:30008->30008/tcp,
-                                                                                0.0.0.0:30009->30009/tcp
+
+        Name                      Command                       State                                                       Ports
+-------------------------------------------------------------------------------------------------------------------------------------
+iris-i14y_ftp_1        /bin/sh -c /run.sh -l pure ...   Up                      0.0.0.0:2121->21/tcp, 0.0.0.0:30000->30000/tcp, 
+                                                                                0.0.0.0:30001->30001/tcp,
+                                                                                0.0.0.0:30002->30002/tcp, 0.0.0.0:30003->30003/tcp, 
+                                                                                0.0.0.0:30004->30004/tcp,
+                                                                                0.0.0.0:30005->30005/tcp, 0.0.0.0:30006->30006/tcp, 
+                                                                                0.0.0.0:30007->30007/tcp,
+                                                                                0.0.0.0:30008->30008/tcp, 0.0.0.0:30009->30009/tcp
 iris-i14y_iris_1       /iris-main                       Up (health: starting)   0.0.0.0:51773->51773/tcp, 0.0.0.0:52773->52773/tcp
 iris-i14y_postgres_1   docker-entrypoint.sh postgres    Up                      0.0.0.0:5432->5432/tcp
 iris-i14y_sftp_1       /entrypoint foo:pass:1000:1000   Up                      0.0.0.0:2222->22/tcp
+iris-i14y_smtp_1       /bin/sh -c /opt/install.sh ...   Up                      0.0.0.0:32768->1525/tcp
 $
 ```
 非docker環境への適用  
@@ -477,9 +480,9 @@ See https://hub.docker.com/r/stilliard/pure-ftpd/
 
 * SMTPサーバ
 ```bash
-$ docker-compose exec smtp cat /var/mail/netteam | nkf -mQ
+$ docker-compose exec smtp cat /var/mail/bot | nkf -mQ
 ```
-アラートメッセージの送信先。netteam, osteamなど複数の宛先ユーザが存在。[Dockerfile](smtp/Dockerfile)を参照。  
+アラートメッセージの送信先。bot, netteam, osteamなど複数の宛先ユーザが存在。[Dockerfile](smtp/Dockerfile)を参照。  
 本文がquoted-printableでエンコードされているので、特に日本語の判読にはnkfが必要。  
 See https://github.com/catatnight/docker-postfix
 
