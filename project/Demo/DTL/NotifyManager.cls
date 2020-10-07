@@ -10,7 +10,7 @@ Parameter TREATEMPTYREPEATINGFIELDASNULL = 0;
 XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 {
 <transform sourceClass='Ens.Alerting.NotificationRequest' targetClass='Ens.Alerting.Context.Notify' create='existing' language='objectscript' >
-<assign value='"bot@localhost"' property='evrything' action='set' />
+<assign value='"bot@localhost"' property='everything' action='set' />
 <assign value='"netteam@localhost"' property='network' action='set' />
 <assign value='"osteam@localhost"' property='os' action='set' />
 <assign value='"appteam@localhost"' property='app' action='set' />
@@ -18,7 +18,7 @@ XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 <assign value='"EnsLib.EMail.AlertOperation"' property='target.Targets.(1).TargetConfigName' action='set' />
 <assign value='"Alert"' property='target.Targets.(2).TargetConfigName' action='set' />
 <assign value='1' property='target.Notify' action='set' />
-<assign value='evrything' property='target.Targets.(1).AlertDestinations' action='append' />
+<assign value='everything' property='target.Targets.(1).AlertDestinations' action='append' />
 <if condition='..Contains(source.ManagedAlert.AlertGroups,"NET")' >
 <true>
 <assign value='network' property='target.Targets.(1).AlertDestinations' action='append' />
