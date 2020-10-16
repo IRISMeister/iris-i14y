@@ -7,7 +7,7 @@ Property Adapter As EnsLib.EMail.OutboundAdapter;
 
 Parameter INVOCATION = "Queue";
 
-Method Exec(pRequest As Ens.StringContainer, Output pResponse As Ens.Response) As %Status
+Method Exec(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
 	Return tSC
