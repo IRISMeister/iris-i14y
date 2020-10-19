@@ -15,11 +15,22 @@ Method Exec(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) A
 	Return tSC
 }
 
+Method Exec2(pRequest As Ens.StringRequest, Output pResponse As Ens.Response) As %Status
+{
+	Set tSC=$$$OK
+	Set pResponse=##class(Ens.Response).%New()
+	$$$LOGINFO("SendMail Called.")
+	Return tSC
+}
+
 XData MessageMap
 {
 <MapItems>
 	<MapItem MessageType="Ens.StreamContainer"> 
 		<Method>Exec</Method>
+	</MapItem>
+	<MapItem MessageType="Ens.StringRequest"> 
+		<Method>Exec2</Method>
 	</MapItem>
 </MapItems>
 }

@@ -9,7 +9,6 @@ XData ProductionDefinition
   <Setting Target="Adapter" Name="AlertNotificationManager">Ens.Alerting.NotificationManager</Setting>
   <Setting Target="Adapter" Name="AlertNotificationOperation">AlertDefault</Setting>
   <Setting Target="Adapter" Name="AlertNotificationRecipients">bot@localhost</Setting>
-
   <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select * from report3 order by orderid</Setting>
@@ -318,7 +317,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="From">iris</Setting>
     <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
   </Item>
-  <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="false" Foreground="false" Comment="Doesn&apos;t work" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigName">FileTransferRouter</Setting>
     <Setting Target="Host" Name="PersistInProcData">0</Setting>
     <Setting Target="Host" Name="KeepCSPPartition">0</Setting>
@@ -344,7 +343,9 @@ XData ProductionDefinition
   </Item>
   <Item Name="Alert" Category="alert" ClassName="Demo.Operation.Alert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  </Production>
+  <Item Name="Direct" Category="" ClassName="Demo.Service.Direct" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+</Production>
 }
 
 }

@@ -1,0 +1,14 @@
+ROUTINE direct
+#include %occStatus
+
+main() {
+	Set tSC = ##class(Ens.Director).CreateBusinessService("Direct",.tService)
+	If ($IsObject(tService)) {
+		Set input = ##class(Ens.StringRequest).%New()
+		Set input.StringValue="test message"
+		Set tSC = tService.ProcessInput(input,.output)
+		If $$$ISERR(tSC) { Write "Error :"_tSC,! }
+		zw output
+	}	
+
+}
