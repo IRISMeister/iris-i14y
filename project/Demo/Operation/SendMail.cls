@@ -10,6 +10,8 @@ Parameter INVOCATION = "Queue";
 Method Exec(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) As %Status
 {
 	Set tSC=$$$OK
+	Set pResponse=##class(Ens.Response).%New()
+	$$$LOGINFO("SendMail Called.")
 	Return tSC
 }
 
