@@ -83,7 +83,8 @@ $ docker-compose down -v
 |8a|xmlvdoc/in_person/person.xml|8と同じ。|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
 |8b|xmlvdoc/in_order/order.xml,<br>xmlvdoc/in_person/person.xml,<br>xmlvdoc/in_person/person-noschema.xml,|8と同じ。|xmlvdoc/out/,<br>xmlvdoc/ignored/|スキーマ定義が無いXMLファイルのハンドリング|
 
-### シーケンス5
+### シーケンス5について
+シーケンス5は、RDBから定期的にデータを取得し、その内容をFTPサーバ(群)に送信し、その送信結果をPostgresに保存するという処理を行っています。
 ![シーケンス5](https://raw.githubusercontent.com/IRISMeister/doc-images/main/iris-i14y/Sequence%20%235.png)
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
