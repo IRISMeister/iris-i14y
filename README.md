@@ -70,26 +70,33 @@ $ docker-compose stop
 $ docker-compose start
 $ docker-compose down -v
 ```
-## ユースケース
+## シーケンス
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
 |2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
 |3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/|バッチによる処理を行います。|
 |4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/,<br>out_target2/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
-|5|report3テーブル| Postgresに対してSELECTを定期的に実行。取得したレコードは、再取得されないよう[削除クエリ]によりDELETEする例。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/,<br>out_report2/,<br>out_report3/,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
-|5a|report4テーブル| 5と同じ。取得したレコードは、再取得されないよう、[削除クエリ]によりUPDATEする例。|||
-|5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
 |6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|local/out_order/|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 |8|xmlvdoc/in_order/order.xml|VDOCを使用したフォルダ監視及びXMLファイルの取得。内容をフォルダに対して出力|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
 |8a|xmlvdoc/in_person/person.xml|8と同じ。|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
 |8b|xmlvdoc/in_order/order.xml,<br>xmlvdoc/in_person/person.xml,<br>xmlvdoc/in_person/person-noschema.xml,|8と同じ。|xmlvdoc/out/,<br>xmlvdoc/ignored/|スキーマ定義が無いXMLファイルのハンドリング|
+
+### シーケンス5
+![シーケンス5](https://raw.githubusercontent.com/IRISMeister/doc-images/main/iris-i14y/Sequence%20%235.png)
+|#|入力元|処理|出力先|備考|
+|:--|:--|:--|:--|:--|
+|5|report3テーブル| Postgresに対してSELECTを定期的に実行。取得したレコードは、再取得されないよう[削除クエリ]によりDELETEする例。その内容から作成したファイルを送信。ファイル送信結果をPostgresに対してINSERT実行。|out_report1/,<br>out_report2/,<br>out_report3/,<br>reportresultレコード|Router,Rule,DTLを使用した例です。FTPへの送信が成功したか否かを確認するためにレスポンス・ターゲット構成を使用しています。その確認結果をPostgresに記録します。|
+|5a|report4テーブル| 5と同じ。取得したレコードは、再取得されないよう、[削除クエリ]によりUPDATEする例。|||
+|5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
+
+
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
 ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの  
 
-|ビジネスホスト名|クラス|アダプタ|I/O|処理概要|ユースケース|
+|ビジネスホスト名|クラス|アダプタ|I/O|処理概要|シーケンス|
 |:--|:--|:--|:--|:--|:--|
 |BS/FTPOrderInfo|EnsLib.RecordMap.Service.FTPService|FTP|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|1|
 |BS/FTPOrderInfoBatch|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_orderフォルダ監視、ファイル取得、バッチ用Orderメッセージ作成|1|
@@ -125,6 +132,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPCustom|[Demo.Operation.FTPCustom](project/Demo/Operation/FTPCustom.cls)|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例||
+|BO/Rest|[Demo.Operation.Rest](project/Demo/Operation/Rest.cls)|HTTP|O|ファイルパススルーから受信した内容をRest送信(PUT)する実行例||
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -136,7 +144,7 @@ http://irishost:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAME
 ## ビジネスホスト以外の主な構成要素  
 CTX:BPコンテキストスーパークラス, DTL:データ変換
 
-|要素|クラス|処理概要|ユースケース|
+|要素|クラス|処理概要|シーケンス|
 |:--|:--|:--|:--|
 |CTX|[Demo.Context.ReportRouter](project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
 |DTL|[Demo.DTL.Report2ReportExtra](project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
@@ -144,7 +152,7 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
 
-|ルール名|用途|Link|ユースケース|
+|ルール名|用途|Link|シーケンス|
 |:--|:--|:--|:--|
 |[Demo.Rule.FileTransferRouter](project/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
 |[Demo.Rule.ReportRouter](project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
@@ -168,7 +176,7 @@ http://irishost:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 
 ## RecordMap一覧
 下記のRecordMapを定義・使用しています。  
-|RecordMap名|生成クラス|生成バッチクラス|ユースケース|使用しているビジネスホスト名|
+|RecordMap名|生成クラス|生成バッチクラス|シーケンス|使用しているビジネスホスト名|
 |:--|:--|:--|:--|:--|
 |User.Order|User.Order.Record|User.Order.Batch|1|FTPOrderInfo,FTPOrderInfoBatch,Postgres1|
 |User.Process|User.Process.Record|User.Process.Batch|2|FTPProcess,FTPProcessBatch,Postgres1|
@@ -207,13 +215,24 @@ http://irishost:52773/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
 下記URLにて閲覧可能です。  
 http://irishost:52773/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
-## ユースケース1,2の実行方法
+## Restサービス
+受信テスト用に下記のRestサービスを作成しています。  
+実装クラス: [Demo.Rest.Dispatcher.cls](project/Demo/Rest/Dispatcher.cls)
+```
+$ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:52773/csp/demo/rest/repo -u SuperUser:SYS -s | jq
+{
+  "Status": "OK",
+  "TimeStamp": "03/26/2021 14:02:54"
+}
+```
+
+## シーケンス1,2の実行方法
 ftp/sftpコンテナ内のフォルダは、ローカルホストのupload/demoフォルダにボリュームマウントしてありますので、下記の実行例のようにローカルのフォルダへの読み書きによる操作・確認が可能です。
 ```bash
 $ cd upload/demo
 cp order.txt in_order/ 
 ```
-を実行することで、ユースケース1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンドにて確認可能です。
+を実行することで、シーケンス1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンドにて確認可能です。
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -240,20 +259,20 @@ SQLRowCount returns 3
 SQL> [リターン押下で終了]
 $ 
 ```
-ファイル、入力フォルダ、出力先テーブル名が異なるだけで、ユースケース2も同様です。
+ファイル、入力フォルダ、出力先テーブル名が異なるだけで、シーケンス2も同様です。
 ```bash
 cp process.txt in_process/ 
 ```
 ```SQL
 SQL> SELECT * FROM orderinfo;
 ```
-## ユースケース4の実行方法
+## シーケンス4の実行方法
 ```bash
 $ cd upload/demo
 $ cp source1_1.txt in_source1/
 $ cp source1_2.txt in_source1/
 ```
-を実行することで、ユースケース4が動作します。その結果、out_target1/もしくはout_target2/直下にファイルがputされます。下記コマンドにて確認可能です。
+を実行することで、シーケンス4が動作します。その結果、out_target1/もしくはout_target2/直下にファイルがputされます。下記コマンドにて確認可能です。
 ```bash
 $ ls out_target1/
 source1_1.txt_2020-04-17_17.45.05.230
@@ -261,7 +280,7 @@ $ ls out_target2/
 source1_2.txt_2020-04-17_17.45.35.278
 $
 ```
-## ユースケース3の実行方法
+## シーケンス3の実行方法
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -277,7 +296,7 @@ SQL>
 ```SQL
 SQL> INSERT INTO reportTrigger VALUES (1);
 ```
-を実行することで、ユースケース3が動作します。このレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportTriggerレコードは削除されます。その結果、out_report/直下にファイルが作成されます。下記コマンドにて確認可能です。
+を実行することで、シーケンス3が動作します。このレコードの発生がトリガとなり、データ(reportレコード)の取得処理が発動します。取得処理完了時に該当reportTriggerレコードは削除されます。その結果、out_report/直下にファイルが作成されます。下記コマンドにて確認可能です。
 
 ```bash
 $ ls out_report/
@@ -296,13 +315,13 @@ SQL> SELECT * FROM reportTrigger;
 +------------+
 SQLRowCount returns 0
 ```
-## ユースケース5の実行方法
+## シーケンス5の実行方法
 ```SQL
 SQL> INSERT INTO report3 VALUES (1,4,10,20,'aaa');
 SQL> INSERT INTO report3 VALUES (1,5,11,21,'bbb');
 SQL> INSERT INTO report3 VALUES (1,6,12,1000,'ccc');
 ```
-を実行することで、ユースケース5が動作します。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。その結果,postgresql上にreportresultレコードがINSERTされます。下記コマンドにて確認可能です。
+を実行することで、シーケンス5が動作します。これらのレコードの発生がトリガとなり、データ(report3レコード)の取得処理が発動します。取得処理完了時には[削除クエリ]設定により、該当report3レコードは削除されます。その結果,postgresql上にreportresultレコードがINSERTされます。下記コマンドにて確認可能です。
 ```SQL
 SQL> SELECT * FROM reportresult;
 +---------------------------+----------------+------------+------------+------------+
@@ -328,13 +347,13 @@ SQL> SELECT * FROM report3;
 SQLRowCount returns 0
 ```
 
-## ユースケース7の実行方法
+## シーケンス7の実行方法
 ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
 ```bash
 $ cd upload/local
 $ cp order.txt in_order/
 ```
-を実行することで、ユースケース7が動作します。その結果、out_order/直下にファイルが作成されます。下記コマンドにて確認可能です。
+を実行することで、シーケンス7が動作します。その結果、out_order/直下にファイルが作成されます。下記コマンドにて確認可能です。
 ```bash
 $ ls out_order/
 order.txt
@@ -355,7 +374,7 @@ $ cat out_order/order.txt
 2       101     201     日本語
 3       102     202     ｱｲｳｴｵ
 ```
-## ユースケース8の実行方法
+## シーケンス8の実行方法
 ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
 
 スキーマ定義を伴う(EnsLib.EDI.XML.Service.FileServiceにおいてDocSchemaCategoryの指定がある)例。(8,8a)
@@ -364,7 +383,7 @@ $ cd upload/xmlvdoc
 $ cp order.xml in_order/
 $ cp person.xml in_person/
 ```
-を実行することで、ユースケースXが動作します。その結果、out/直下にファイルが作成されます。下記コマンドにて確認可能です。
+を実行することで、シーケンスXが動作します。その結果、out/直下にファイルが作成されます。下記コマンドにて確認可能です。
 ```bash
 $ ls out/
 order.xml_2020-06-09_16.34.37.521  person.xml_2020-06-09_17.06.59.279
@@ -383,7 +402,7 @@ $ cp order.xml in_noschema/
 $ cp person.xml in_noschema/
 $ cp person-noschema.xml in_noschema/
 ```
-を実行することで、ユースケースXが動作します。その結果、out/もしくはignored/直下にファイルが作成されます。どちらのフォルダに保存されるかは、ルールにて決定されます。  
+を実行することで、シーケンスXが動作します。その結果、out/もしくはignored/直下にファイルが作成されます。どちらのフォルダに保存されるかは、ルールにて決定されます。  
 下記コマンドにて確認可能です。
 ```bash
 $ ls out/
@@ -465,7 +484,7 @@ root@sftp:/home/foo/upload/demo#
 See https://hub.docker.com/r/atmoz/sftp/  
 SFTPサーバにおける文字エンコードの制限  
 SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](project/Demo/Service/MyFTPService.cls))が必要になります。  
-パススルー処理(ユースケース4)は、このような文字エンコードによる影響を受けません。
+パススルー処理(シーケンス4)は、このような文字エンコードによる影響を受けません。
 
 * FTPサーバ
 ```bash

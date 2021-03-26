@@ -78,6 +78,17 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">NET</Setting>
   </Item>
+  <Item Name="FTPSource2PassThrough" Category="ftp2ftp" ClassName="EnsLib.FTP.PassthroughService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="FilePath">/upload/demo/in_source2</Setting>
+    <Setting Target="Adapter" Name="FileSpec">*.txt</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/var/tmp/arc</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">FileTransferRouter</Setting>
+    <Setting Target="Adapter" Name="Credentials">ftp</Setting>
+    <Setting Target="Adapter" Name="FTPServer">ftp</Setting>
+    <Setting Target="Adapter" Name="Protocol">FTP</Setting>
+    <Setting Target="Host" Name="AlertOnError">1</Setting>
+    <Setting Target="Host" Name="AlertGroups">NET</Setting>
+  </Item>
   <Item Name="FileTransferRouterCallBack" Category="custom,ftp2ftp" ClassName="Demo.Process.FileTransferRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
   <Item Name="FTPOrderInfo" Category="ftp2sql" ClassName="EnsLib.RecordMap.Service.FTPService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
@@ -344,6 +355,12 @@ XData ProductionDefinition
   <Item Name="Alert" Category="alert" ClassName="Demo.Operation.Alert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
   <Item Name="Direct" Category="" ClassName="Demo.Service.Direct" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="Rest" Category="" ClassName="Demo.Operation.Rest" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="HTTPPort">52773</Setting>
+    <Setting Target="Adapter" Name="HTTPServer">localhost</Setting>
+    <Setting Target="Adapter" Name="URL">/csp/demo/rest/repo</Setting>
+    <Setting Target="Adapter" Name="Credentials">rest</Setting>
   </Item>
 </Production>
 }

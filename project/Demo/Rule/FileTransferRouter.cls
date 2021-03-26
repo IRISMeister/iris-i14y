@@ -22,7 +22,7 @@ XData RuleDefinition [ XMLNamespace = "http://www.intersystems.com/rule" ]
 <return></return>
 </when>
 <otherwise>
-<send transform="" target="SendMail"></send>
+<send transform="" target="SendMail,Rest"></send>
 </otherwise>
 </rule>
 </ruleSet>

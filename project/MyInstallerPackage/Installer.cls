@@ -25,6 +25,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 	<Production Name="${ProductionName}" AutoStart="1">
 	<Credential Name="ftp" Username="foo" Password="pass" Overwrite="1"/>
 	<Credential Name="smtp" Username="foo" Password="pass" Overwrite="1"/>
+	<Credential Name="rest" Username="SuperUser" Password="SYS" Overwrite="1"/>
 	</Production>
 </Namespace>
 </Manifest>
@@ -84,13 +85,21 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set tSC=p.%Save()
 		$$$ThrowOnError(tSC)
 
-		; Create New REST App for EnsLib.REST.GenericService(RESTPassThrough)
+		; Create a New REST App for EnsLib.REST.GenericService(RESTPassThrough)
 		Kill prop
 		Set prop("NameSpace")="DEMO"
 		Set prop("DispatchClass")="EnsLib.REST.GenericService"
 		Set prop("AutheEnabled")=$$$AutheUnauthenticated
 		Set prop("MatchRoles")=":%All"
 		Set tSC = ##Class(Security.Applications).Create("/csp/demo/restpassthrough",.prop)		
+
+		; Create a New REST App
+		Kill prop
+		Set prop("NameSpace")="DEMO"
+		Set prop("DispatchClass")="Demo.Rest.Dispatcher"
+		Set prop("AutheEnabled")=$$$AutheUnauthenticated
+		Set prop("MatchRoles")=":%All"
+		Set tSC = ##Class(Security.Applications).Create("/csp/demo/rest",.prop)		
 
 		Set $NAMESPACE=tVars("NAMESPACE")
 		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/order.xsd")

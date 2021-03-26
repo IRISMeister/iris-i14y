@@ -1,0 +1,20 @@
+title Sequence #5
+
+SQLReport->+ReportRouter: Request
+note right of ReportRouter: Applying Rule
+
+par targets
+    ReportRouter->>+FTPReport1: Request
+    ReportRouter->>+FTPReport2: Request
+    ReportRouter->>+FTPReport3: Request
+    FTPReport1->>-ReportRouter: Response
+    FTPReport2->>-ReportRouter: Response
+    FTPReport3->>-ReportRouter: Response
+end
+
+ReportRouter->>+ReportRouterCallBack: ResponseTarget
+ReportRouter->-SQLReport: Response
+loop # of responses 
+ReportRouterCallBack->+Postgres1: Request
+Postgres1->-ReportRouterCallBack: Response
+end
