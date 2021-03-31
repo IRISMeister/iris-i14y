@@ -116,12 +116,14 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/XMLPerson|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_personフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8a|
 |BS/XMLNoSchema|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_noschemaフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8b|
 |BS/AccessLocalDB|[Demo.Service.AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)||N/A|一定時間間隔でローカルデータベースをアクセスする例。||
+|BS/Direct|[Demo.Service.Direct](project/Demo/Service/Direct.cls)||N/A|クライアントアプリ側でサービスをインスタンス化する例。||
 |BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
 |BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|4|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
 |BP/ReportRouterCallBack|[Demo.Process.ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
 |BP/XMLVDocRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8,8a|
 |BP/XMLVDocNoSchemaRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8b|
+|BP/SimpleCall|[Demo.Process.SimpleCall](project/Demo/Process/SimpleCall.cls)||N/A|シンプルなCALL実行例||
 |BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
 |BO/FTPTarget1PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
 |BO/FTPTarget2PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
@@ -134,6 +136,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|5|
 |BO/FTPCustom|[Demo.Operation.FTPCustom](project/Demo/Operation/FTPCustom.cls)|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例||
 |BO/Rest|[Demo.Operation.Rest](project/Demo/Operation/Rest.cls)|HTTP|O|ファイルパススルーから受信した内容をRest送信(PUT)する実行例||
+|BO/SendMail|[Demo.Operation.SendMail](project/Demo/Operation/SendMail.cls)|EMAIL|O|未実装。||
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
