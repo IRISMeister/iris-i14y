@@ -362,6 +362,8 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="URL">/csp/demo/rest/repo</Setting>
     <Setting Target="Adapter" Name="Credentials">rest</Setting>
   </Item>
+  <Item Name="SimpleCall" Category="" ClassName="Demo.Process.SimpleCall" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
 </Production>
 }
 

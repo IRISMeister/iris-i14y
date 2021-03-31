@@ -5,7 +5,7 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 {
 	Set tSC=$$$OK
 	Try {
-		Set tSC=..SendRequestSync("SendMail",pInput,.pOutput)
+		Set tSC=..SendRequestSync("SimpleCall",pInput,.pOutput)
 	}
 	Catch e {
 		Set tSC=e.AsStatus()

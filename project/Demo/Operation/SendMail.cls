@@ -15,10 +15,12 @@ Method Exec(pRequest As Ens.StreamContainer, Output pResponse As Ens.Response) A
 	Return tSC
 }
 
-Method Exec2(pRequest As Ens.StringRequest, Output pResponse As Ens.Response) As %Status
+Method Exec2(pRequest As Ens.StringContainer, Output pResponse As Ens.StringContainer) As %Status
 {
 	Set tSC=$$$OK
-	Set pResponse=##class(Ens.Response).%New()
+	h 10
+	Set pResponse=##class(Ens.StringContainer).%New()
+	Set pResponse.StringValue="Not Yet Implemented"
 	$$$LOGINFO("SendMail Called. Not Yet Implemented.")
 	Return tSC
 }
@@ -29,7 +31,7 @@ XData MessageMap
 	<MapItem MessageType="Ens.StreamContainer"> 
 		<Method>Exec</Method>
 	</MapItem>
-	<MapItem MessageType="Ens.StringRequest"> 
+	<MapItem MessageType="Ens.StringContainer"> 
 		<Method>Exec2</Method>
 	</MapItem>
 </MapItems>

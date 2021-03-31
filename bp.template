@@ -1,0 +1,18 @@
+	"Process Class": {
+        "prefix": "ClassProcess",
+        "body": [
+            "Class ${TM_FILENAME_BASE} Extends Ens.BusinessProcessBPL [ ClassType = persistent, ProcedureBlock ]",
+            "{",
+            "XData BPL [ XMLNamespace = \"http://www.intersystems.com/bpl\" ]",
+            "{",
+
+			"<process language='objectscript' request='Ens.Request' response='Ens.Response' height='2000' width='2000' >",
+			"\t<sequence xend='200' yend='350' >",
+			"\t\t<trace value='\"test\"' xpos='200' ypos='250' disabled=\"true\"/>",
+			"\t</sequence>",
+			"</process>",
+            "}",
+            "}",
+        ],
+        "description": "Process helper"
+    },
