@@ -1,10 +1,19 @@
 {
+
+    "intersystems.servers": {
+        "irisi14y": {
+            "webServer": {
+                "scheme": "http",
+                "host": "localhost",
+                "port": 52773
+            },
+            "username": "SuperUser"
+        }
+    },
     "objectscript.conn": {
+        "server": "irisi14y",
         "ns": "DEMO",
-        "host": "localhost",
-        "port": 52773,
-        "username": "SuperUser",
-        "password": "SYS",
         "active": true
-    }
+    },
+    "search.useIgnoreFiles": false
 }

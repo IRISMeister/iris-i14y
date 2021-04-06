@@ -1,4 +1,5 @@
-FROM store/intersystems/iris-community:2020.1.0.209.0
+#FROM store/intersystems/iris-community:2020.1.0.209.0
+FROM containers.intersystems.com/intersystems/iris-community:2020.1.1.408.0
 
 USER root
 
