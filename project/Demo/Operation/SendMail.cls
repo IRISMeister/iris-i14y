@@ -25,6 +25,17 @@ Method Exec2(pRequest As Ens.StringContainer, Output pResponse As Ens.StringCont
 	Return tSC
 }
 
+Method Exec3(pRequest As User.Order.Record, Output pResponse As Ens.StringContainer) As %Status
+{
+	Set tSC=$$$OK
+	h 10
+	Set pResponse=##class(Ens.StringContainer).%New()
+	Set pResponse.StringValue="Not Yet Implemented"
+	$$$LOGINFO("SendMail Called. Not Yet Implemented.")
+	Return tSC
+}
+
+
 XData MessageMap
 {
 <MapItems>
@@ -33,6 +44,9 @@ XData MessageMap
 	</MapItem>
 	<MapItem MessageType="Ens.StringContainer"> 
 		<Method>Exec2</Method>
+	</MapItem>
+	<MapItem MessageType="User.Order.Record"> 
+		<Method>Exec3</Method>
 	</MapItem>
 </MapItems>
 }
