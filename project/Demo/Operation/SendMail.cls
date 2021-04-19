@@ -35,7 +35,6 @@ Method Exec3(pRequest As User.Order.Record, Output pResponse As Ens.StringContai
 	Return tSC
 }
 
-
 XData MessageMap
 {
 <MapItems>
