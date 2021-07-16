@@ -189,7 +189,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">NET</Setting>
   </Item>
-  <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select * from report2 order by orderid</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
@@ -197,7 +197,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
-  <Item Name="SQLEntireTableBulk" Category="custom" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="SQLEntireTableBulk" Category="custom" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select 1</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
@@ -363,6 +363,13 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Credentials">rest</Setting>
   </Item>
   <Item Name="SimpleCall" Category="" ClassName="Demo.Process.SimpleCall" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="SQLMultipleTables" Category="" ClassName="Demo.Service.SQLMultipleTables" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query">select 1</Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName"></Setting>
+    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
 </Production>
 }

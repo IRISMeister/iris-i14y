@@ -1,7 +1,7 @@
 # InterSystems IRIS インターオペラビリティ機能の紹介
 ## 概要
 InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。使用するファイルはUTF8エンコードを前提にしています。  
-Ubuntu 18.04 LTS + Docker CE 19.03.7, Windows10 + Docker Desdktop 2.2.0.4(43472) にて動作確認済み。
+Ubuntu 18.04 LTS + Docker CE 19.03.7, Windows10 + Docker Desktop 2.2.0.4(43472) にて動作確認済み。
 
 ## 起動前提条件
 下記のイメージ実行が成功する環境であること。
@@ -44,7 +44,7 @@ iris-i14y_smtp_1       /bin/sh -c /opt/install.sh ...   Up                      
 $
 ```
 非docker環境への適用  
-非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/(Winodwsの場合、c:\home\user1\git\)下にcloneしたと仮定します。  
+非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/(Windowsの場合、c:\home\user1\git\)下にcloneしたと仮定します。  
 ```ObjectScript
 USER>d $SYSTEM.OBJ.Load("/home/user1/git/iris-i14y/project/MyInstallerPackage/Installer.cls","ck")
 USER>Set tVars("SRCDIR")="/home/user1/git/iris-i14y/project"
@@ -74,9 +74,9 @@ $ docker-compose down -v
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
 |1|in_order/order.txt|FTP経由でのフォルダ監視及びファイルの取得。CSVの行をRDB上のレコードに編成。Postgresに対してINSERT実行|orderinfoレコード|単独メッセージ処理とバッチによる処理の2種類があります。|
-|2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるReccordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
-|3|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/|バッチによる処理を行います。|
-|4|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/,<br>out_target2/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
+|2|in_process/process.txt|1と同様の処理を異なる入力ファイル、出力先テーブルに対して実行。|processレコード|異なるRecordMapを定義・使用することで、同類の処理を容易に複製可能であることを示す例です。|
+|3|in_source1/*.txt| FTP経由でのフォルダ監視及びファイルの取得。FileTransferのRule定義にしたがって、送信先を決定。FTP経由でファイルを出力。|out_target1/,<br>out_target2/*|受信ファイルをパススルーで送信する例です。ファイル内容は任意です。|
+|4|reportTriggerテーブル| Postgresに対してSELECTを定期的に実行。reportテーブルのレコードをCSVに編成。FTP経由でファイルを出力。|out_report/|バッチによる処理を行います。|
 |6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|local/out_order/|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
 |8|xmlvdoc/in_order/order.xml|VDOCを使用したフォルダ監視及びXMLファイルの取得。内容をフォルダに対して出力|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
@@ -103,30 +103,30 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPOrderInfoBatch|EnsLib.RecordMap.Service.BatchFTPService|FTP|I|in_orderフォルダ監視、ファイル取得、バッチ用Orderメッセージ作成|1|
 |BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|SFTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|2|
 |BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|2|
-|BS/FTPSource1PassThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|4|
+|BS/FTPSource1PassThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|3|
 |BS/SQLEntireTable|[Demo.Service.SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|6|
 |BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
 |BS/SQLReport|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|5|
 |BS/SQLReport_update|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|5a|
 |BS/SQLReport_lastkey|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
-|BS/SQLReportBatch|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|3|
-|BS/SQLReportBatchODBC|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|ODBC|I|SQLReportBatchのODBC接続版。|3|
+|BS/SQLReportBatch|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|4|
+|BS/SQLReportBatchODBC|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|ODBC|I|SQLReportBatchのODBC接続版。|4|
 |BS/FILEOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|7|
 |BS/XMLOrder|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_orderフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8|
 |BS/XMLPerson|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_personフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8a|
 |BS/XMLNoSchema|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_noschemaフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|8b|
 |BS/AccessLocalDB|[Demo.Service.AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)||N/A|一定時間間隔でローカルデータベースをアクセスする例。||
 |BS/Direct|[Demo.Service.Direct](project/Demo/Service/Direct.cls)||N/A|クライアントアプリ側でサービスをインスタンス化する例。||
-|BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|4|
-|BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|4|
+|BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|3|
+|BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|3|
 |BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|5|
 |BP/ReportRouterCallBack|[Demo.Process.ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|5|
 |BP/XMLVDocRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8,8a|
 |BP/XMLVDocNoSchemaRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|8b|
 |BP/SimpleCall|[Demo.Process.SimpleCall](project/Demo/Process/SimpleCall.cls)||N/A|シンプルなCALL実行例||
-|BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|3|
-|BO/FTPTarget1PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|4|
-|BO/FTPTarget2PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|4|
+|BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|4|
+|BO/FTPTarget1PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|3|
+|BO/FTPTarget2PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|3|
 |BO/Postgres1|[Demo.Operation.SQL](project/Demo/Operation/SQL.cls)|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|1,2,5|
 |BO/FILEOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|7|
 |BO/XMLOut|EnsLib.EDI.XML.Operation.FileOperation|File|O|O\order.xml,person.xmlファイルの作成|8,8a,8b|
@@ -236,7 +236,7 @@ ftp/sftpコンテナ内のフォルダは、ローカルホストのupload/demo�
 $ cd upload/demo
 cp order.txt in_order/ 
 ```
-を実行することで、シーケンス1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンドにて確認可能です。
+を実行することで、シーケンス1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンド(irisコンテナ内からisqlを使用して、postgresqlデータソースに接続)にて確認可能です。
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -270,7 +270,7 @@ cp process.txt in_process/
 ```SQL
 SQL> SELECT * FROM orderinfo;
 ```
-## シーケンス4の実行方法
+## シーケンス3の実行方法
 ```bash
 $ cd upload/demo
 $ cp source1_1.txt in_source1/
@@ -284,7 +284,7 @@ $ ls out_target2/
 source1_2.txt_2020-04-17_17.45.35.278
 $
 ```
-## シーケンス3の実行方法
+## シーケンス4の実行方法
 ```bash
 $ docker-compose exec iris isql postgresql -v
 +---------------------------------------+
@@ -350,6 +350,10 @@ SQL> SELECT * FROM report3;
 +------------+------------+------------+------------+---------------------+
 SQLRowCount returns 0
 ```
+## シーケンス6の実行方法
+起動のための操作はありません。定期的にreport2テーブルの全件を取得し、$$$LOGINFO()を使用してイベントログに出力します。  
+report2にINSERT/UPDATE/DELETE操作を行うと、それに合わせてイベントログ出力内容が変化します。
+
 
 ## シーケンス7の実行方法
 ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
@@ -416,6 +420,24 @@ order.xml_2020-06-09_17.48.01.563
 $
 ```
 
+## シーケンスxの実行方法
+同一のDSNを使用する複数のテーブルからのレコード取得を単独のBSで実行する例です。  
+起動のための操作はありません。定期的にmulti1,multi2,multi3テーブルのレコードを取得し、$$$LOGINFO()を使用してイベントログに出力します。  
+プロダクションの起動後、一度でも実行されると、初期登録されている全レコードが処理され、それ以降は新たなレコードがINSERTされるまで、イベント発生しません。処理済みのレコードを重複して処理しないよう、各テーブルのPrimary Keyを値が純増する数値カラムとして採用しています。  
+下記のようにmulti1,multi2,multi3にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
+
+```
+INSERT INTO multi1 VALUES (6,1);
+INSERT INTO multi2 VALUES (106,'XXX');
+INSERT INTO multi3 VALUES (6,123);
+```
+
+処理を行った最新のキーは、下記に格納されています。通常運用では行いませんが、これらを削除(Kill)すれば、再度先頭レコードから処理させることが可能です。
+```
+DEMO>zw ^Ens.AppData
+
+```
+
 ## その他
 ### プロダクションの初期化
 下記のコマンドで、プロダクションを、初期化した上で再起動することができます。ポータルでの起動・停止と異なり、プロダクションの状態のリセット、蓄積したメッセージ、ログを削除します。
@@ -443,8 +465,7 @@ irisowner@iris:~$ cat commit.txt
 ```
 * PostgreSQL
 ```bash
-$ docker-compose exec postgres bash
-bash-5.0# psql -U postgres demo
+$ docker-compose exec postgres psql -U postgres demo
 psql (12.2)
 Type "help" for help.
 
@@ -487,7 +508,7 @@ root@sftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/atmoz/sftp/  
 SFTPサーバにおける文字エンコードの制限  
-SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、SJIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](project/Demo/Service/MyFTPService.cls))が必要になります。  
+SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、Shift_JIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](project/Demo/Service/MyFTPService.cls))が必要になります。  
 パススルー処理(シーケンス4)は、このような文字エンコードによる影響を受けません。
 
 * FTPサーバ
