@@ -62,7 +62,8 @@ DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 ## 管理ポータルへのアクセス
 http://irishost:52773/csp/sys/%25CSP.Portal.Home.zen  
 ユーザ名:SuperUser  
-パスワード:SYS
+パスワード:SYS  
+補足)パスワードはビルド時にSecurity.Users:UnExpireUserPasswords()を実行しています。
 
 ## 停止/再開/削除方法
 ```bash
