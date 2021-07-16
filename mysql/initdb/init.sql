@@ -120,3 +120,26 @@ CREATE TABLE reportResult
     result Integer
 );
 
+CREATE TABLE logtable1
+(
+    logtable1_id Integer,
+    data1 Integer,
+    PRIMARY KEY (logtable1_id)
+);
+INSERT INTO logtable1 VALUES (1,100);
+INSERT INTO logtable1 VALUES (2,200);
+INSERT INTO logtable1 VALUES (3,300);
+INSERT INTO logtable1 VALUES (4,400);
+INSERT INTO logtable1 VALUES (5,500);
+
+CREATE TABLE logtable2
+(
+    logtable2_id Integer,
+    data2 VARCHAR(32),
+    PRIMARY KEY (logtable2_id)
+);
+INSERT INTO logtable2 VALUES (101,'AA');
+INSERT INTO logtable2 VALUES (102,'BB');
+INSERT INTO logtable2 VALUES (103,'CCC');
+INSERT INTO logtable2 VALUES (104,'DD');
+INSERT INTO logtable2 VALUES (105,'EEE');

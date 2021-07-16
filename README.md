@@ -575,6 +575,26 @@ mysql>
 mysql>
 root@mysql:/# mysql -u demo -p demo
 Enter password:demo
+mysql> show tables;
++----------------+
+| Tables_in_demo |
++----------------+
+| logtable1      |
+| logtable2      |
+| mytable        |
+| orderinfo      |
+| process        |
+| report         |
+| report2        |
+| report3        |
+| report4        |
+| report5        |
+| reportResult   |
+| reportTarget   |
+| reportTrigger  |
++----------------+
+13 rows in set (0.00 sec)
+
 mysql> select * from report;
 +------+---------+-------+-------+-------------------+
 | seq  | orderid | data1 | data2 | memo              |
