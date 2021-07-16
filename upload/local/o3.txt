@@ -1,4 +1,0 @@
-orderid	data1	data2	memo
-1	100	200	abc
-2	101	201	日本語
-3	102	202	ｱｲｳｴｵ
