@@ -93,6 +93,9 @@ $ docker-compose down -v
 |5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
 
 
+### シーケンス9について
+|9|logtable1,logtable2,logtable3テーブル| Postgresに対して同一の接続(DSN)を使用して、複数のテーブルからレコードを取得する例。|イベントログ||
+
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
 ビジネスホスト名がリンクされているものはカスタムコーディングを伴うもの  
@@ -422,14 +425,14 @@ $
 
 ## シーケンスxの実行方法
 同一のDSNを使用する複数のテーブルからのレコード取得を単独のBSで実行する例です。  
-起動のための操作はありません。定期的にmulti1,multi2,multi3テーブルのレコードを取得し、$$$LOGINFO()を使用してイベントログに出力します。  
+起動のための操作はありません。定期的にlogtable1,logtable2,logtable3テーブルのレコードを取得し、$$$LOGINFO()を使用してイベントログに出力します。  
 プロダクションの起動後、一度でも実行されると、初期登録されている全レコードが処理され、それ以降は新たなレコードがINSERTされるまで、イベント発生しません。処理済みのレコードを重複して処理しないよう、各テーブルのPrimary Keyを値が純増する数値カラムとして採用しています。  
-下記のようにmulti1,multi2,multi3にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
+下記のようにlogtable1,logtable2,logtable3にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
 
 ```
-INSERT INTO multi1 VALUES (6,1);
-INSERT INTO multi2 VALUES (106,'XXX');
-INSERT INTO multi3 VALUES (6,123);
+INSERT INTO logtable1 VALUES (6,1);
+INSERT INTO logtable2 VALUES (106,'XXX');
+INSERT INTO logtable3 VALUES (6,123);
 ```
 
 処理を行った最新のキーは、下記に格納されています。通常運用では行いませんが、これらを削除(Kill)すれば、再度先頭レコードから処理させることが可能です。

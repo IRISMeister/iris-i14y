@@ -116,36 +116,36 @@ CREATE TABLE public.reportResult
     result Integer
 );
 
-CREATE TABLE public.multi1
+CREATE TABLE public.logtable1
 (
-    multi1_id Integer,
+    logtable1_id Integer,
     data1 Integer,
-    PRIMARY KEY (multi1_id)
+    PRIMARY KEY (logtable1_id)
 );
-INSERT INTO multi1 VALUES (1,100);
-INSERT INTO multi1 VALUES (2,200);
-INSERT INTO multi1 VALUES (3,300);
-INSERT INTO multi1 VALUES (4,400);
-INSERT INTO multi1 VALUES (5,500);
-CREATE TABLE public.multi2
+INSERT INTO logtable1 VALUES (1,100);
+INSERT INTO logtable1 VALUES (2,200);
+INSERT INTO logtable1 VALUES (3,300);
+INSERT INTO logtable1 VALUES (4,400);
+INSERT INTO logtable1 VALUES (5,500);
+CREATE TABLE public.logtable2
 (
-    multi2_id Integer,
+    logtable2_id Integer,
     data2 VARCHAR(32),
-    PRIMARY KEY (multi2_id)
+    PRIMARY KEY (logtable2_id)
 );
-INSERT INTO multi2 VALUES (101,'AA');
-INSERT INTO multi2 VALUES (102,'BB');
-INSERT INTO multi2 VALUES (103,'CCC');
-INSERT INTO multi2 VALUES (104,'DD');
-INSERT INTO multi2 VALUES (105,'EEE');
-CREATE TABLE public.multi3
+INSERT INTO logtable2 VALUES (101,'AA');
+INSERT INTO logtable2 VALUES (102,'BB');
+INSERT INTO logtable2 VALUES (103,'CCC');
+INSERT INTO logtable2 VALUES (104,'DD');
+INSERT INTO logtable2 VALUES (105,'EEE');
+CREATE TABLE public.logtable3
 (
-    multi3_id Integer,
+    logtable3_id Integer,
     data3 Integer,
-    PRIMARY KEY (multi3_id)
+    PRIMARY KEY (logtable3_id)
 );
-INSERT INTO multi3 VALUES (1,11);
-INSERT INTO multi3 VALUES (2,12);
-INSERT INTO multi3 VALUES (3,13);
-INSERT INTO multi3 VALUES (4,14);
-INSERT INTO multi3 VALUES (5,15);
+INSERT INTO logtable3 VALUES (1,11);
+INSERT INTO logtable3 VALUES (2,12);
+INSERT INTO logtable3 VALUES (3,13);
+INSERT INTO logtable3 VALUES (4,14);
+INSERT INTO logtable3 VALUES (5,15);

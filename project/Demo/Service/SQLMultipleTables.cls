@@ -8,7 +8,7 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 	Set tSC=$$$OK	
 	Try 
 	{		
-		$$$ThrowOnError(..ProcessMulti1())
+		$$$ThrowOnError(..Processlogtable1())
 		;Do ..ProcessNewCategories()
 		;Do ..ProcessNewEquipments() //gets equipment, groups and models
 	}
@@ -20,17 +20,17 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 	Return tSC
 }
 
-Method ProcessMulti1()
+Method Processlogtable1()
 {
 	#Dim tRS As EnsLib.SQL.GatewayResultSet
 	Set tSC=$$$OK	
 	
 	Try {
-		Set tLastKey = ..Adapter.GetPersistentValue(..%ConfigName, "LastMulti1Key")
-		$$$LOGINFO("Multi1 Next event Id "_tLastKey_"...")
+		Set tLastKey = ..Adapter.GetPersistentValue(..%ConfigName, "Lastlogtable1Key")
+		$$$LOGINFO("logtable1 Next event Id "_tLastKey_"...")
 		
 		/// Gets all the new received events where equipment is involved, infer form here which ones are new
-		Set tQueryStatement="SELECT multi1_id, data1 FROM multi1 WHERE multi1_id>? ORDER BY multi1_id"
+		Set tQueryStatement="SELECT logtable1_id, data1 FROM logtable1 WHERE logtable1_id>? ORDER BY logtable1_id"
 		$$$ThrowOnError(..Adapter.ExecuteQuery(.tRS, tQueryStatement, tLastKey))
 
 		If tRS.%SQLCODE<0 {
@@ -39,10 +39,10 @@ Method ProcessMulti1()
 
 		While(tRS.Next())
 		{
-			Set tLastKey = tRS.Get("multi1_id")
-			$$$LOGINFO(tRS.Get("multi1_id")_"/"_tRS.Get("data1"))
+			Set tLastKey = tRS.Get("logtable1_id")
+			$$$LOGINFO(tRS.Get("logtable1_id")_"/"_tRS.Get("data1"))
 		}
-		Do ..Adapter.SetPersistentValue(..%ConfigName, "LastMulti1Key", tLastKey)
+		Do ..Adapter.SetPersistentValue(..%ConfigName, "Lastlogtable1Key", tLastKey)
 	}
 	Catch e
 	{
@@ -55,9 +55,9 @@ Method ProcessMulti1()
 Method OnInit() As %Status
 {
    #; initialize persistent last key value (if not exists already)
-   Do ..Adapter.InitializePersistentValue(..%ConfigName, "LastMulti1Key", 0)
-   Do ..Adapter.InitializePersistentValue(..%ConfigName, "LastMulti2Key", 0)
-   Do ..Adapter.InitializePersistentValue(..%ConfigName, "LastMulti3Key", 0)
+   Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable1Key", 0)
+   Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable2Key", 0)
+   Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable3Key", 0)
    Quit $$$OK
 }
 
