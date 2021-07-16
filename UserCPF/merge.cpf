@@ -1,0 +1,14 @@
+[Startup]
+SystemMode=DEVELOPMENT
+WebServer=1
+
+[config]
+globals=0,0,256,0,0,0
+routines=128
+gmheap=128000
+
+[SQL]
+TimePrecision=6
+
+[SqlSysDatatypes]
+TIMESTAMP=%Library.PosixTime
