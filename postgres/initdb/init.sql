@@ -138,14 +138,3 @@ INSERT INTO logtable2 VALUES (102,'BB');
 INSERT INTO logtable2 VALUES (103,'CCC');
 INSERT INTO logtable2 VALUES (104,'DD');
 INSERT INTO logtable2 VALUES (105,'EEE');
-CREATE TABLE public.logtable3
-(
-    logtable3_id Integer,
-    data3 Integer,
-    PRIMARY KEY (logtable3_id)
-);
-INSERT INTO logtable3 VALUES (1,11);
-INSERT INTO logtable3 VALUES (2,12);
-INSERT INTO logtable3 VALUES (3,13);
-INSERT INTO logtable3 VALUES (4,14);
-INSERT INTO logtable3 VALUES (5,15);

@@ -9,8 +9,7 @@ Method OnProcessInput(pInput As EnsLib.SQL.Snapshot, Output pOutput As %Register
 	Try 
 	{		
 		$$$ThrowOnError(..Processlogtable1())
-		;Do ..ProcessNewCategories()
-		;Do ..ProcessNewEquipments() //gets equipment, groups and models
+		$$$ThrowOnError(..Processlogtable2())
 	}
 	Catch e
 	{
@@ -52,12 +51,43 @@ Method Processlogtable1()
 	Return tSC
 }
 
+Method Processlogtable2()
+{
+	#Dim tRS As EnsLib.SQL.GatewayResultSet
+	Set tSC=$$$OK	
+	
+	Try {
+		Set tLastKey = ..Adapter.GetPersistentValue(..%ConfigName, "Lastlogtable2Key")
+		$$$LOGINFO("logtable2 Next event Id "_tLastKey_"...")
+		
+		/// Gets all the new received events where equipment is involved, infer form here which ones are new
+		Set tQueryStatement="SELECT logtable2_id, data2 FROM logtable2 WHERE logtable2_id>? ORDER BY logtable2_id"
+		$$$ThrowOnError(..Adapter.ExecuteQuery(.tRS, tQueryStatement, tLastKey))
+
+		If tRS.%SQLCODE<0 {
+			$$$LOGERROR("SQL Failed SQLCODE:"_tRS.%SQLCODE)
+		}
+
+		While(tRS.Next())
+		{
+			Set tLastKey = tRS.Get("logtable2_id")
+			$$$LOGINFO(tRS.Get("logtable2_id")_"/"_tRS.Get("data2"))
+		}
+		Do ..Adapter.SetPersistentValue(..%ConfigName, "Lastlogtable2Key", tLastKey)
+	}
+	Catch e
+	{
+		Set tSC=e.AsStatus()
+	}
+	
+	Return tSC
+}
+
 Method OnInit() As %Status
 {
    #; initialize persistent last key value (if not exists already)
    Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable1Key", 0)
    Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable2Key", 0)
-   Do ..Adapter.InitializePersistentValue(..%ConfigName, "Lastlogtable3Key", 0)
    Quit $$$OK
 }
 

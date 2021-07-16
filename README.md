@@ -84,7 +84,7 @@ $ docker-compose down -v
 |8b|xmlvdoc/in_order/order.xml,<br>xmlvdoc/in_person/person.xml,<br>xmlvdoc/in_person/person-noschema.xml,|8と同じ。|xmlvdoc/out/,<br>xmlvdoc/ignored/|スキーマ定義が無いXMLファイルのハンドリング|
 
 ### シーケンス5について
-シーケンス5は、RDBから定期的にデータを取得し、その内容をFTPサーバ(群)に送信し、その送信結果をPostgresに保存するという処理を行っています。
+RDBから定期的にデータを取得し、その内容をFTPサーバ(群)に送信し、その送信結果をPostgresに保存するという処理を行っています。
 ![シーケンス5](https://raw.githubusercontent.com/IRISMeister/doc-images/main/iris-i14y/Sequence%20%235.png)
 |#|入力元|処理|出力先|備考|
 |:--|:--|:--|:--|:--|
@@ -94,7 +94,11 @@ $ docker-compose down -v
 
 
 ### シーケンス9について
-|9|logtable1,logtable2,logtable3テーブル| Postgresに対して同一の接続(DSN)を使用して、複数のテーブルからレコードを取得する例。|イベントログ||
+同一のDSNを使用する複数のテーブルからのレコード取得を単独のBSで実行する例です。  
+
+|#|入力元|処理|出力先|備考|
+|:--|:--|:--|:--|:--|
+|9|logtable1,logtable2テーブル| Postgresに対して同一の接続(DSN)を使用して、複数のテーブルからレコードを取得する。|イベントログ||
 
 ## ビジネスホスト一覧
 BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレーション  
@@ -109,6 +113,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |BS/FTPSource1PassThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|3|
 |BS/SQLEntireTable|[Demo.Service.SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|6|
 |BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|6|
+|BS/SQLReport|[Demo.Service.MultiTables](project/Demo/Service/SQLMultipleTables.cls)|JDBC|I|logtable1,logtable2レコード監視・取得|9|
 |BS/SQLReport|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|5|
 |BS/SQLReport_update|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|5a|
 |BS/SQLReport_lastkey|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|5b|
@@ -423,16 +428,15 @@ order.xml_2020-06-09_17.48.01.563
 $
 ```
 
-## シーケンスxの実行方法
-同一のDSNを使用する複数のテーブルからのレコード取得を単独のBSで実行する例です。  
-起動のための操作はありません。定期的にlogtable1,logtable2,logtable3テーブルのレコードを取得し、$$$LOGINFO()を使用してイベントログに出力します。  
+## シーケンス9の実行方法
+起動のための操作はありません。定期的にlogtable1及びlogtable2テーブルのレコードを取得し、$$$LOGINFO()を使用してイベントログに出力します。  
 プロダクションの起動後、一度でも実行されると、初期登録されている全レコードが処理され、それ以降は新たなレコードがINSERTされるまで、イベント発生しません。処理済みのレコードを重複して処理しないよう、各テーブルのPrimary Keyを値が純増する数値カラムとして採用しています。  
-下記のようにlogtable1,logtable2,logtable3にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
+下記のようにlogtable1やlogtable2にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
 
 ```
-INSERT INTO logtable1 VALUES (6,1);
-INSERT INTO logtable2 VALUES (106,'XXX');
-INSERT INTO logtable3 VALUES (6,123);
+$ docker-compose exec postgres psql -U postgres demo
+demo=# INSERT INTO logtable1 VALUES (6,1);
+demo=# INSERT INTO logtable2 VALUES (106,'XXX');
 ```
 
 処理を行った最新のキーは、下記に格納されています。通常運用では行いませんが、これらを削除(Kill)すれば、再度先頭レコードから処理させることが可能です。
