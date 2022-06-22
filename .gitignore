@@ -1,5 +1,4 @@
 ext
-src
 oracle/oradata/ORCLCDB
 oracle/oradata/dbconfig
 mysql/data/*

@@ -1,7 +1,4 @@
-#FROM store/intersystems/iris-community:2020.1.0.209.0
-#FROM containers.intersystems.com/intersystems/iris-community:2020.1.1.408.0
-#FROM containers.intersystems.com/intersystems/iris-community:2020.4.0.547.0
-FROM containers.intersystems.com/intersystems/iris-community:2021.1.0.215.3
+FROM containers.intersystems.com/intersystems/iris-community:2022.1.0.209.0
 
 USER root
 
@@ -10,7 +7,8 @@ RUN apt -y update \
  && DEBIAN_FRONTEND=noninteractive apt -y install language-pack-ja-base language-pack-ja ibus-mozc 
 
 # odbc/jdbc related 
-RUN DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
+RUN apt -y update \
+ && DEBIAN_FRONTEND=noninteractive apt -y install unixodbc odbc-postgresql openjdk-8-jre \
  && apt clean
 
 # jdbc driver(s) and odbc ini files, if any
@@ -38,7 +36,7 @@ RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.11.jar \
  && echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc && echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc 
 
 ENV SRCDIR=src
-COPY project/ $SRCDIR/
+COPY src/ $SRCDIR/
 COPY resources/ resources/
 
 # making archive path 777 because depending on how you start your production(via SMP or command line), it uses different O/S user (irisuser/irisowner).

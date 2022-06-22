@@ -14,8 +14,11 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <sequence xend='200' yend='550' >
 <trace value='"test"' xpos='200' ypos='250' disabled="true"/>
 <call name='call1' target='SendMail' async='1' xpos='200' ypos='350' >
-<request type='Ens.StringContainer' >
-<assign property="callrequest" value="request" action="set" />
+<request type='Demo.Request.SendMail' >
+<assign property="callrequest.Body" value="request.StringValue" action="set" />
+<assign property="callrequest.Subject" value="&quot;お知らせ&quot;" action="set" />
+<assign property="callrequest.MailFrom" value="&quot;test@intersystems.com&quot;" action="set" />
+<assign property="callrequest.MailTo" value="&quot;bot@localhost&quot;" action="set" />
 </request>
 <response type='Ens.StringContainer' >
 <assign property="response" value="callresponse" action="set" />

@@ -15,11 +15,11 @@ docker-composeを導入済みであること。
 See https://docs.docker.com/compose/install/
 
 ## 起動方法
-初回起動時のみイメージpullのために`docker-compose pull`を実行します。若干(2,3分程度)の時間を要します。  
+初回起動時のみイメージビルドのために`docker-compose build`を実行します。若干(2,3分程度)の時間を要します。  
 ```bash
 $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
-$ docker-compose pull
+$ docker-compose build
 ```
 注)明示的にpullせずにupすると、IRIS関連のイメージのビルドが実行されます。proxy設定など、正しく構成されたdocker環境であれば、ビルドは正常に完了します。デモ実行目的であればビルドは必要ありません。
 
@@ -446,6 +446,14 @@ demo=# INSERT INTO logtable2 VALUES (106,'XXX');
 DEMO>zw ^Ens.AppData
 
 ```
+
+## メール送信
+
+```
+$ docker-compose exec iris iris session iris -U demo direct
+```
+
+
 
 ## その他
 ### プロダクションの初期化
