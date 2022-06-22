@@ -31,7 +31,8 @@ services:
     - sftp
     - ftp
     - smtp
-
+    secrets:
+      - my_secret
   postgres:
     image: postgres:12.2-alpine
     hostname: postgres
@@ -100,3 +101,7 @@ networks:
       config:
       - subnet: 10.0.1.0/24
       
+secrets:
+  my_secret:
+    file: ./my_secret.txt
+

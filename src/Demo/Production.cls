@@ -391,4 +391,24 @@ XData ProductionDefinition
 </Production>
 }
 
+/// Override this in your Production class to do setup before the Production starts
+ClassMethod OnStart(pTimeStarted As %String) As %Status
+{
+  // Secretを使用しているため、コンテナ環境でしか機能しない。
+  // fileに実際のファイル名(my_secret.txt)を絶対パスで指定すれば非コンテナ環境でも使用可能。
+  Set tSC=$$$OK
+  Try {
+    Set file="/run/secrets/my_secret"
+    Set stream = ##class(%Stream.FileCharacter).%New()
+    Set sc = stream.LinkToFile(file)
+    Set json = {}.%FromJSON(stream)
+    Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
+	}
+	Catch e {
+		Set tSC=e.AsStatus()
+	}
+  //必須ではないので常に成功させる
+	Return $$$OK
+}
+
 }
