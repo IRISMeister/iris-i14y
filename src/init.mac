@@ -41,6 +41,6 @@ DumpQueue
 
 SetupEnv() public {
 	#; Credentialを追加/変更
-	Set tSC=##class(Ens.Config.Credentials).SetCredential("ftp","iwamoto","kureyon$",1)
+	Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-yahoo",user,pass,1)
 	w "Set Credentials:",tSC,!	
 }
