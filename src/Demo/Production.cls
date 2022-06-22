@@ -255,9 +255,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
-  <Item Name="AccessLocalDB" Category="" ClassName="Demo.Service.AccessLocalDB" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="AccessLocalDB" Category="custom" ClassName="Demo.Service.AccessLocalDB" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
-  <Item Name="FTPCustom" Category="" ClassName="Demo.Operation.FTPCustom" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="FTPCustom" Category="custom" ClassName="Demo.Operation.FTPCustom" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="Credentials">ftp</Setting>
     <Setting Target="Adapter" Name="FTPServer">ftp</Setting>
     <Setting Target="Adapter" Name="FilePath">/upload/demo/out_custom</Setting>
@@ -321,10 +321,18 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
   </Item>
-  <Item Name="SendMail" Category="mail" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SendMail" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
     <Setting Target="Adapter" Name="Credentials">smtp</Setting>
+    <Setting Target="Adapter" Name="From">iris</Setting>
+    <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
+  </Item>
+  <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
+    <Setting Target="Adapter" Name="SMTPPort">465</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp.mail.yahoo.co.jp</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
     <Setting Target="Adapter" Name="From">iris</Setting>
     <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
   </Item>
@@ -350,26 +358,35 @@ XData ProductionDefinition
   <Item Name="Ens.Alerting.NotificationManager" Category="alert" ClassName="Ens.Alerting.NotificationManager" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="NotificationTransform">Demo.DTL.NotifyManager</Setting>
   </Item>
-  <Item Name="AlertDefault" Category="alert" ClassName="Demo.Operation.AlertDefault" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="AlertDefault" Category="alert,custom" ClassName="Demo.Operation.AlertDefault" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="Alert" Category="alert" ClassName="Demo.Operation.Alert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Alert" Category="alert,custom" ClassName="Demo.Operation.Alert" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="Direct" Category="" ClassName="Demo.Service.Direct" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Direct" Category="custom" ClassName="Demo.Service.Direct" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="Rest" Category="" ClassName="Demo.Operation.Rest" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="Rest" Category="custom" ClassName="Demo.Operation.Rest" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="HTTPPort">52773</Setting>
     <Setting Target="Adapter" Name="HTTPServer">localhost</Setting>
     <Setting Target="Adapter" Name="URL">/csp/demo/rest/repo</Setting>
     <Setting Target="Adapter" Name="Credentials">rest</Setting>
   </Item>
-  <Item Name="SimpleCall" Category="" ClassName="Demo.Process.SimpleCall" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SimpleSendMail" Category="custom" ClassName="Demo.Process.SimpleSendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
-  <Item Name="SQLMultipleTables" Category="" ClassName="Demo.Service.SQLMultipleTables" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SQLMultipleTables" Category="custom" ClassName="Demo.Service.SQLMultipleTables" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select 1</Setting>
     <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
+  </Item>
+  <Item Name="dc.demo.imap.python.IMAPPyTestService" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="POP3Port">993</Setting>
+    <Setting Target="Adapter" Name="POP3Server">imap.mail.yahoo.co.jp</Setting>
+    <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
+    <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
+    <Setting Target="Adapter" Name="CallInterval">30</Setting>
+    <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
   </Item>
 </Production>
 }

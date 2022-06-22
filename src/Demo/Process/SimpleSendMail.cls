@@ -1,5 +1,5 @@
 /// 
-Class Demo.Process.SimpleCall Extends Ens.BusinessProcessBPL [ ClassType = persistent, ProcedureBlock ]
+Class Demo.Process.SimpleSendMail Extends Ens.BusinessProcessBPL [ ClassType = persistent, ProcedureBlock ]
 {
 
 Storage Default
