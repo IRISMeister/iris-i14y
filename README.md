@@ -115,7 +115,7 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |3|BS/FTPSource1PassThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|
 |6|BS/SQLEntireTable|[Demo.Service.SQLEntireTable](src/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|
 |6|BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](src/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|
-|9|BS/SQLMultipleTables|[Demo.Service.MultiTables](src/Demo/Service/SQLMultipleTables.cls)|JDBC|I|logtable1,logtable2レコード監視・取得|
+|9|BS/SQLMultipleTables|[Demo.Service.MultiTables](src/Demo/Service/SQLMultipleTables.cls)|JDBC|I|仮想レコード監視,logtable1,logtable2レコード監視・取得|
 |5|BS/SQLReport|EnsLib.SQL.Service.GenericService|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|
 |5a|BS/SQLReport_update|EnsLib.SQL.Service.GenericService|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|
 |5b|BS/SQLReport_lastkey|EnsLib.SQL.Service.GenericService|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|
