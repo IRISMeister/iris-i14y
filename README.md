@@ -113,40 +113,40 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 |2|BS/FTPProcess|EnsLib.RecordMap.Service.FTPService|SFTP|I|in_processフォルダ監視、ファイル取得、Processメッセージ作成|
 |2|BS/FTPProcessBatch|EnsLib.RecordMap.Service.BatchFTPService|SFTP|I|in_processフォルダ監視、ファイル取得、バッチ用Processメッセージ作成|
 |3|BS/FTPSource1PassThrough|EnsLib.FTP.PassthroughService|SFTP|I|in_source1フォルダ監視、ファイル取得、パススルー用メッセージ作成|
-|6|BS/SQLEntireTable|[Demo.Service.SQLEntireTable](project/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|
-|6|BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](project/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|
-|9|BS/SQLReport|[Demo.Service.MultiTables](project/Demo/Service/SQLMultipleTables.cls)|JDBC|I|logtable1,logtable2レコード監視・取得|
-|5|BS/SQLReport|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|
-|5a|BS/SQLReport_update|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|
-|5b|BS/SQLReport_lastkey|[Demo.Service.SQLReport](project/Demo/Service/SQLReport.cls)|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|
-|4|BS/SQLReportBatch|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|
-|4|BS/SQLReportBatchODBC|[Demo.Service.SQLReportBatch](project/Demo/Service/SQLReportBatch.cls)|ODBC|I|SQLReportBatchのODBC接続版。|
+|6|BS/SQLEntireTable|[Demo.Service.SQLEntireTable](src/Demo/Service/SQLEntireTable.cls)|JDBC|I|report2レコード監視、report2レコード取得|
+|6|BS/SQLEntireTableBulk|[Demo.Service.SQLEntireTableBulk](src/Demo/Service/SQLEntireTableBulk.cls)|JDBC|I|仮想レコード監視(select 1)、report2レコード取得|
+|9|BS/SQLMultipleTables|[Demo.Service.MultiTables](src/Demo/Service/SQLMultipleTables.cls)|JDBC|I|logtable1,logtable2レコード監視・取得|
+|5|BS/SQLReport|EnsLib.SQL.Service.GenericService|JDBC|I|report3レコード監視、report3レコード取得、Reportメッセージ作成|
+|5a|BS/SQLReport_update|EnsLib.SQL.Service.GenericService|JDBC|I|report4レコード監視、report4レコード取得、Reportメッセージ作成|
+|5b|BS/SQLReport_lastkey|EnsLib.SQL.Service.GenericService|JDBC|I|report5レコード監視、report5レコード取得、Reportメッセージ作成|
+|4|BS/SQLReportBatch|[Demo.Service.SQLReportBatch](src/Demo/Service/SQLReportBatch.cls)|JDBC|I|reportTriggerレコード監視、reportレコード取得、バッチ用Reportメッセージ作成|
+|4|BS/SQLReportBatchODBC|[Demo.Service.SQLReportBatch](src/Demo/Service/SQLReportBatch.cls)|ODBC|I|SQLReportBatchのODBC接続版。|
 |7|BS/FILEOrderInfo|EnsLib.RecordMap.Service.FileService|File|I|in_orderフォルダ監視、ファイル取得、Orderメッセージ作成|
 |8|BS/XMLOrder|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_orderフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|
 |8a|BS/XMLPerson|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_personフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|
 |8b|BS/XMLNoSchema|EnsLib.EDI.XML.Service.FileService|File|I|xmlvdoc/in_noschemaフォルダ監視、ファイル取得、EnsLib.EDI.XML.Documentメッセージ作成|
-||BS/AccessLocalDB|[Demo.Service.AccessLocalDB](project/Demo/Service/AccessLocalDB.cls)||N/A|一定時間間隔でローカルデータベースをアクセスする例。|
-||BS/Direct|[Demo.Service.Direct](project/Demo/Service/Direct.cls)||N/A|クライアントアプリ側でサービスをインスタンス化する例。|
+||BS/AccessLocalDB|[Demo.Service.AccessLocalDB](src/Demo/Service/AccessLocalDB.cls)||N/A|一定時間間隔でローカルデータベースをアクセスする例。|
+||BS/Direct|[Demo.Service.Direct](src/Demo/Service/Direct.cls)||N/A|クライアントアプリ側でサービスをインスタンス化する例。|
 |3|BP/FileTransferRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|
-|3|BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](project/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|
+|3|BP/FileTransferRouterCallBack|[Demo.Process.FileTransferRouterCallBack](src/Demo/Process/FileTransferRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト|
 |5|BP/ReportRouter|EnsLib.MsgRouter.RoutingEngine||I/O|Rule適用,オペレーションへの送信|
-|5|BP/ReportRouterCallBack|[Demo.Process.ReportRouterCallBack](project/Demo/Process/ReportRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|
+|5|BP/ReportRouterCallBack|[Demo.Process.ReportRouterCallBack](src/Demo/Process/ReportRouterCallBack.cls)||I/O|(オプション)オペレーションからの戻り値のテスト。戻り値をBOに送信|
 |8,8a|BP/XMLVDocRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|
 |8b|BP/XMLVDocNoSchemaRouter|EnsLib.MsgRouter.VDocRoutingEngine||I/O|Rule適用,オペレーションへの送信|
-||BP/SimpleSendMail|[Demo.Process.SimpleSendMail](project/Demo/Process/SimpleSendMail.cls)||N/A|シンプルなCALL実行例|
+||BP/SimpleSendMail|[Demo.Process.SimpleSendMail](src/Demo/Process/SimpleSendMail.cls)||N/A|シンプルなCALL実行例|
 |4|BO/FTPReportBatch|EnsLib.RecordMap.Operation.BatchFTPOperation|SFTP|O|Reportファイルの作成、FTP出力|
 |3|BO/FTPTarget1PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|受信ファイルから送信用ファイルを複製、FTP出力|
 |3|BO/FTPTarget2PassThrough|EnsLib.FTP.PassthroughOperation|SFTP|O|同上|
-|1,2,5|BO/Postgres1|[Demo.Operation.SQL](project/Demo/Operation/SQL.cls)|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|
+|1,2,5|BO/Postgres1|[Demo.Operation.SQL](src/Demo/Operation/SQL.cls)|JDBC|O|受信メッセージに従ったINSERT文の組み立て,PostgresへのレコードのINSERT|
 |7|BO/FILEOrderInfoOut|EnsLib.RecordMap.Operation.FileOperation|File|O|Orderファイルの作成|
 |8,8a,8b|BO/XMLOut|EnsLib.EDI.XML.Operation.FileOperation|File|O|O\order.xml,person.xmlファイルの作成|
 |8b|BO/XMLIgnored|EnsLib.EDI.XML.Operation.FileOperation|File|O|order.xml,person.xml,person-noschema.xmlファイルの作成|
 |5|BO/FTPReport1|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|
 |5|BO/FTPReport2|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|
 |5|BO/FTPReport3|EnsLib.RecordMap.Operation.FTPOperation|SFTP|O|Reportファイルの作成、FTP出力|
-||BO/FTPCustom|[Demo.Operation.FTPCustom](project/Demo/Operation/FTPCustom.cls)|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例|
-||BO/Rest|[Demo.Operation.Rest](project/Demo/Operation/Rest.cls)|HTTP|O|ファイルパススルーから受信した内容をRest送信(PUT)する実行例|
-||BO/SendMail|[Demo.Operation.SendMail](project/Demo/Operation/SendMail.cls)|EMAIL|O|未実装。|
+||BO/FTPCustom|[Demo.Operation.FTPCustom](src/Demo/Operation/FTPCustom.cls)|FTP|O|FTPへのNameList(),GetStream(),PutStream()実行例|
+||BO/Rest|[Demo.Operation.Rest](src/Demo/Operation/Rest.cls)|HTTP|O|ファイルパススルーから受信した内容をRest送信(PUT)する実行例|
+||BO/SendMail|[Demo.Operation.SendMail](src/Demo/Operation/SendMail.cls)|EMAIL|O|未実装。|
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
@@ -160,18 +160,18 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 |要素|クラス|処理概要|シーケンス|
 |:--|:--|:--|:--|
-|CTX|[Demo.Context.ReportRouter](project/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
-|DTL|[Demo.DTL.Report2ReportExtra](project/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
+|CTX|[Demo.Context.ReportRouter](src/Demo/Context/ReportRouter.cls)|BP/ReportRouterCallBackにて使用。BP/ReportRouterの[レスポンスターゲット構成]設定経由のBOからのメッセージを処理。BOにメッセージを送信。|5|
+|DTL|[Demo.DTL.Report2ReportExtra](src/Demo/DTL/Report2ReportExtra.cls)|BP/ReportRouterで適用されるRuleで変換処理を担う。|5|
 
 ## ビジネスルール一覧
 下記のビジネスルールを定義・使用しています。  
 
 |ルール名|用途|Link|シーケンス|
 |:--|:--|:--|:--|
-|[Demo.Rule.FileTransferRouter](project/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
-|[Demo.Rule.ReportRouter](project/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
-|[Demo.Rule.VDocRoutingEngineRoutingRule](project/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|スキーマ依存パスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
-|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](project/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|DOMスタイルパスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
+|[Demo.Rule.FileTransferRouter](src/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
+|[Demo.Rule.ReportRouter](src/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
+|[Demo.Rule.VDocRoutingEngineRoutingRule](src/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|スキーマ依存パスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
+|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](src/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|DOMスタイルパスを使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
 
 
 スキーマ依存パスについて  
@@ -231,7 +231,7 @@ http://irishost:52773/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
 ## Restサービス
 受信テスト用に下記のRestサービスを作成しています。  
-実装クラス: [Demo.Rest.Dispatcher.cls](project/Demo/Rest/Dispatcher.cls)
+実装クラス: [Demo.Rest.Dispatcher.cls](src/Demo/Rest/Dispatcher.cls)
 ```
 $ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:52773/csp/demo/rest/repo -u SuperUser:SYS -s | jq
 {
@@ -525,7 +525,7 @@ root@sftp:/home/foo/upload/demo#
 ```
 See https://hub.docker.com/r/atmoz/sftp/  
 SFTPサーバにおける文字エンコードの制限  
-SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、Shift_JIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](project/Demo/Service/MyFTPService.cls))が必要になります。  
+SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一するのが好ましいです。WindowsでIRISを稼働させる場合、Shift_JIS以外の日本語文字を含むファイルの処理は、可能ですが、IRISのシステムロケールの変更やカスタムコーディング([Demo.Service.MyFTPService](src/Demo/Service/MyFTPService.cls))が必要になります。  
 パススルー処理(シーケンス4)は、このような文字エンコードによる影響を受けません。
 
 * FTPサーバ

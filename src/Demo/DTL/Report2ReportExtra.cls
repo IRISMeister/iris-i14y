@@ -9,12 +9,11 @@ Parameter TREATEMPTYREPEATINGFIELDASNULL = 0;
 
 XData DTL [ XMLNamespace = "http://www.intersystems.com/dtl" ]
 {
-<transform sourceClass='User.Report.Record' targetClass='User.ReportExtra.Record' create='new' language='objectscript' >
+<transform sourceClass='Demo.Request.ReportTable' targetClass='User.ReportExtra.Record' create='new' language='objectscript' >
 <assign value='source.orderid' property='target.orderid' action='set' />
 <assign value='source.data1' property='target.data1' action='set' />
 <assign value='source.data2' property='target.data2' action='set' />
 <assign value='source.memo' property='target.memo' action='set' />
-<assign value='source.%Source' property='target.%Source' action='set' />
 <assign value='..Length(source.memo)' property='target.Extra1' action='set' />
 <if condition='source.data2&lt;100' >
 <true>

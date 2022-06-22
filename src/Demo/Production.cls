@@ -1,6 +1,35 @@
 Class Demo.Production Extends Ens.Production
 {
 
+/// Override this in your Production class to do setup before the Production starts
+ClassMethod OnStart(pTimeStarted As %String) As %Status
+{
+  Set tSC=$$$OK
+  Try {
+    // Credentialをファイル経由で更新する。
+    // Docker Secretを使用しているため、コンテナ環境でしか機能しない。
+    // fileに実際のファイル名(my_secret.txt)を絶対パスで指定すれば非コンテナ環境でも使用可能。
+    Set file="/run/secrets/my_secret"
+    Set stream = ##class(%Stream.FileCharacter).%New()
+    Set sc = stream.LinkToFile(file)
+    Set json = {}.%FromJSON(stream)
+    Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
+
+    // SQL Inbound Adaptorで使用するキーの初期値を設定
+    // NoCodeのSQL BSの採用に伴い、カスタムのBSのOnIit()あった処理をこちらに移動。
+    Set configname="SQLReport_lastkey",keyname="%LastKey"
+    If ##class(EnsLib.SQL.InboundAdapter).GetPersistentValue(configname,keyname)="" {
+      Set tSC=##class(EnsLib.SQL.InboundAdapter).InitializePersistentValue(configname,keyname,0)
+    }
+
+	}
+	Catch e {
+		Set tSC=e.AsStatus()
+	}
+  //必須ではないので常に成功させる
+	Return $$$OK
+}
+
 XData ProductionDefinition
 {
 <Production Name="Demo.Production" TestingEnabled="true" LogGeneralTraceEvents="false">
@@ -9,16 +38,6 @@ XData ProductionDefinition
   <Setting Target="Adapter" Name="AlertNotificationManager">Ens.Alerting.NotificationManager</Setting>
   <Setting Target="Adapter" Name="AlertNotificationOperation">AlertDefault</Setting>
   <Setting Target="Adapter" Name="AlertNotificationRecipients">bot@localhost</Setting>
-  <Item Name="SQLReport" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
-    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query">select * from report3 order by orderid</Setting>
-    <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
-    <Setting Target="Adapter" Name="DeleteQuery">delete from report3 where orderid=?</Setting>
-    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
-    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
-    <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
-  </Item>
   <Item Name="SQLReportBatch" Category="custom,sql2ftp" ClassName="Demo.Service.SQLReportBatch" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを１回の取得毎(複数レコードの可能性あり)にファイルにまとめる処理" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select * from reportTrigger order by seq</Setting>
@@ -234,27 +253,6 @@ XData ProductionDefinition
   <Item Name="ReportRouterCallBack" Category="" ClassName="Demo.Process.ReportRouterCallBack" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="TargetConfigName">Postgres1</Setting>
   </Item>
-  <Item Name="SQLReport_update" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
-    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query">select * from report4 where done=false order by orderid;</Setting>
-    <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
-    <Setting Target="Adapter" Name="DeleteQuery">update report4 Set done=true where orderid=?</Setting>
-    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
-    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
-    <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
-  </Item>
-  <Item Name="SQLReport_lastkey" Category="custom,sql2sql" ClassName="Demo.Service.SQLReport" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
-    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query"><![CDATA[select * from report5 where seq>? order by seq]]></Setting>
-    <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
-    <Setting Target="Adapter" Name="DeleteQuery"></Setting>
-    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
-    <Setting Target="Host" Name="TargetConfigName">ReportRouter</Setting>
-    <Setting Target="Adapter" Name="Parameters"><![CDATA[&%LastKey]]></Setting>
-    <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
-  </Item>
   <Item Name="AccessLocalDB" Category="custom" ClassName="Demo.Service.AccessLocalDB" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
   </Item>
   <Item Name="FTPCustom" Category="custom" ClassName="Demo.Operation.FTPCustom" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
@@ -388,27 +386,41 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">30</Setting>
     <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
   </Item>
+  <Item Name="SQLReport" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query">select orderid,data1,data2,memo from report3 order by orderid</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery">delete from report3 where orderid=?</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Host" Name="MessageClass">User.Report.Record</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">ReportRouter</Setting>
+    <Setting Target="Host" Name="AlertOnError">1</Setting>
+    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
+  </Item>
+  <Item Name="SQLReport_update" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query">select orderid,data1,data2,memo from report4 where done=false order by orderid</Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">orderid</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery">update report4 Set done=true where orderid=?</Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Host" Name="MessageClass">User.Report.Record</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">ReportRouter</Setting>
+    <Setting Target="Host" Name="AlertOnError">1</Setting>
+    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
+  </Item>
+  <Item Name="SQLReport_lastkey" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
+    <Setting Target="Adapter" Name="Query"><![CDATA[select seq,orderid,data1,data2,memo from report5 where seq>? order by seq]]></Setting>
+    <Setting Target="Adapter" Name="KeyFieldName">seq</Setting>
+    <Setting Target="Adapter" Name="DeleteQuery"></Setting>
+    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
+    <Setting Target="Adapter" Name="Parameters"><![CDATA[&%LastKey]]></Setting>
+    <Setting Target="Host" Name="MessageClass">Demo.Request.ReportTable</Setting>
+    <Setting Target="Host" Name="TargetConfigNames">ReportRouter</Setting>
+    <Setting Target="Host" Name="AlertOnError">1</Setting>
+    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
+  </Item>
 </Production>
-}
-
-/// Override this in your Production class to do setup before the Production starts
-ClassMethod OnStart(pTimeStarted As %String) As %Status
-{
-  // Secretを使用しているため、コンテナ環境でしか機能しない。
-  // fileに実際のファイル名(my_secret.txt)を絶対パスで指定すれば非コンテナ環境でも使用可能。
-  Set tSC=$$$OK
-  Try {
-    Set file="/run/secrets/my_secret"
-    Set stream = ##class(%Stream.FileCharacter).%New()
-    Set sc = stream.LinkToFile(file)
-    Set json = {}.%FromJSON(stream)
-    Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
-	}
-	Catch e {
-		Set tSC=e.AsStatus()
-	}
-  //必須ではないので常に成功させる
-	Return $$$OK
 }
 
 }
