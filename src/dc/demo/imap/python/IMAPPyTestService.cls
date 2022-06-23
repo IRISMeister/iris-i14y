@@ -8,6 +8,7 @@ Method OnProcessInput(pMailMessage As %Net.MailMessage, pOutput As %RegisteredOb
     Set tSC = $$$OK
     Try {
         $$$TRACE("received email from "_pMailMessage.From_". To "_pMailMessage.To.GetAt(1)_". Subject"_pMailMessage.Subject)
+        $$$TRACE("ContentType: "_pMailMessage.ContentType)
 
         If pMailMessage.IsBinary
         {
@@ -25,14 +26,36 @@ Method OnProcessInput(pMailMessage As %Net.MailMessage, pOutput As %RegisteredOb
 
             For i=1:1:parts.Count() {
                 Set mp=parts.GetAt(i)
+                $$$TRACE("mp.ContentType["_i_"]: "_mp.ContentType)
+
                 if mp.IsMultiPart {
-                    $$$TRACE("multiple parts unexpeced. Ignore it.")
+                    $$$TRACE("further multiple parts. Do nothing.")
+                    /*
+                    Set parts2=mp.Parts
+                    For j=1:1:parts2.Count() {
+                        Set mp2=parts2.GetAt(i)
+                        $$$TRACE("mp2.ContentType: "_mp2.ContentType)
+
+                        $$$TRACE("mp2.IsMultiPart:"_mp2.IsMultiPart)
+                        $$$TRACE("mp2.IsHTML:"_mp2.IsHTML)
+                        $$$TRACE("mp2.IsBinary:"_mp2.IsBinary)
+                        Set maildata=mp2.TextData // %Library.FileCharacterStream
+                        $$$TRACE("TextData:["_maildata.Read(100)_"]")
+                        Set maildata=mp2.BinaryData // %Library.FileCharacterStream
+                        $$$TRACE("BinaryData:["_maildata.Read(100)_"]")
+                    }
+                    */
+
                 }
                 Elseif mp.IsHTML {
                     $$$TRACE("Ignoring HTML part.")
                 }
                 Elseif mp.IsBinary {
-                    $$$TRACE("Ignoring binary part.")
+                    $$$TRACE("Binary part. : ContentType "_mp.ContentType_" Size:"_mp.BinaryData.Size)
+                    If mp.IsBase64 {
+                        ; d mp.BinaryData.Rewind()
+                        b
+                    }
                 }
                 Else {
                     Set maildata=mp.TextData // %Library.FileCharacterStream

@@ -367,6 +367,15 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">30</Setting>
     <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
   </Item>
+  <Item Name="IMAP2" Category="mail,custom" ClassName="dc.demo.imap.IMAPTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="POP3Port">993</Setting>
+    <Setting Target="Adapter" Name="POP3Server">imap.mail.yahoo.co.jp</Setting>
+    <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
+    <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
+    <Setting Target="Adapter" Name="CallInterval">30</Setting>
+    <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
+  </Item>
   <Item Name="SQLReport" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
     <Setting Target="Adapter" Name="Query">select orderid,data1,data2,memo from report3 order by orderid</Setting>
