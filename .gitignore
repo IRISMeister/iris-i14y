@@ -5,3 +5,4 @@ mysql/data/*
 jars/*.jar
 
 upload/xmlvdoc/000readme.txt
+private-memo.txt
