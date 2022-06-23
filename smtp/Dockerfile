@@ -12,4 +12,5 @@ RUN useradd netteam -p pass -m \
  && useradd osteam -p pass -m \ 
  && useradd appteam -p pass -m \ 
  && useradd sqlteam -p pass -m \
- && useradd bot -p pass -m
+ && useradd bot -p pass -m \
+ && echo 'export LANG=ja_JP.UTF-8' >> /home/bot/.bashrc && echo 'export LANGUAGE="ja_JP:ja"' >> /home/bot/.bashrc && chown bot:bot /home/bot/.bashrc

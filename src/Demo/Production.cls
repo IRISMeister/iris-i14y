@@ -208,22 +208,6 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">NET</Setting>
   </Item>
-  <Item Name="SQLEntireTable" Category="custom" ClassName="Demo.Service.SQLEntireTable" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query">select * from report2 order by orderid</Setting>
-    <Setting Target="Adapter" Name="KeyFieldName"></Setting>
-    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
-    <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
-  </Item>
-  <Item Name="SQLEntireTableBulk" Category="custom" ClassName="Demo.Service.SQLEntireTableBulk" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>
-    <Setting Target="Adapter" Name="Query">select 1</Setting>
-    <Setting Target="Adapter" Name="KeyFieldName"></Setting>
-    <Setting Target="Adapter" Name="JGService">EnsLib.JavaGateway.Service</Setting>
-    <Setting Target="Host" Name="AlertOnError">1</Setting>
-    <Setting Target="Host" Name="AlertGroups">SQL</Setting>
-  </Item>
   <Item Name="EnsLib.JavaGateway.Service" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
@@ -320,19 +304,16 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
   </Item>
   <Item Name="SendMail" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="Credentials">smtp</Setting>
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
-    <Setting Target="Adapter" Name="Credentials">smtp</Setting>
-    <Setting Target="Adapter" Name="From">iris</Setting>
     <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
   </Item>
-  <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
     <Setting Target="Adapter" Name="SMTPPort">465</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.mail.yahoo.co.jp</Setting>
     <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
-    <Setting Target="Adapter" Name="From">iris</Setting>
-    <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
   </Item>
   <Item Name="RESTPassThrough" Category="" ClassName="EnsLib.REST.GenericService" PoolSize="0" Enabled="false" Foreground="false" Comment="Doesn&apos;t work" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="TargetConfigName">FileTransferRouter</Setting>
@@ -377,7 +358,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
-  <Item Name="dc.demo.imap.python.IMAPPyTestService" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="IMAP" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="POP3Port">993</Setting>
     <Setting Target="Adapter" Name="POP3Server">imap.mail.yahoo.co.jp</Setting>
     <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>

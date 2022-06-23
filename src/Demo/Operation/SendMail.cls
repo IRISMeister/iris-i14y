@@ -17,6 +17,8 @@ Method Exec(pRequest As Demo.Request.SendMail, Output pResponse As Ens.Response)
 	Set pHTML=pRequest.Body_$C(13,10)
 	Set pHTML=pHTML_"詳細は <a href=www.intersystems.co.jp>こちら</a> をご覧ください。"
 	Set pEmailAddress=pRequest.MailTo
+	;注意。少なくともYahooは認証情報とFromを一致させないと拒否する模様。
+	;自分から自分に送る場合、From,Toは共にxxxx@yahoo.co.jpになる。
 	Set pFrom=pRequest.MailFrom
 
 	Do tMail.To.Insert(pEmailAddress)
