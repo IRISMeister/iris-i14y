@@ -9,11 +9,14 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
     // Credentialをファイル経由で更新する。
     // Docker Secretを使用しているため、コンテナ環境でしか機能しない。
     // fileに実際のファイル名(my_secret.txt)を絶対パスで指定すれば非コンテナ環境でも使用可能。
+    // {"CredName":"mail-yahoo","UserName":"YourUserName","Password":"YourPassword"}
     Set file="/run/secrets/my_secret"
-    Set stream = ##class(%Stream.FileCharacter).%New()
-    Set sc = stream.LinkToFile(file)
-    Set json = {}.%FromJSON(stream)
-    Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
+    if ##class(%File).Exists(file) {
+      Set stream = ##class(%Stream.FileCharacter).%New()
+      Set sc = stream.LinkToFile(file)
+      Set json = {}.%FromJSON(stream)
+      Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
+    }
 
     // SQL Inbound Adaptorで使用するキーの初期値を設定
     // NoCodeのSQL BSの採用に伴い、カスタムのBSのOnIit()あった処理をこちらに移動。
@@ -366,15 +369,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
     <Setting Target="Adapter" Name="CallInterval">30</Setting>
     <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
-  </Item>
-  <Item Name="IMAP2" Category="mail,custom" ClassName="dc.demo.imap.IMAPTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
-    <Setting Target="Adapter" Name="POP3Port">993</Setting>
-    <Setting Target="Adapter" Name="POP3Server">imap.mail.yahoo.co.jp</Setting>
-    <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
-    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
-    <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
-    <Setting Target="Adapter" Name="CallInterval">30</Setting>
-    <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
+    <Setting Target="Adapter" Name="FilePath">/var/tmp/</Setting>
   </Item>
   <Item Name="SQLReport" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>

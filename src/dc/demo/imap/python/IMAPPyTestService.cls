@@ -30,44 +30,45 @@ Method OnProcessInput(pMailMessage As %Net.MailMessage, pOutput As %RegisteredOb
 
                 if mp.IsMultiPart {
                     $$$TRACE("further multiple parts. Do nothing.")
-                    /*
-                    Set parts2=mp.Parts
-                    For j=1:1:parts2.Count() {
-                        Set mp2=parts2.GetAt(i)
-                        $$$TRACE("mp2.ContentType: "_mp2.ContentType)
-
-                        $$$TRACE("mp2.IsMultiPart:"_mp2.IsMultiPart)
-                        $$$TRACE("mp2.IsHTML:"_mp2.IsHTML)
-                        $$$TRACE("mp2.IsBinary:"_mp2.IsBinary)
-                        Set maildata=mp2.TextData // %Library.FileCharacterStream
-                        $$$TRACE("TextData:["_maildata.Read(100)_"]")
-                        Set maildata=mp2.BinaryData // %Library.FileCharacterStream
-                        $$$TRACE("BinaryData:["_maildata.Read(100)_"]")
-                    }
-                    */
-
                 }
                 Elseif mp.IsHTML {
-                    $$$TRACE("Ignoring HTML part.")
+                    $$$TRACE("HTML part. Do nithing.")
                 }
                 Elseif mp.IsBinary {
-                    $$$TRACE("Binary part. : ContentType "_mp.ContentType_" Size:"_mp.BinaryData.Size)
-                    If mp.IsBase64 {
-                        ; d mp.BinaryData.Rewind()
-                        b
-                    }
+                    Set desc=mp.Headers.GetAt("Content-Description")  // expecting a attached filename.
+                    Set disp=mp.Headers.GetAt("Content-Disposition")  
+                    Set maildata=mp.BinaryData
+                    Set data= maildata.Read(20) Do maildata.Rewind()
+                    $$$TRACE("Binary part. : ContentType:"_mp.ContentType_" CharSet:"_mp.Charset_" Description:"_desc_" Disposition:"_disp_" Size:"_maildata.Size_" Data:"_$E(data,1,20))
+
+                    Set file=..Adapter.FilePath_desc
+                    $$$TRACE("Saving to "_file)
+                    Set fs=##class(%Stream.FileBinary).%New()
+                    Set fs.Filename=file
+                    Set tSC=fs.CopyFrom(maildata) $$$ThrowOnError(tSC)
+                    Set tSC=fs.%Save() $$$ThrowOnError(tSC)
                 }
                 Else {
+                    Set desc=mp.Headers.GetAt("Content-Description")  // expecting a attached filename.
+                    Set disp=mp.Headers.GetAt("Content-Disposition")  
                     Set maildata=mp.TextData // %Library.FileCharacterStream
-                    $$$TRACE("maildata:["_maildata.Read(maildata.Size)_"]")
+                    Set data= maildata.Read(20) Do maildata.Rewind()
+                    $$$TRACE("Other part. : ContentType:"_mp.ContentType_" CharSet:"_mp.Charset_" Description:"_desc_" Disposition:"_disp_" Size:"_maildata.Size_" Data:"_$E(data,1,20))
+
+                    If desc'="" {  // text file attachment 
+                        Set file=..Adapter.FilePath_desc
+                        $$$TRACE("Saving to "_file)
+                        Set fs=##class(%Stream.FileBinary).%New()  // Use FileBinary to save incoming steram data as is.
+                        Do fs.LinkToFile(file)
+                        Set tSC=fs.CopyFrom(maildata) $$$ThrowOnError(tSC)
+                        Set tSC=fs.%Save() $$$ThrowOnError(tSC)                
+                    }
+                    Else {
+	                    $$$TRACE("Plain message received. Do nothing.")
+                    }
                 }
             }
         }
-
-
-        //now safe to get text of message
-        ;Set pReq=##class(EEMA.EmailContents).%New()
-        ;Set pReq.MessageText=pMailMessage.TextData
 
         /*
         Set tSendReply = ##class(dc.demo.imap.IMAPTestReplyMsg).%New()

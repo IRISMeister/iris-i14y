@@ -284,7 +284,7 @@ Method Fetch(MessageNumber As %Integer, ByRef Msg As %Net.MailMessage, Delete As
         // %Net.MailMessagePart object
         Set Msg = ..Helper.GetMailMessageParts(msgPart, .Msg)
         Set Msg.MessageSize = msgSize
-        ;S Delete=1 ;; force to delete  by IRISMeister
+
         If ($Get(Delete) = 1) {
             $$$TOE(sc, ..DeleteMessage(MessageNumber))
         }
@@ -350,11 +350,11 @@ Method CommitMarkedAsDeleted() As %Status [ Internal, Private ]
         // such number
         Set messageNumber = $Order(..MarkedAsDeleted(""), -1)
         While (messageNumber '= "") {
+	        Set sc=..GetMessageUIDArray(messageNumber,.uids), uid=uids.GetNext(""),uid=uid_""    // irismeister
             // hack to ensure that messageNumber is of type %String
             Set messageNumber = messageNumber_""
-            Set resp = ..client.store(messageNumber, "+FLAGS", "\Deleted")
-            ;DEMO 9e1>zw ..client
-            ;9@%SYS.Python  ; <imaplib.IMAP4_SSL object at 0x7f35bef01f10>  ; <OREF>
+            //Set resp = ..client.store(messageNumber, "+FLAGS", "\Deleted")
+            Set resp = ..client.uid("STORE",uid, "+FLAGS", "\Deleted")   // irismeister
             Do ..Helper.Log("[CommitMarkedAsDeleted] "_..MailboxName_": "_..PythonToString(resp))
 
             Set messageNumber = $Order(..MarkedAsDeleted(messageNumber), -1)

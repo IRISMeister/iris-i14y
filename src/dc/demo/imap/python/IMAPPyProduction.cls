@@ -12,6 +12,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="Credentials">imap-test</Setting>
     <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
     <Setting Target="Adapter" Name="Mailbox">production</Setting>
+    <Setting Target="Adapter" Name="FilePath">/var/temp/</Setting>
   </Item>
   <Item Name="dc.demo.imap.IMAPTestSendEmailOperation" Category="" ClassName="dc.demo.imap.IMAPTestSendEmailOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">imap-test</Setting>

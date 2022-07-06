@@ -102,13 +102,22 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set prop("MatchRoles")=":%All"
 		Set tSC = ##Class(Security.Applications).Create("/csp/demo/rest",.prop)		
 
+		;DEV/DEBUG Purrpose Only. Make enslib R/W
+		Set db=##class(SYS.Database).%OpenId("/usr/irissys/mgr/enslib"),db.ReadOnly=0,tSC=db.%Save()
+
 		Set $NAMESPACE=tVars("NAMESPACE")
 		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/order.xsd")
 		$$$ThrowOnError(tSC)
 		Set tsC=##class(EnsLib.EDI.XML.SchemaXSD).ImportFiles("/home/irisowner/resources/person.xsd")
 		$$$ThrowOnError(tSC)
 
+		;DEV/DEBUG Purrpose Only. Force compile some enslib classes.
+		Do $SYSTEM.OBJ.Compile("Ens.Queue","ck-u")
+		Do $SYSTEM.OBJ.Compile("Ens.BusinessService","ck-u")
+		Do $SYSTEM.OBJ.Compile("EnsLib.EMail.InboundAdapter","ck-u")
+
   } Catch(e) {
+	  zw e
 	  Set tSC=e.AsStatus()
   }
   Return tSC
