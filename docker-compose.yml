@@ -32,7 +32,9 @@ services:
     - ftp
     - smtp
     secrets:
-      - my_secret
+      - yahoo_cred
+      - gmail_cred
+      - gmail_client_secret
   postgres:
     image: postgres:12.2-alpine
     hostname: postgres
@@ -102,6 +104,9 @@ networks:
       - subnet: 10.0.1.0/24
       
 secrets:
-  my_secret:
-    file: ./my_secret.txt
-
+  yahoo_cred:
+    file: ./yahoo_cred.json
+  gmail_cred:
+    file: ./gmail_cred.json
+  gmail_client_secret:
+    file: ./gmail_client_secret.json

@@ -27,6 +27,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 	<Credential Name="smtp" Username="foo" Password="pass" Overwrite="1"/>
 	<Credential Name="rest" Username="SuperUser" Password="SYS" Overwrite="1"/>
 	<Credential Name="mail-yahoo" Username="test" Password="test" Overwrite="1"/>
+	<Credential Name="mail-gmail" Username="test" Password="test" Overwrite="1"/>
 	</Production>
 </Namespace>
 </Manifest>

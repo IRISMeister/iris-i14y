@@ -22,9 +22,9 @@ Method EMailSendReply(pRequest As dc.demo.imap.IMAPTestReplyMsg, Output pRespons
 	Set tMailMessage = ##class(%Net.MailMessage).%New()
 	Do tMailMessage.To.Insert(pRequest.Destination)
 	Set tMailMessage.From = pRequest.Sender
-	Set tMailMessage.Subject = "RE: "_pRequest.Text
+	Set tMailMessage.Subject = "[IMAP test]"_pRequest.Text
 	set tMailMessage.Charset = "UTF-8"
-	Set tSC = tMailMessage.TextData.Write("Sent by IMAP Inbound Adapter Example.") 
+	Set tSC = tMailMessage.TextData.Write("Test.") 
     Quit:$$$ISERR(tSC) tSC
 	Set tSC = ..Adapter.SendMail(tMailMessage)
 	Quit tSC

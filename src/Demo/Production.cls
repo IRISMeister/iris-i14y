@@ -8,14 +8,37 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
   Try {
     // Credentialをファイル経由で更新する。
     // Docker Secretを使用しているため、コンテナ環境でしか機能しない。
-    // fileに実際のファイル名(my_secret.txt)を絶対パスで指定すれば非コンテナ環境でも使用可能。
+    // fileに実際のファイル名(yahoo_cred.json)を絶対パスで指定すれば非コンテナ環境でも使用可能。
     // {"CredName":"mail-yahoo","UserName":"YourUserName","Password":"YourPassword"}
-    Set file="/run/secrets/my_secret"
+    Set file="/run/secrets/yahoo_cred"
     if ##class(%File).Exists(file) {
       Set stream = ##class(%Stream.FileCharacter).%New()
       Set sc = stream.LinkToFile(file)
       Set json = {}.%FromJSON(stream)
-      Set tSC=##class(Ens.Config.Credentials).SetCredential(json.CredName,json.UserName,json.Password,1)
+      Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-yahoo",json.UserName,json.Password,1)
+    }
+
+    #; Refresh Tokenを使ったoAuth2認証の例
+    Set file="/run/secrets/gmail_cred"
+    if ##class(%File).Exists(file) {
+      Set stream = ##class(%Stream.FileCharacter).%New()
+      Set sc = stream.LinkToFile(file)
+      Set json = {}.%FromJSON(stream)
+      Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-gmail",json.UserName,"",1)
+    }
+    #; これとは別にCLientId,ClientSecret,RefreshTokenを取得し、プロダクションに反映する
+    Set file="/run/secrets/gmail_client_secret"
+    if ##class(%File).Exists(file) {
+      Set stream = ##class(%Stream.FileCharacter).%New()
+      Set sc = stream.LinkToFile(file)
+      Set json = {}.%FromJSON(stream)
+
+      Do ##class(Ens.Director).GetAdapterSettings("IMAP-GMAIL",.p)
+      Set p("ClientId")=json."client_id"
+      Set p("ClientSecret")=json."client_secret"
+      Set p("RefreshToken")=json."refresh_token"
+      Merge settings("IMAP-GMAIL","Adapter")=p
+      Set tSC=##class(Ens.Production).ApplySettings("Demo.Production",.settings)
     }
 
     // SQL Inbound Adaptorで使用するキーの初期値を設定
@@ -361,10 +384,20 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="KeyFieldName"></Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
-  <Item Name="IMAP" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+  <Item Name="IMAP-YahooMAIL" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="POP3Port">993</Setting>
     <Setting Target="Adapter" Name="POP3Server">imap.mail.yahoo.co.jp</Setting>
     <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
+    <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
+    <Setting Target="Adapter" Name="CallInterval">30</Setting>
+    <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
+    <Setting Target="Adapter" Name="FilePath">/var/tmp/</Setting>
+  </Item>
+  <Item Name="IMAP-GMAIL" Category="mail,custom" ClassName="dc.demo.imap.python.IMAPPyTestService" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
+    <Setting Target="Adapter" Name="POP3Port">993</Setting>
+    <Setting Target="Adapter" Name="POP3Server">imap.gmail.com</Setting>
+    <Setting Target="Adapter" Name="Credentials">mail-gmail</Setting>
     <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
     <Setting Target="Adapter" Name="Mailbox">INBOX</Setting>
     <Setting Target="Adapter" Name="CallInterval">30</Setting>
