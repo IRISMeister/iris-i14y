@@ -6,7 +6,7 @@ Class dc.demo.imap.IMAPTestSendEmailOperation Extends Ens.BusinessOperation
 Parameter INVOCATION = "Queue";
 
 /// Name of the adapter class
-Parameter ADAPTER = "EnsLib.EMail.OutboundAdapter";
+Parameter ADAPTER = "dc.demo.imap.IMAPOutboundAdapter";
 
 XData MessageMap
 {
@@ -17,6 +17,11 @@ XData MessageMap
 
 Method EMailSendReply(pRequest As dc.demo.imap.IMAPTestReplyMsg, Output pResponse As Ens.Response) As %Status
 {
+	
+	;注意。少なくともYahooは認証情報とFromを一致させないと拒否する模様。
+	Set pRequest.Destination=pRequest.Sender ; 自分に送り返す
+	Set pRequest.Sender=..Adapter.%CredentialsObj.Username
+	
 	If pRequest.Destination = "" $$$TRACE("no email address.") Quit $$$OK
 	$$$TRACE("send email to "_pRequest.Destination)
 	Set tMailMessage = ##class(%Net.MailMessage).%New()

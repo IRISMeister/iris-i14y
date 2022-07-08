@@ -70,13 +70,15 @@ Method OnProcessInput(pMailMessage As %Net.MailMessage, pOutput As %RegisteredOb
             }
         }
 
-        /*
+        //Send it back to itself
         Set tSendReply = ##class(dc.demo.imap.IMAPTestReplyMsg).%New()
-        Set tSendReply.Text = tSubject
-        Set tSendReply.Destination = pMailMessage.From
+        Set tSendReply.Text = "[IMAP test] ("_$ZDATETIME($H)_")"  ; Subject
         Set tSendReply.Sender = pMailMessage.To.GetAt(1)
-        Set tSC = ..SendRequestAsync("dc.demo.imap.IMAPTestSendEmailOperation", tSendReply)
-        $$$TRACE("SendRequestAsync to dc.demo.imap.IMAPTestSendEmailOperation")    
+        Set tSendReply.Destination = tSendReply.Sender
+        /*
+        $$$TRACE("Sending Text:"_tSendReply.Text_" Destination:"_tSendReply.Destination_" Sender:"_tSendReply.Sender)
+        Set tSC = ..SendRequestAsync("SMTP-GMAIL", tSendReply)
+        $$$TRACE("SendRequestAsync to SMTP-GMAIL")
         */
     } Catch(ex) {
         Set tSC = ex.AsStatus()
