@@ -19,8 +19,8 @@ Method EMailSendReply(pRequest As dc.demo.imap.IMAPTestReplyMsg, Output pRespons
 {
 	
 	;注意。少なくともYahooは認証情報とFromを一致させないと拒否する模様。
-	Set pRequest.Destination=pRequest.Sender ; 自分に送り返す
 	Set pRequest.Sender=..Adapter.%CredentialsObj.Username
+	Set pRequest.Destination=pRequest.Sender ; 自分に送り返す
 	
 	If pRequest.Destination = "" $$$TRACE("no email address.") Quit $$$OK
 	$$$TRACE("send email to "_pRequest.Destination)
