@@ -485,6 +485,8 @@ $ docker-compose exec postgres psql -U postgres demo
 psql (12.2)
 Type "help" for help.
 
+demo-# show shared_buffers; 
+
 demo-# \dt
              List of relations
  Schema |     Name      | Type  |  Owner
