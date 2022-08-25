@@ -95,6 +95,26 @@ services:
     networks:
       - iris-tier
 
+  iris2:
+    build: 
+      context: msgbank
+      args:
+        COMMIT_ID: ${COMMIT_ID}
+    hostname: iris2
+    ports:
+    - "52774:52773"
+    command:
+      --check-caps false
+    environment:
+    - TZ=JST-9
+    - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
+    networks:
+    - iris-tier
+    volumes:
+    - ./UserCPF:/home/irisowner/cpf
+    depends_on:
+    - iris
+
 networks:
   iris-tier:
     driver: bridge

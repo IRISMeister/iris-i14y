@@ -438,6 +438,10 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">SQL</Setting>
   </Item>
+  <Item Name="Ens.Enterprise.MsgBankOperation" Category="" ClassName="Ens.Enterprise.MsgBankOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="IPAddress">iris2</Setting>
+    <Setting Target="Host" Name="EnableArchiving">1</Setting>
+  </Item>
 </Production>
 }
 
