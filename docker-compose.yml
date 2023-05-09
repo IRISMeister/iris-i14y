@@ -14,12 +14,10 @@ services:
     - "63300:63300"  # foreground
     - "63301:63301"  # foreground
     command:
-      --check-caps false
+      --ISCAgent false --monitorCPF false
     environment:
     - TZ=JST-9
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
-    cap_add:
-    - IPC_LOCK
     networks:
     - iris-tier
     volumes:
@@ -31,6 +29,7 @@ services:
     - sftp
     - ftp
     - smtp
+    - iris2
     secrets:
       - yahoo_cred
       - gmail_cred
@@ -104,7 +103,7 @@ services:
     ports:
     - "52774:52773"
     command:
-      --check-caps false
+      --ISCAgent false --monitorCPF false
     environment:
     - TZ=JST-9
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
@@ -112,8 +111,6 @@ services:
     - iris-tier
     volumes:
     - ./UserCPF:/home/irisowner/cpf
-    depends_on:
-    - iris
 
 networks:
   iris-tier:

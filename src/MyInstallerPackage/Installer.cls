@@ -103,6 +103,15 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set prop("MatchRoles")=":%All"
 		Set tSC = ##Class(Security.Applications).Create("/csp/demo/rest",.prop)		
 
+#if 0
+		; Create an oAuth2 client definition for gmail
+        #dim server as OAuth2.ServerDefinition=""
+        Set issuerEndpoint="https://accounts.google.com"
+        Set sslConfiguration="ISC.FeatureTracker.SSL.Config"
+        Set tSC=##class(%SYS.OAuth2.Registration).Discover(issuerEndpoint,sslConfiguration,.server)
+        Set tSC=server.%Save()
+        $$$ThrowOnError(tSC)
+#endif
 		;DEV/DEBUG Purrpose Only. Make enslib R/W
 		Set db=##class(SYS.Database).%OpenId("/usr/irissys/mgr/enslib"),db.ReadOnly=0,tSC=db.%Save()
 

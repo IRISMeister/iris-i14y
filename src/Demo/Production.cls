@@ -40,7 +40,42 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       Merge settings("IMAP-GMAIL","Adapter")=p
       Set tSC=##class(Ens.Production).ApplySettings("Demo.Production",.settings)
     }
-
+#if 0
+    #; not ready/working yet.
+    New $NAMESPACE
+    Set oldns=$NAMESPACE
+    Set $NAMESPACE="%SYS"
+    Set server=##class(OAuth2.ServerDefinition).%OpenId(1)
+    Set AppName="APP-GMAIL"
+    Set c=##class(OAuth2.Client).%New()
+    Set c.ApplicationName=AppName
+    Set c.Description=AppName
+    Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
+    Set c.AuthenticationType="basic"
+    Set c.ClientType="confidential"
+    Set c.ServerDefinition=server
+    Set endpoint=##class(OAuth2.Endpoint).%New()
+    Set endpoint.Host = "irishost"
+    Set endpoint.Port = "52773"
+    Set endpoint.Prefix = ""
+    Set endpoint.UseSSL = 0   
+    Set c.RedirectionEndpoint=endpoint
+    Set c.Metadata."grant_types" = $lb("client_credentials")
+    Set c.Metadata."client_name" = AppName
+    ;Set c.Metadata."response_types" = $lb("code")
+    Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
+    Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
+    Set c.Metadata."access_token_signed_response_alg" = "RS256"
+    Set c.Metadata."id_token_signed_response_alg" = "RS256"
+    ;Set c.Metadata."frontchannel_logout_uri" = fclouri
+    Set c.Metadata."frontchannel_logout_session_required" = 1 
+    ;Set c.Metadata."post_logout_redirect_uris" = postlorediruris
+    Set c.ClientId=json."client_id"
+    Set c.ClientSecret=json."client_secret"
+    Set tSC=c.%Save()
+		$$$ThrowOnError(tSC)
+    Set $NAMESPACE=oldns
+#endif
     // SQL Inbound Adaptorで使用するキーの初期値を設定
     // NoCodeのSQL BSの採用に伴い、カスタムのBSのOnIit()あった処理をこちらに移動。
     Set configname="SQLReport_lastkey",keyname="%LastKey"
@@ -441,6 +476,11 @@ XData ProductionDefinition
   <Item Name="Ens.Enterprise.MsgBankOperation" Category="" ClassName="Ens.Enterprise.MsgBankOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="IPAddress">iris2</Setting>
     <Setting Target="Host" Name="EnableArchiving">1</Setting>
+  </Item>
+  <Item Name="POP3" Category="" ClassName="Demo.Service.POP3" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config</Setting>
+    <Setting Target="Adapter" Name="OAuth2ApplicationName">APP-GMAIL</Setting>
+    <Setting Target="Adapter" Name="OAuth2GrantType">ClientCredentials</Setting>
   </Item>
 </Production>
 }
