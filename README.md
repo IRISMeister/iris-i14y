@@ -156,8 +156,10 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 |rest|SuperUser|SYS|RESTサーバへのアクセス|
 |smtp|foo|pass|SMTPサーバの認証情報|
 |mail-yahoo|test|test|外部IMAPサーバの認証情報|
+|mail-gmail|test|test|外部IMAPサーバの認証情報|
+|mail-o365|test|test|外部POPサーバの認証情報|
 
->mail-yahooには、有効なメールアカウントを設定してください。[yahoo_cred.json](yahoo_cred.json)にユーザ名、パスワードを記述しておくと、実行時に適用されます。
+>mail-yahooには、有効なメールアカウントを設定してください。[yahoo_cred.json](secrets/yahoo_cred.json)にユーザ名、パスワードを記述しておくと、プロダクション起動時に適用されます。
 
 
 下記URLにて閲覧可能です。  

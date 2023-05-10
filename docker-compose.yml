@@ -33,7 +33,9 @@ services:
     secrets:
       - yahoo_cred
       - gmail_cred
+      - o365_cred
       - gmail_client_secret
+      - o365_client_secret
   postgres:
     image: postgres:12.2-alpine
     hostname: postgres
@@ -122,8 +124,12 @@ networks:
       
 secrets:
   yahoo_cred:
-    file: ./yahoo_cred.json
+    file: ./secrets/yahoo_cred.json
   gmail_cred:
-    file: ./gmail_cred.json
+    file: ./secrets/gmail_cred.json
+  o365_cred:
+    file: ./secrets/o365_cred.json
   gmail_client_secret:
-    file: ./gmail_client_secret.json
+    file: ./secrets/gmail_client_secret.json
+  o365_client_secret:
+    file: ./secrets/o365_client_secret.json

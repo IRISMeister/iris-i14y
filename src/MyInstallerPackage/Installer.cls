@@ -28,6 +28,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 	<Credential Name="rest" Username="SuperUser" Password="SYS" Overwrite="1"/>
 	<Credential Name="mail-yahoo" Username="test" Password="test" Overwrite="1"/>
 	<Credential Name="mail-gmail" Username="test" Password="test" Overwrite="1"/>
+	<Credential Name="mail-o365" Username="test" Password="test" Overwrite="1"/>
 	</Production>
 </Namespace>
 </Manifest>
@@ -103,10 +104,16 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set prop("MatchRoles")=":%All"
 		Set tSC = ##Class(Security.Applications).Create("/csp/demo/rest",.prop)		
 
-#if 0
-		; Create an oAuth2 client definition for gmail
+#if 1
+		; Enable DeepSee for portal access
+		Kill prop
+		Set tSC = ##Class(Security.Applications).Get("/csp/demo",.prop)
+		Set prop("DeepSeeEnabled")=1
+		Set tSC = ##Class(Security.Applications).Modify("/csp/demo",.prop)
+
+		; Create an oAuth2 client definition for Azure AD
         #dim server as OAuth2.ServerDefinition=""
-        Set issuerEndpoint="https://accounts.google.com"
+        Set issuerEndpoint="https://login.microsoftonline.com/d8f44e7a-12b5-4a59-b444-c6657e2c5416/v2.0"
         Set sslConfiguration="ISC.FeatureTracker.SSL.Config"
         Set tSC=##class(%SYS.OAuth2.Registration).Discover(issuerEndpoint,sslConfiguration,.server)
         Set tSC=server.%Save()
@@ -126,6 +133,11 @@ ClassMethod setup(ByRef tVars) As %Status
 		Do $SYSTEM.OBJ.Compile("Ens.BusinessService","ck-u")
 		Do $SYSTEM.OBJ.Compile("EnsLib.EMail.InboundAdapter","ck-u")
 
+		; Add User/Role for oAuth2 login.
+		Set $NAMESPACE=tVars("NAMESPACE")
+		Set tSC=##class(EnsLib.Workflow.RoleDefinition).CreateRole("%InteroperabilityOAuth2Authorizers") 
+		Set tSC=##class(EnsLib.Workflow.UserDefinition).CreateUser("SuperUser")
+		Set tSC=##class(EnsLib.Workflow.RoleDefinition).AddUserToRole("%InteroperabilityOAuth2Authorizers", "SuperUser")
   } Catch(e) {
 	  zw e
 	  Set tSC=e.AsStatus()
