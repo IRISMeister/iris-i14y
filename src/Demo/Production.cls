@@ -503,6 +503,9 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="POP3Port">995</Setting>
     <Setting Target="Adapter" Name="POP3Server">outlook.office365.com</Setting>
   </Item>
+  <Item Name="Ens.Activity.Operation.Local" Category="" ClassName="Ens.Activity.Operation.Local" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Host" Name="RecordStatsInterval">30</Setting>
+  </Item>
 </Production>
 }
 
