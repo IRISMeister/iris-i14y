@@ -470,6 +470,13 @@ $ docker compose exec iris iris session iris -U demo init
 + エラー <Ens>ErrGeneral: Unexpected body type 'String' encountered for header 101:795
 ```
 
+### アクティビティ量と期間
+
+アクティビティ量と期間を有効にしてあります。[管理ポータル](http://localhost:52873/csp/demo/EnsPortal.ActivityVolumeAndDuration.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO&)で参照できます。
+
+![](https://raw.githubusercontent.com/IRISMeister/doc-images/main/iris-i14y/act.png)
+
+
 ### 各コンテナへのアクセス方法
 
 * InterSystems IRIS 
