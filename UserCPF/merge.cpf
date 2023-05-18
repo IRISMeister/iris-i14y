@@ -9,6 +9,3 @@ gmheap=128000
 
 [SQL]
 TimePrecision=6
-
-[SqlSysDatatypes]
-TIMESTAMP=%Library.PosixTime

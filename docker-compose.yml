@@ -9,8 +9,7 @@ services:
         COMMIT_ID: ${COMMIT_ID}
     hostname: iris
     ports:
-    - "1972:1972"
-    - "52773:52773"
+    - "52873:52773"
     - "63300:63300"  # foreground
     - "63301:63301"  # foreground
     command:
@@ -103,7 +102,7 @@ services:
         COMMIT_ID: ${COMMIT_ID}
     hostname: iris2
     ports:
-    - "52774:52773"
+    - "52874:52773"
     command:
       --ISCAgent false --monitorCPF false
     environment:

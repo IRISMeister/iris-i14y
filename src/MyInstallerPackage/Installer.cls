@@ -44,6 +44,7 @@ ClassMethod setupMethod(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %I
 
 ClassMethod setup(ByRef tVars) As %Status
 {
+  //#define INSTALLZPM 
   Set tSC='$$$OK
   Try {
 		If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src" }
@@ -109,7 +110,11 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set tSC = ##Class(Security.Applications).Get("/csp/demo",.prop)
 		Set prop("DeepSeeEnabled")=1
 		Set tSC = ##Class(Security.Applications).Modify("/csp/demo",.prop)
-
+		
+#ifdef INSTALLZPM
+		; Install ZPM
+		Set r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="ISC.FeatureTracker.SSL.Config" d r.Get("/packages/zpm/latest/installer"),$system.OBJ.LoadStream(r.HttpResponse.Data,"c")
+#endif
 #if 1
 		; Create an oAuth2 client definition for Azure AD
         #dim server as OAuth2.ServerDefinition=""
@@ -142,6 +147,10 @@ ClassMethod setup(ByRef tVars) As %Status
 		; Enable Activity monitor
 		Set $NAMESPACE="DEMO"
 		do ##class(Ens.Util.Statistics).EnableStatsForProduction()
+#ifdef INSTALLZPM
+		; Install open exchange message viewer
+		zpm "install iris-message-viewer"
+#endif
   } Catch(e) {
 	  zw e
 	  Set tSC=e.AsStatus()

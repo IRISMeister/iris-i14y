@@ -1,7 +1,7 @@
 # InterSystems IRIS インターオペラビリティ機能の紹介
 ## 概要
 InterSystems IRIS, postgresql, SFTPサーバ,FTPサーバ用のコンテナを使用した、InterSystems IRISの相互運用性(Interoperability)の例です。アダプタの使用方法にフォーカスしています。使用するファイルはUTF8エンコードを前提にしています。  
-Ubuntu 18.04 LTS + Docker CE 19.03.7, Windows10 + Docker Desktop 2.2.0.4(43472) にて動作確認済み。
+Windows10 + WSL2(Ubuntu 22.04) にて動作確認しています。
 
 ## 起動前提条件
 下記のイメージ実行が成功する環境であること。
@@ -10,16 +10,12 @@ $ sudo docker run hello-world
 ```
 See https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
-docker-composeを導入済みであること。  
-
-See https://docs.docker.com/compose/install/
-
 ## 起動方法
-初回起動時のみイメージビルドのために`docker-compose build`を実行します。若干(2,3分程度)の時間を要します。  
+初回起動時のみイメージビルドのために`./build.sh`を実行します。若干(2,3分程度)の時間を要します。  
 ```bash
 $ git clone https://github.com/IRISMeister/iris-i14y.git
 $ cd iris-i14y
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 非docker環境への適用  
@@ -36,19 +32,19 @@ USER>zn "DEMO"
 DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 ```
 
-以下、コンテナを起動した環境のホスト名を***irishost***と仮定します。プロダクションへのリンクは、このホスト名を使用しています。
+以下、コンテナを起動した環境のホストにlocalhostでアクセス可能であると仮定します(WSL2のデフォルトの動作です)。プロダクションへのリンクは、このホスト名を使用しています。
 
 ## 管理ポータルへのアクセス
-http://irishost:52773/csp/sys/%25CSP.Portal.Home.zen  
+http://localhost:52873/csp/sys/%25CSP.Portal.Home.zen  
 ユーザ名:SuperUser  
 パスワード:SYS  
 補足)パスワードはビルド時にSecurity.Users:UnExpireUserPasswords()を実行しています。
 
 ## 停止/再開/削除方法
 ```bash
-$ docker-compose stop
-$ docker-compose start
-$ docker-compose down -v
+$ docker compose stop
+$ docker compose start
+$ docker compose down -v
 ```
 ## シーケンス
 |#|入力元|処理|出力先|備考|
@@ -125,9 +121,9 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
-http://irishost:52773/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
+http://localhost:52873/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
 インターフェースマップ  
-http://irishost:52773/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
+http://localhost:52873/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
 ## ビジネスホスト以外の主な構成要素  
@@ -143,10 +139,10 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 |ルール名|用途|エディタ|シーケンス|
 |:--|:--|:--|:--|
-|[Demo.Rule.FileTransferRouter](src/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
-|[Demo.Rule.ReportRouter](src/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
-|[Demo.Rule.VDocRoutingEngineRoutingRule](src/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|[スキーマ依存パス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_schema_path)を使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
-|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](src/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|[DOMスタイルパス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_dom_path)を使用したconditionによりファイル送信先を決定|[Link](http://irishost:52773/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
+|[Demo.Rule.FileTransferRouter](src/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
+|[Demo.Rule.ReportRouter](src/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
+|[Demo.Rule.VDocRoutingEngineRoutingRule](src/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|[スキーマ依存パス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_schema_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
+|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](src/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|[DOMスタイルパス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_dom_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
@@ -163,7 +159,7 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 
 下記URLにて閲覧可能です。  
-http://irishost:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
+http://localhost:52873/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 
 ## RecordMap一覧
 下記のRecordMapを定義・使用しています。  
@@ -175,7 +171,7 @@ http://irishost:52773/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 |User.ReportExtra|User.Report.RecordExtra|User.ReportExtra.Batch|5|FTPReport1,FTPReport2,FTPReport3|
 
 下記URLにて閲覧可能です。  
-http://irishost:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
+http://localhost:52873/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
 
 ## SQL Gateway接続
 下記のSQL Gateway接続を定義・使用しています。  
@@ -187,7 +183,7 @@ http://irishost:52773/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAM
 |oraclejdbc|oracleへのJDBC接続情報|
 
 下記URLにて閲覧可能です。  
-http://irishost:52773/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
+http://localhost:52873/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ODBC接続については、[直接データソース定義](odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
 
@@ -200,11 +196,11 @@ ODBC接続については、[直接データソース定義](odbc/odbc.ini)を�
 |person|ファイル入力時のXMLバリデーション及び、ルール内でのスキーマ依存パスの使用|[person.xsd](resources/person.xsd)|
 
 下記URLにて閲覧可能です。  
-http://irishost:52773/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
+http://localhost:52873/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
 
 ## アラート管理
 下記URLにて閲覧可能です。  
-http://irishost:52773/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
+http://localhost:52873/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
 ## Restサービス
 下記のRestサービスを作成しています。  
@@ -212,7 +208,7 @@ http://irishost:52773/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
 curlによる呼び出し例
 ```
-$ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:52773/csp/demo/rest/repo -u SuperUser:SYS -s | jq
+$ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:52873/csp/demo/rest/repo -u SuperUser:SYS -s | jq
 {
   "Status": "OK",
   "TimeStamp": "03/26/2021 14:02:54"
@@ -228,7 +224,7 @@ cp order.txt in_order/
 ```
 を実行することで、シーケンス1が動作します。その結果、postgresql上にorderinfoレコードがINSERTされます。下記コマンド(irisコンテナ内からisqlを使用して、postgresqlデータソースに接続)にて確認可能です。
 ```bash
-$ docker-compose exec iris isql postgresql -v
+$ docker compose exec iris isql postgresql -v
 +---------------------------------------+
 | Connected!                            |
 |                                       |
@@ -276,7 +272,7 @@ $
 ```
 ### シーケンス4の実行方法
 ```bash
-$ docker-compose exec iris isql postgresql -v
+$ docker compose exec iris isql postgresql -v
 +---------------------------------------+
 | Connected!                            |
 |                                       |
@@ -417,7 +413,7 @@ $
 下記のようにlogtable1やlogtable2にINSERT操作を行うと、それに合わせてイベントログ出力内容が変化します。各テーブルの初期値は[init.sql](postgres/initdb/init.sql)を参照。
 
 ```
-$ docker-compose exec postgres psql -U postgres demo
+$ docker compose exec postgres psql -U postgres demo
 demo=# INSERT INTO logtable1 VALUES (6,1);
 demo=# INSERT INTO logtable2 VALUES (106,'XXX');
 ```
@@ -432,7 +428,7 @@ DEMO>zw ^Ens.AppData
 
 下記でメール送信をトリガします。
 ```
-$ docker-compose exec iris iris session iris -U demo direct
+$ docker compose exec iris iris session iris -U demo direct
 output=6@Ens.Response  ; <OREF>
 +----------------- general information ---------------
 |      oref value: 6
@@ -448,9 +444,9 @@ $
 コンテナ稼働のSMTPサーバで受信したメールは下記で閲覧可能です(nkfによる日本語表示は文字化けするかもしれません)。
 
 ```
-$ docker-compose exec smtp cat /var/mail/bot | nkf -mQ
+$ docker compose exec smtp cat /var/mail/bot | nkf -mQ
 もしくは
-$ docker-compose exec smtp mail -u bot
+$ docker compose exec smtp mail -u bot
 ```
 
 ### シーケンス11の実行方法
@@ -460,13 +456,25 @@ $ docker-compose exec smtp mail -u bot
 ### プロダクションの初期化
 下記のコマンドで、プロダクションを、初期化した上で再起動することができます。ポータルでの起動・停止と異なり、プロダクションの状態のリセット、蓄積したメッセージ、ログを削除します。
 ```bash
-$ docker-compose exec iris iris session iris -U demo init
+$ docker compose exec iris iris session iris -U demo init
 ```
+
+### メッセージバンク
+メッセージバンクを有効にしてあります。ArchiveItemsは初期値のままなので、全てのメッセージとイベントをアーカイブします。
+
+[管理ポータル](http://localhost:52874/csp/sys/%25CSP.Portal.Home.zen)のInterOperability > 表示 > バンクされたメッセージ、で参照できます。
+
+> ResponseTargetConfigNamesで発生する内部メッセージ(MessageBodyClassNameは無いがMessageBodyIdはある)に対応していないようで、シーケンス5等を実行すると、Ens.Enterprise.MsgBankOperationで下記のエラーが出ます。
+```
+エラー <Ens>ErrGeneral: Archive Submission attempt received error : エラー <Ens>ErrGeneral: Failed to parse header: エラー #6301: SAX XMLパーサエラー: invalid character 0x5 while processing Anonymous Stream at line 2 offset 663
++ エラー <Ens>ErrGeneral: Unexpected body type 'String' encountered for header 101:795
+```
+
 ### 各コンテナへのアクセス方法
 
 * InterSystems IRIS 
 ```bash
-$ docker-compose exec iris bash
+$ docker compose exec iris bash
 irisowner@iris:~$ iris session iris -U demo
 
 ノード: iris インスタンス: IRIS
@@ -483,7 +491,7 @@ irisowner@iris:~$ cat commit.txt
 ```
 * PostgreSQL
 ```bash
-$ docker-compose exec postgres psql -U postgres demo
+$ docker compose exec postgres psql -U postgres demo
 psql (12.2)
 Type "help" for help.
 
@@ -518,7 +526,7 @@ See https://hub.docker.com/_/postgres
 注) 本イメージは起動時にデータベース保存エリア用のvolumeを作成します。停止時に-vを指定しないと、このvolumeがディスク上に残ります。
 * SFTPサーバ
 ```bash
-$ docker-compose exec sftp bash
+$ docker compose exec sftp bash
 root@sftp:/#
 root@sftp:/# cd /home/foo/upload/demo/
 root@sftp:/home/foo/upload/demo# ls
@@ -533,7 +541,7 @@ SFTPで扱うファイルの文字エンコードはLinuxではUTF8に統一す�
 
 * FTPサーバ
 ```bash
-$ docker-compose exec ftp bash
+$ docker compose exec ftp bash
 root@ftp:/# cd /home/foo/upload/demo/
 root@ftp:/home/foo/upload/demo# ls
 in_order    in_source1  out_report   out_target2  report.txt     source1_2.txt
@@ -544,7 +552,7 @@ See https://hub.docker.com/r/stilliard/pure-ftpd/
 
 * SMTPサーバ
 ```bash
-$ docker-compose exec smtp cat /var/mail/bot | nkf -mQ
+$ docker compose exec smtp cat /var/mail/bot | nkf -mQ
 ```
 アラートメッセージの送信先。bot, netteam, osteamなど複数の宛先ユーザが存在。[Dockerfile](smtp/Dockerfile)を参照。  
 本文がquoted-printableでエンコードされているので、特に日本語の判読にはnkfが必要。  
@@ -554,11 +562,11 @@ See https://github.com/catatnight/docker-postfix
 
 起動方法  
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-mysql.yml up -d
+$ docker compose -f docker-compose.yml -f docker-compose-mysql.yml up -d
 ```
 アクセス方法  
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-mysql.yml exec mysql bash
+$ docker compose -f docker-compose.yml -f docker-compose-mysql.yml exec mysql bash
 root@mysql:/# mysql -u root -p
 Enter password:SYS
 mysql> SHOW VARIABLES LIKE '%char%';
@@ -631,11 +639,11 @@ Oracle JDBC Driver(ojdbc8.jarなど)をjars/直下に配置してください。
 
 起動方法  
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml up -d
+$ docker compose -f docker-compose.yml -f docker-compose-oracle.yml up -d
 ```
 アクセス方法  
 ```bash
-$ docker-compose -f docker-compose.yml -f docker-compose-oracle.yml exec oracle bash
+$ docker compose -f docker-compose.yml -f docker-compose-oracle.yml exec oracle bash
 [oracle@oracle ~]$ sqlplus demo/demo@//localhost:1521/ORCLPDB1
 SQL> select * from report;
        SEQ    ORDERID      DATA1      DATA2 MEMO

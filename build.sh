@@ -1,3 +1,3 @@
 #!/bin/bash
 export COMMIT_ID=$(git show -s --format=%H)
-docker-compose build
+docker compose build --progress plain
