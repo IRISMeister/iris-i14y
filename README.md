@@ -18,6 +18,12 @@ $ cd iris-i14y
 $ docker compose up -d
 ```
 
+初回起動時のみメールサーバにアカウント追加するために下記を実行する。
+```
+$ mailserver/add-users.sh
+```
+
+
 非docker環境への適用  
 非docker環境の既存のIRISインスタンスに、IRISの構成要素だけを導入する事が可能です。以下、Git Repositoryを/home/user1/git/(Windowsの場合、c:\home\user1\git\)下にcloneしたと仮定します。  
 ```ObjectScript
@@ -150,7 +156,7 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 |:--|:--|:--|:--|
 |ftp|foo|pass|SFTP/FTPサーバへのログイン|
 |rest|SuperUser|SYS|RESTサーバへのアクセス|
-|smtp|foo|pass|SMTPサーバの認証情報|
+|~~smtp~~|~~foo~~|~~pass~~|~~SMTPサーバの認証情報~~|
 |mail-yahoo|test|test|外部IMAPサーバの認証情報|
 |mail-gmail|test|test|外部IMAPサーバの認証情報|
 |mail-o365|test|test|外部POPサーバの認証情報|
@@ -441,13 +447,7 @@ output=6@Ens.Response  ; <OREF>
 $
 ```
 
-コンテナ稼働のSMTPサーバで受信したメールは下記で閲覧可能です(nkfによる日本語表示は文字化けするかもしれません)。
-
-```
-$ docker compose exec smtp cat /var/mail/bot | nkf -mQ
-もしくは
-$ docker compose exec smtp mail -u bot
-```
+コンテナ稼働のSMTPサーバで受信したメールはThundirbirdのようなメールクライアントで閲覧可能です。
 
 ### シーケンス11の実行方法
 間違ったログイン情報を送信しないよう、安全のために、無効にしてあります。使用するには、有効化してください。有効化すると、それ以降、30秒間隔で外部IMAPメールサーバに対して受信メールのチェックを行います。
@@ -558,12 +558,37 @@ root@ftp:/home/foo/upload/demo#
 See https://hub.docker.com/r/stilliard/pure-ftpd/
 
 * SMTPサーバ
+
+> 使用中止。mailserverを使用。
 ```bash
 $ docker compose exec smtp cat /var/mail/bot | nkf -mQ
 ```
 アラートメッセージの送信先。bot, netteam, osteamなど複数の宛先ユーザが存在。[Dockerfile](smtp/Dockerfile)を参照。  
 本文がquoted-printableでエンコードされているので、特に日本語の判読にはnkfが必要。  
 See https://github.com/catatnight/docker-postfix
+
+* mailserver
+
+dockerのexternal volumeを使用しているので、受信データや、設定内容はコンテナの再起動後も継続的に使用される。
+(メールクライアントからのメールアカウントの登録を再起動のたびに繰り返したくないので、このようにしている)
+
+受信内容の確認にはThundirbirdのようなメールクライアントを使用する。Thundirbirdでの設定例を以下に示す。
+
+メールアカウント追加操作で、次のように設定する(メールアカウントとしてbot@foo.example.comを追加する例)。パスワードはpass。
+
+![tb1](images//tb1.png)
+
+手動設定を選択し、下記画像のように入力後、再テストを押す。
+
+![tb2](images//tb2.png)
+
+下記画像のような表示になったら、完了を押す。
+
+![tb3](images//tb3.png)
+
+ポップアップされる確認画面にて「 接続する上での危険性を理解しました」をチェックし、確認を押すとアカウントが追加される。
+
+自分宛て(画像の例ではbot@foo.example.com)にメールを送って、受信されることを確認する。
 
 * MySQL  
 

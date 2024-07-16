@@ -383,10 +383,9 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
   </Item>
   <Item Name="SendMail" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="Credentials">smtp</Setting>
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
-    <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
-    <Setting Target="Adapter" Name="Recipient">root@localhost</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">mail.example.com</Setting>
+    <Setting Target="Adapter" Name="Recipient">root@foo.example.com</Setting>
   </Item>
   <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
@@ -403,9 +402,8 @@ XData ProductionDefinition
   </Item>
   <Item Name="EnsLib.EMail.AlertOperation" Category="alert,mail" ClassName="EnsLib.EMail.AlertOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="SMTPPort">25</Setting>
-    <Setting Target="Adapter" Name="SMTPServer">smtp</Setting>
-    <Setting Target="Adapter" Name="Credentials">smtp</Setting>
-    <Setting Target="Adapter" Name="From">iris</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">mail.example.com</Setting>
+    <Setting Target="Adapter" Name="From">iris@iris.example.org</Setting>
     <Setting Target="Host" Name="IncludeDetails">1</Setting>
     <Setting Target="Host" Name="IncludeNodeinSubject">1</Setting>
   </Item>

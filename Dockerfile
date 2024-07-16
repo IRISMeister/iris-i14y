@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris-community:2023.1.0.229.0 
+FROM containers.intersystems.com/intersystems/iris-community:2024.1
 
 USER root
 
@@ -24,10 +24,10 @@ RUN odbcinst -i -s -l -f odbc.ini \
  && cd $ISC_PACKAGE_INSTALLDIR/bin \
  && mv odbcgateway.so odbcgateway.so.org \
  && cp odbcgatewayur64.so odbcgateway.so\
- && mv liblber-2.4.so.2 liblber-2.4.so.2.org \
- && mv libldap-2.4.so.2 libldap-2.4.so.2.org \
- && ln -s /usr/lib/x86_64-linux-gnu/liblber-2.4.so.2 liblber-2.4.so.2 \
- && ln -s /usr/lib/x86_64-linux-gnu/libldap-2.4.so.2 libldap-2.4.so.2 
+ && mv liblber-2.5.so.0 liblber-2.5.so.0.org \
+ && mv libldap-2.5.so.0 libldap-2.5.so.0.org \
+ && ln -s /usr/lib/x86_64-linux-gnu/liblber-2.5.so.0 liblber-2.5.so.0 \
+ && ln -s /usr/lib/x86_64-linux-gnu/libldap-2.5.so.0 libldap-2.5.so.0 
 
 USER irisowner
 # download postgresql/mysql jdbc driver and place them under /home/irisowner 

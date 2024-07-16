@@ -17,8 +17,8 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 <request type='Demo.Request.SendMail' >
 <assign property="callrequest.Body" value="request.StringValue" action="set" />
 <assign property="callrequest.Subject" value="&quot;お知らせ&quot;" action="set" />
-<assign property="callrequest.MailFrom" value="&quot;test@intersystems.com&quot;" action="set" />
-<assign property="callrequest.MailTo" value="&quot;bot@localhost&quot;" action="set" />
+<assign property="callrequest.MailFrom" value="&quot;iris@iris.example.org&quot;" action="set" />
+<assign property="callrequest.MailTo" value="&quot;bot@foo.example.com&quot;" action="set" />
 </request>
 <response type='Ens.StringContainer' >
 <assign property="response" value="callresponse" action="set" />

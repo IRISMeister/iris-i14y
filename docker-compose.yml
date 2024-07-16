@@ -1,13 +1,10 @@
-version: '3.7'
-
 services: 
   iris:
-    init: true
     build: 
       context: .
       args:
         COMMIT_ID: ${COMMIT_ID}
-    hostname: iris
+    hostname: iris.example.org
     ports:
     - "52873:52773"
     - "63300:63300"  # foreground
@@ -27,7 +24,7 @@ services:
     - postgres
     - sftp
     - ftp
-    - smtp
+    - mailserver
     - iris2
     secrets:
       - yahoo_cred
@@ -36,7 +33,7 @@ services:
       - gmail_client_secret
       - o365_client_secret
   postgres:
-    image: postgres:12.2-alpine
+    image: postgres:16.3
     hostname: postgres
     ports: 
     - "5432:5432"
@@ -83,17 +80,50 @@ services:
     networks:
       - iris-tier
   
-  smtp:
-    build: 
-      context: smtp
-    hostname: smtp.example.com
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: mailserver
+    # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
+    hostname: mail.example.com
+    env_file: mailserver.env
+    # More information about the mail-server ports:
+    # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
     ports:
-    - "25:25"
-    environment:
-      - maildomain=smtp.example.com
-      - smtp_user=foo:pass
+      - "25:25"    # SMTP  (explicit TLS => STARTTLS, Authentication is DISABLED => use port 465/587 instead)
+      - "143:143"  # IMAP4 (explicit TLS => STARTTLS)
+      - "465:465"  # ESMTP (implicit TLS)
+      - "587:587"  # ESMTP (explicit TLS => STARTTLS)
+      - "993:993"  # IMAP4 (implicit TLS)
+      - "110:110"
+    volumes:
+      - ./mailserver/docker-data/dms/mail-data/:/var/mail/
+      - ./mailserver/docker-data/dms/mail-state/:/var/mail-state/
+      - ./mailserver/docker-data/dms/mail-logs/:/var/log/mail/
+      - ./mailserver/docker-data/dms/config/:/tmp/docker-mailserver/
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    stop_grace_period: 1m
+    # Uncomment if using `ENABLE_FAIL2BAN=1`:
+    # cap_add:
+    #   - NET_ADMIN
+    healthcheck:
+      test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+      timeout: 3s
+      retries: 0
     networks:
       - iris-tier
+
+  #smtp:
+  #  build: 
+  #    context: smtp
+  #  hostname: smtp.example.com
+  #  ports:
+  #  - "25:25"
+  #  environment:
+  #    - maildomain=smtp.example.com
+  #    - smtp_user=foo:pass
+  #  networks:
+  #    - iris-tier
 
   iris2:
     build: 
@@ -112,6 +142,8 @@ services:
     - iris-tier
     volumes:
     - ./UserCPF:/home/irisowner/cpf
+
+
 
 networks:
   iris-tier:
