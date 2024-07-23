@@ -75,11 +75,10 @@ Method OnProcessInput(pMailMessage As %Net.MailMessage, pOutput As %RegisteredOb
         Set tSendReply.Text = "[IMAP test] ("_$ZDATETIME($H)_")"  ; Subject
         Set tSendReply.Sender = pMailMessage.To.GetAt(1)
         Set tSendReply.Destination = tSendReply.Sender
-        /*
+
         $$$TRACE("Sending Text:"_tSendReply.Text_" Destination:"_tSendReply.Destination_" Sender:"_tSendReply.Sender)
         Set tSC = ..SendRequestAsync("SMTP-GMAIL", tSendReply)
         $$$TRACE("SendRequestAsync to SMTP-GMAIL")
-        */
     } Catch(ex) {
         Set tSC = ex.AsStatus()
     }

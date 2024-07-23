@@ -18,28 +18,63 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-yahoo",json.UserName,json.Password,1)
     }
 
-    #; Refresh Tokenを使ったoAuth2認証の例
-    Set file="/run/secrets/gmail_cred"
-    if ##class(%File).Exists(file) {
-      Set stream = ##class(%Stream.FileCharacter).%New()
-      Set sc = stream.LinkToFile(file)
-      Set json = {}.%FromJSON(stream)
-      Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-gmail",json.UserName,"",1)
-    }
-    #; これとは別にCLientId,ClientSecret,RefreshTokenを取得し、プロダクションに反映する
     Set file="/run/secrets/gmail_client_secret"
     if ##class(%File).Exists(file) {
       Set stream = ##class(%Stream.FileCharacter).%New()
       Set sc = stream.LinkToFile(file)
       Set json = {}.%FromJSON(stream)
 
-      Do ##class(Ens.Director).GetAdapterSettings("IMAP-GMAIL",.p)
+      Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-gmail",json.AccountName,"",1)
+
+      k p Do ##class(Ens.Director).GetAdapterSettings("IMAP-GMAIL",.p)
       Set p("ClientId")=json."client_id"
       Set p("ClientSecret")=json."client_secret"
       Set p("RefreshToken")=json."refresh_token"
       Merge settings("IMAP-GMAIL","Adapter")=p
+      
+	    k p Do ##class(Ens.Director).GetAdapterSettings("SendMailExt2",.p)
+      Set p("ClientId")=json."client_id"
+      Set p("ClientSecret")=json."client_secret"
+      Set p("RefreshToken")=json."refresh_token"
+      Set p("TokenEndPoint")=json."token_uri"
+      Merge settings("SendMailExt2","Adapter")=p
       Set tSC=##class(Ens.Production).ApplySettings("Demo.Production",.settings)
+
+      New $NAMESPACE
+      Set oldns=$NAMESPACE
+      Set $NAMESPACE="%SYS"
+      Set server=##class(OAuth2.ServerDefinition).%OpenId(2) ;GMAIL
+      Set AppName="APP-GMAIL"
+      Set c=##class(OAuth2.Client).%New()
+      Set c.ApplicationName=AppName
+      Set c.Description=AppName
+      Set c.ClientId=json."client_id"
+      Set c.ClientSecret=json."client_secret"
+      Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
+      Set c.AuthenticationType="basic"
+      Set c.ClientType="confidential"
+      Set c.DefaultScope="openid https://mail.google.com/"
+      Set c.ServerDefinition=server
+      Set endpoint=##class(OAuth2.Endpoint).%New()
+      Set endpoint.Host = "localhost"
+      Set endpoint.Port = "8883"
+      Set endpoint.UseSSL = 1    
+      Set c.RedirectionEndpoint=endpoint
+      Set c.Metadata."grant_types" =  $lb("authorization_code","jwt_authorization","refresh_token")
+      Set c.Metadata."client_name" = AppName
+      Set c.Metadata."response_types" = $lb("code")
+      Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
+      Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
+      Set c.Metadata."access_token_signed_response_alg" = "RS256"
+      Set c.Metadata."id_token_signed_response_alg" = "RS256"
+      Set c.Metadata."frontchannel_logout_session_required" = 1 
+      Set tSC=c.%Save()
+      $$$ThrowOnError(tSC)
+
+      Set $NAMESPACE=oldns
+
     }
+
 #if 1
     #; o365 
     #; Credential情報。
@@ -63,7 +98,7 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       Set $NAMESPACE="%SYS"
       Set server=##class(OAuth2.ServerDefinition).%OpenId(1) ; are you sure?
       Set AppName="APP-O365-MAIL"
-      Set c=##class(OAuth2.Client).%New()
+      Set c=##class(OAuth2.Client).%New() ;; $OpenId(AppName) to open exsisting one
       Set c.ApplicationName=AppName
       Set c.Description=AppName
       Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
@@ -91,6 +126,7 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       Set c.ClientSecret=json."client_secret"
       Set tSC=c.%Save()
       $$$ThrowOnError(tSC)
+
       Set $NAMESPACE=oldns
 #endif
     }
@@ -387,7 +423,21 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="SMTPServer">mail.example.com</Setting>
     <Setting Target="Adapter" Name="Recipient">root@foo.example.com</Setting>
   </Item>
-  <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  <Item Name="SendMailExt" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="Credentials">mail-gmail</Setting>
+    <Setting Target="Adapter" Name="SMTPPort">587</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp.gmail.com</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config*</Setting>
+    <Setting Target="Adapter" Name="OAuth2GrantType">AuthCode</Setting>
+    <Setting Target="Adapter" Name="OAuth2ApplicationName">APP-GMAIL</Setting>
+  </Item>
+  <Item Name="SendMailExt2" Category="mail,custom" ClassName="Demo.Operation.SendMail2" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+    <Setting Target="Adapter" Name="Credentials">mail-gmail</Setting>
+    <Setting Target="Adapter" Name="SMTPPort">587</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp.gmail.com</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config*</Setting>
+  </Item>
+  <Item Name="SendMailExtYahoo" Category="mail,custom" ClassName="Demo.Operation.SendMail" PoolSize="1" Enabled="false" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="Credentials">mail-yahoo</Setting>
     <Setting Target="Adapter" Name="SMTPPort">465</Setting>
     <Setting Target="Adapter" Name="SMTPServer">smtp.mail.yahoo.co.jp</Setting>
@@ -454,6 +504,7 @@ XData ProductionDefinition
     <Setting Target="Adapter" Name="CallInterval">30</Setting>
     <Setting Target="Adapter" Name="MatchSubject">[IMAP test]</Setting>
     <Setting Target="Adapter" Name="FilePath">/var/tmp/</Setting>
+    <Setting Target="Adapter" Name="DeleteMessage">1</Setting>
   </Item>
   <Item Name="SQLReport" Category="sql2sql" ClassName="EnsLib.SQL.Service.GenericService" PoolSize="1" Enabled="true" Foreground="false" Comment="SQLレコードを行ごとに転送する処理" LogTraceEvents="true" Schedule="">
     <Setting Target="Adapter" Name="DSN">postgresqljdbc</Setting>

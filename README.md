@@ -689,3 +689,36 @@ SQL>
 ```
 [oracle@oracle ~]$ sqlplus sys/SYS@//localhost:1521/ORCLCDB as sysdba
 ```
+
+### oAuth2認証によるSMTP
+
+SendMailExt(製品のアダプタ使用),SendMailExt2(コミュニティアダプタ使用)にGMAIL用の設定を施してある。テストファシリティで同BOを起動する。
+
+```
+Body:適当
+Subject:適当
+MailFrom:自分のメアド
+MailTo:xxxxx@gmail.com (secrets/gmail_client_secret.jsonで指定したアカウント)
+```
+
+- 製品のアダプタの挙動。
+
+下記の設定を施してある。
+
+```
+サーバー名: 	smtp.gmail.com
+ポート: 	587
+ユーザー名: 	xxxxx@gmail.com
+認証方式: 	OAuth2
+接続の保護: 	STARTTLS
+```
+
+この時点でアクセストークンを取得するための認証フローを開始するためのリンクがIRIS BIポータルに届く(SuperUserのみ)。
+そのため、初回の送信はタイムアウトで失敗する。
+```
+エラーを受信しました : エラー <Ens>ErrFailureTimeout: Demo.Operation.SendMail 中にFailureTimeout 15 秒が経過しました; 最終試行ステータス: エラー <Ens>ErrOAUTH2NotAuthorized: OAUTH2 の OAuth2 アプリケーションが認可されていません : APP-GMAIL
+```
+
+リンクを使用して、GCPにログイン、認可を与える。2回目以降のテストで送信できる。
+
+

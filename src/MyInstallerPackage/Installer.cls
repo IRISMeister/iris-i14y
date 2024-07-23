@@ -109,6 +109,7 @@ ClassMethod setup(ByRef tVars) As %Status
 		Kill prop
 		Set tSC = ##Class(Security.Applications).Get("/csp/demo",.prop)
 		Set prop("DeepSeeEnabled")=1
+		Set prop("AutheEnabled")=32 // password
 		Set tSC = ##Class(Security.Applications).Modify("/csp/demo",.prop)
 		
 #ifdef INSTALLZPM
@@ -118,11 +119,21 @@ ClassMethod setup(ByRef tVars) As %Status
 #if 1
 		; Create an oAuth2 client definition for Azure AD
         #dim server as OAuth2.ServerDefinition=""
+		k server
         Set issuerEndpoint="https://login.microsoftonline.com/d8f44e7a-12b5-4a59-b444-c6657e2c5416/v2.0"
         Set sslConfiguration="ISC.FeatureTracker.SSL.Config"
         Set tSC=##class(%SYS.OAuth2.Registration).Discover(issuerEndpoint,sslConfiguration,.server)
         Set tSC=server.%Save()
         $$$ThrowOnError(tSC)
+
+		; Create an oAuth2 client definition for GCP
+		k server
+		Set issuerEndpoint="https://accounts.google.com"
+		Set sslConfiguration="ISC.FeatureTracker.SSL.Config"
+		Set tSC=##class(%SYS.OAuth2.Registration).Discover(issuerEndpoint,sslConfiguration,.server)
+        Set tSC=server.%Save()
+        $$$ThrowOnError(tSC)
+
 #endif
 		;DEV/DEBUG Purrpose Only. Make enslib R/W
 		Set db=##class(SYS.Database).%OpenId("/usr/irissys/mgr/enslib"),db.ReadOnly=0,tSC=db.%Save()
