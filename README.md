@@ -692,7 +692,7 @@ SQL>
 
 ### oAuth2認証によるSMTP
 
-SendMailExt(製品のアダプタ使用),SendMailExt2(コミュニティアダプタ使用)にGMAIL用の設定を施してある。テストファシリティで同BOを起動する。
+SendMailExt(製品のアダプタ使用),SendMailExt2(コミュニティアダプタ使用)にGMAIL用の設定を施してあります。テストファシリティで同BOを起動することで動作させます。
 
 ```
 Body:適当
@@ -701,9 +701,9 @@ MailFrom:自分のメアド
 MailTo:xxxxx@gmail.com (secrets/gmail_client_secret.jsonで指定したアカウント)
 ```
 
-- 製品のアダプタの挙動。
+#### 製品のアダプタの挙動。
 
-下記の設定を施してある。
+下記の設定を施してあります。
 
 ```
 サーバー名: 	smtp.gmail.com
@@ -713,12 +713,62 @@ MailTo:xxxxx@gmail.com (secrets/gmail_client_secret.jsonで指定したアカウ
 接続の保護: 	STARTTLS
 ```
 
-この時点でアクセストークンを取得するための認証フローを開始するためのリンクがIRIS BIポータルに届く(SuperUserのみ)。
-そのため、初回の送信はタイムアウトで失敗する。
+この時点でアクセストークンを取得するための認証フローを開始するためのリンクが、IRIS BIポータルにSuperUser宛てで届きます。
+そのため、初回の送信リクエストは、下記のログが示す通り、タイムアウトで失敗します。
 ```
 エラーを受信しました : エラー <Ens>ErrFailureTimeout: Demo.Operation.SendMail 中にFailureTimeout 15 秒が経過しました; 最終試行ステータス: エラー <Ens>ErrOAUTH2NotAuthorized: OAUTH2 の OAuth2 アプリケーションが認可されていません : APP-GMAIL
 ```
 
-リンクを使用して、GCPにログイン、認可を与える。2回目以降のテストで送信できる。
+IRIS BIポータルのリンクを使用して、GCPにログイン、認可を与えます。
 
+再度テストファシリティで同BOを起動するか、初回の送信メッセージ(Error状態になっている)を再送することで、送信が成功します。
+
+#### アクセストークンなど
+
+アクセストークンなどは、テーブル保存されており、参照することができます。
+
+```
+$ docker compose exec iris iris sql iris -U%SYS
+
+[SQL]%SYS>>SELECT AccessToken FROM OAuth2.AccessToken
+| AccessToken |
+| -- |
+| ya29.xxxxxx |
+
+[SQL]%SYS>> SELECT Expires FROM OAuth2.AccessToken
+
+| Expires |
+| -- |
+| 1721705061 |  
+
+
+[SQL]%SYS>>SELECT RefreshToken FROM OAuth2.AccessToken
+
+| RefreshToken |
+| -- |
+| 1//0eUKxxxxxx |
+```
+
+
+Expires(UnixTime)の日付への変換方法。
+
+```
+USER> w ##class(%SYS.Python).Import("datetime").datetime.fromtimestamp(1721705061).strftime("%Y/%m/%d %H:%M:%S")
+2024/07/23 12:24:21
+```
+
+GMAILのATは下記のエンドポイントにて内容を検証できます。
+
+curl https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=ya29.xxxxxx
+{
+  "issued_to": "xxxxx.apps.googleusercontent.com",
+  "audience": "xxxxx.apps.googleusercontent.com",
+  "user_id": "yyyyyyyyyyyyyyy",
+  "scope": "https://mail.google.com/ openid",
+  "expires_in": 2312,
+  "access_type": "offline"
+}
+
+リフレッシュトークンがあるので、Expire後には、自動で更新してくれると期待しましたがダメでした。
+> エラー #6167: 認証が期待されましたが失敗しました。
 
