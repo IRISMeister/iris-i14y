@@ -41,7 +41,7 @@ DEMO>d $SYSTEM.OBJ.ImportDir("/home/user1/git/iris-i14y/project/","*","ck",.e,1)
 以下、コンテナを起動した環境のホストにlocalhostでアクセス可能であると仮定します(WSL2のデフォルトの動作です)。プロダクションへのリンクは、このホスト名を使用しています。
 
 ## 管理ポータルへのアクセス
-http://localhost:52873/csp/sys/%25CSP.Portal.Home.zen  
+http://localhost:8882/csp/sys/%25CSP.Portal.Home.zen  
 ユーザ名:SuperUser  
 パスワード:SYS  
 補足)パスワードはビルド時にSecurity.Users:UnExpireUserPasswords()を実行しています。
@@ -64,6 +64,7 @@ $ docker compose down -v
 |5b|report5テーブル| 5と同じ。取得したレコードは、再取得されないよう、seqを純増する値と見なし、[パラメータ]として%LastKeyを使用する例。|||
 |6|report2テーブル| Postgresに対して全件取得するSELECTを定期的に実行。|なし|3,5のケースと異なり、毎回全レコードを取得する例です。単独メッセージ処理とバッチによる処理の2種類があります。|
 |7|local/in_order/order.txt|フォルダ監視及びファイルの取得。個々のレコードの内容をフォルダに対して出力|local/out_order/|処理ロジックは異なりますが、出力ファイル名を入力ファイル名と同一にしてある(個々のレコードの内容が同一ファイルにアペンドされる)ため、パススルーと同様の結果が得られます。|
+|7a|local/watch[1\|2\|3]/order.txt|複数のフォルダ監視及びファイル名の取得。|未定|カスタムアダプタを使用。発見したファイルを処理する全責任はビジネスホストにある。|
 |8|xmlvdoc/in_order/order.xml|VDOCを使用したフォルダ監視及びXMLファイルの取得。内容をフォルダに対して出力|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
 |8a|xmlvdoc/in_person/person.xml|8と同じ。|xmlvdoc/out/|スキーマ定義があるXMLファイルのハンドリング|
 |8b|xmlvdoc/in_order/order.xml,<br>xmlvdoc/in_person/person.xml,<br>xmlvdoc/in_person/person-noschema.xml,|8と同じ。|xmlvdoc/out/,<br>xmlvdoc/ignored/|スキーマ定義が無いXMLファイルのハンドリング|
@@ -127,9 +128,9 @@ BS:ビジネスサービス,BP:ビジネスプロセス,BO:ビジネスオペレ
 
 プロダクションに関する情報は下記URLにて閲覧可能です。  
 プロダクション画面  
-http://localhost:52873/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
+http://localhost:8882/csp/demo/EnsPortal.ProductionConfig.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO  
 インターフェースマップ  
-http://localhost:52873/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
+http://localhost:8882/csp/demo/EnsPortal.InterfaceMaps.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO
 
 
 ## ビジネスホスト以外の主な構成要素  
@@ -145,10 +146,10 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 |ルール名|用途|エディタ|シーケンス|
 |:--|:--|:--|:--|
-|[Demo.Rule.FileTransferRouter](src/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
-|[Demo.Rule.ReportRouter](src/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
-|[Demo.Rule.VDocRoutingEngineRoutingRule](src/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|[スキーマ依存パス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_schema_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
-|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](src/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|[DOMスタイルパス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_dom_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:52873/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
+|[Demo.Rule.FileTransferRouter](src/Demo/Rule/FileTransferRouter.cls)|ファイル送信先を決定|[Link](http://localhost:8882/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.FileTransferRouter)||
+|[Demo.Rule.ReportRouter](src/Demo/Rule/ReportRouter.cls)|BP/ReportRouterで適用されるRule。ファイル送信先を決定|[Link](http://localhost:8882/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.ReportRouter)|5|
+|[Demo.Rule.VDocRoutingEngineRoutingRule](src/Demo/Rule/VDocRoutingEngineRoutingRule.cls)|[スキーマ依存パス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_schema_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:8882/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRule)|8,8a|
+|[Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema](src/Demo/Rule/VDocRoutingEngineRoutingRuleNoSchema.cls)|[DOMスタイルパス](https://docs.intersystems.com/irislatestj/csp/docbook/Doc.View.cls?KEY=EXML_dom_path)を使用したconditionによりファイル送信先を決定|[Link](http://localhost:8882/csp/demo/EnsPortal.RuleEditor.zen?RULE=Demo.Rule.VDocRoutingEngineRoutingRuleNoSchema)|8b|
 
 ## 認証情報一覧
 下記の認証情報を定義・使用しています。  
@@ -165,7 +166,7 @@ CTX:BPコンテキストスーパークラス, DTL:データ変換
 
 
 下記URLにて閲覧可能です。  
-http://localhost:52873/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
+http://localhost:8882/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 
 ## RecordMap一覧
 下記のRecordMapを定義・使用しています。  
@@ -177,7 +178,7 @@ http://localhost:52873/csp/demo/EnsPortal.Credentials.zen?$NAMESPACE=DEMO
 |User.ReportExtra|User.Report.RecordExtra|User.ReportExtra.Batch|5|FTPReport1,FTPReport2,FTPReport3|
 
 下記URLにて閲覧可能です。  
-http://localhost:52873/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
+http://localhost:8882/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSAMPLE=1
 
 ## SQL Gateway接続
 下記のSQL Gateway接続を定義・使用しています。  
@@ -189,7 +190,7 @@ http://localhost:52873/csp/demo/EnsPortal.RecordMapper.cls?MAP=User.Order&SHOWSA
 |oraclejdbc|oracleへのJDBC接続情報|
 
 下記URLにて閲覧可能です。  
-http://localhost:52873/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
+http://localhost:8882/csp/sys/mgr/UtilSqlGateway.csp?$ID1=1&$ID2=postgresqljdbc&$NAMESPACE=DEMO
 
 ODBC接続については、[直接データソース定義](odbc/odbc.ini)を参照しているので、SQL Gateway接続の定義はありません。
 
@@ -202,11 +203,11 @@ ODBC接続については、[直接データソース定義](odbc/odbc.ini)を�
 |person|ファイル入力時のXMLバリデーション及び、ルール内でのスキーマ依存パスの使用|[person.xsd](resources/person.xsd)|
 
 下記URLにて閲覧可能です。  
-http://localhost:52873/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
+http://localhost:8882/csp/demo/EnsPortal.EDI.XML.SchemaMain.zen?$NAMESPACE=DEMO
 
 ## アラート管理
 下記URLにて閲覧可能です。  
-http://localhost:52873/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
+http://localhost:8882/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
 ## Restサービス
 下記のRestサービスを作成しています。  
@@ -214,7 +215,7 @@ http://localhost:52873/csp/demo/EnsPortal.ManagedAlerts.zen?$NAMESPACE=DEMO
 
 curlによる呼び出し例
 ```
-$ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:52873/csp/demo/rest/repo -u SuperUser:SYS -s | jq
+$ curl -X POST -H "Content-Type: application/json; charset=UTF-8" -d '{"Name":"あいうえお", "Age":"100"}' http://localhost:8882/csp/demo/rest/repo -u SuperUser:SYS -s | jq
 {
   "Status": "OK",
   "TimeStamp": "03/26/2021 14:02:54"
@@ -375,6 +376,18 @@ $ cat out_order/order.txt
 2       101     201     日本語
 3       102     202     ｱｲｳｴｵ
 ```
+
+### シーケンス7aの実行方法
+
+```bash
+$ cd upload/local
+$ cp order.txt watch1/
+$ cp order.txt watch2/
+$ cp order.txt watch3/
+```
+を実行することで、シーケンス7aが動作します。cpしたファイル(群)はオペレーションによって削除されます。
+
+
 ### シーケンス8の実行方法
 ftp/sftpの場合とは、ファイルを操作するフォルダが異なりますので、ご注意ください。
 
@@ -462,7 +475,7 @@ $ docker compose exec iris iris session iris -U demo init
 ### メッセージバンク
 メッセージバンクを有効にしてあります。ArchiveItemsは初期値のままなので、全てのメッセージとイベントをアーカイブします。
 
-[管理ポータル](http://localhost:52874/csp/sys/%25CSP.Portal.Home.zen)のInterOperability > 表示 > バンクされたメッセージ、で参照できます。
+[メッセージバンク用のIRISの管理ポータル](http://localhost:52874/csp/sys/%25CSP.Portal.Home.zen)のInterOperability > 表示 > バンクされたメッセージ、で参照できます。
 
 > ResponseTargetConfigNamesで発生する内部メッセージ(MessageBodyClassNameは無いがMessageBodyIdはある)に対応していないようで、シーケンス5等を実行すると、Ens.Enterprise.MsgBankOperationで下記のエラーが出ます。
 ```
@@ -472,7 +485,7 @@ $ docker compose exec iris iris session iris -U demo init
 
 ### アクティビティ量と期間
 
-アクティビティ量と期間を有効にしてあります。[管理ポータル](http://localhost:52873/csp/demo/EnsPortal.ActivityVolumeAndDuration.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO&)で参照できます。
+アクティビティ量と期間を有効にしてあります。[管理ポータル](http://localhost:8882/csp/demo/EnsPortal.ActivityVolumeAndDuration.zen?$NAMESPACE=DEMO&$NAMESPACE=DEMO&)で参照できます。
 
 ![](https://raw.githubusercontent.com/IRISMeister/doc-images/main/iris-i14y/act.png)
 

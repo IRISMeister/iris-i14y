@@ -38,12 +38,14 @@ ClassMethod setupMethod(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %I
 
 ClassMethod setup(ByRef tVars) As %Status
 {
+  New $NAMESPACE
   Set tSC='$$$OK
   Try {
 		If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src" }
 		If '$D(tVars("NAMESPACE")) { Set tVars("NAMESPACE")="demo" }
 		$$$THROWONERROR(tSC,..setupMethod(.tVars))
-
+		Set $NAMESPACE="%SYS"
+		Do $System.CSP.SetConfig("CSPConfigName","iris2")
   } Catch(e) {
 	  zw e
 	  Set tSC=e.AsStatus()

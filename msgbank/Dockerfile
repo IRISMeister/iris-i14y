@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris-community:2024.1
+FROM containers.intersystems.com/intersystems/iris-community:2025.1
 
 USER root
 

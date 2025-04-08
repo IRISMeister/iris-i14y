@@ -43,33 +43,35 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       New $NAMESPACE
       Set oldns=$NAMESPACE
       Set $NAMESPACE="%SYS"
-      Set server=##class(OAuth2.ServerDefinition).%OpenId(2) ;GMAIL
-      Set AppName="APP-GMAIL"
-      Set c=##class(OAuth2.Client).%New()
-      Set c.ApplicationName=AppName
-      Set c.Description=AppName
-      Set c.ClientId=json."client_id"
-      Set c.ClientSecret=json."client_secret"
-      Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
-      Set c.AuthenticationType="basic"
-      Set c.ClientType="confidential"
-      Set c.DefaultScope="openid https://mail.google.com/"
-      Set c.ServerDefinition=server
-      Set endpoint=##class(OAuth2.Endpoint).%New()
-      Set endpoint.Host = "localhost"
-      Set endpoint.Port = "8883"
-      Set endpoint.UseSSL = 1    
-      Set c.RedirectionEndpoint=endpoint
-      Set c.Metadata."grant_types" =  $lb("authorization_code","jwt_authorization","refresh_token")
-      Set c.Metadata."client_name" = AppName
-      Set c.Metadata."response_types" = $lb("code")
-      Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
-      Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
-      Set c.Metadata."access_token_signed_response_alg" = "RS256"
-      Set c.Metadata."id_token_signed_response_alg" = "RS256"
-      Set c.Metadata."frontchannel_logout_session_required" = 1 
-      Set tSC=c.%Save()
-      $$$ThrowOnError(tSC)
+      Set server=##class(OAuth2.ServerDefinition).%OpenId(1) ;GMAIL
+      If $ISOBJECT(server) {
+        Set AppName="APP-GMAIL"
+        Set c=##class(OAuth2.Client).%New()
+        Set c.ApplicationName=AppName
+        Set c.Description=AppName
+        Set c.ClientId=json."client_id"
+        Set c.ClientSecret=json."client_secret"
+        Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
+        Set c.AuthenticationType="basic"
+        Set c.ClientType="confidential"
+        Set c.DefaultScope="openid https://mail.google.com/"
+        Set c.ServerDefinition=server
+        Set endpoint=##class(OAuth2.Endpoint).%New()
+        Set endpoint.Host = "localhost"
+        Set endpoint.Port = "8883"
+        Set endpoint.UseSSL = 1    
+        Set c.RedirectionEndpoint=endpoint
+        Set c.Metadata."grant_types" =  $lb("authorization_code","jwt_authorization","refresh_token")
+        Set c.Metadata."client_name" = AppName
+        Set c.Metadata."response_types" = $lb("code")
+        Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
+        Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
+        Set c.Metadata."access_token_signed_response_alg" = "RS256"
+        Set c.Metadata."id_token_signed_response_alg" = "RS256"
+        Set c.Metadata."frontchannel_logout_session_required" = 1 
+        Set tSC=c.%Save()
+        $$$ThrowOnError(tSC)
+      }
 
       Set $NAMESPACE=oldns
 
@@ -96,36 +98,38 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
       New $NAMESPACE
       Set oldns=$NAMESPACE
       Set $NAMESPACE="%SYS"
-      Set server=##class(OAuth2.ServerDefinition).%OpenId(1) ; are you sure?
-      Set AppName="APP-O365-MAIL"
-      Set c=##class(OAuth2.Client).%New() ;; $OpenId(AppName) to open exsisting one
-      Set c.ApplicationName=AppName
-      Set c.Description=AppName
-      Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
-      Set c.AuthenticationType="basic"
-      Set c.ClientType="confidential"
-      Set c.DefaultScope="https://outlook.office365.com/POP.AccessAsUser.All"
-      Set c.ServerDefinition=server
-      Set endpoint=##class(OAuth2.Endpoint).%New()
-      Set endpoint.Host = "localhost" ; using localhost for convenience
-      Set endpoint.Port = "52773"
-      Set endpoint.Prefix = ""
-      Set endpoint.UseSSL = 0   
-      Set c.RedirectionEndpoint=endpoint
-      Set c.Metadata."grant_types" =  $lb("authorization_code","jwt_authorization","refresh_token")
-      Set c.Metadata."client_name" = AppName
-      Set c.Metadata."response_types" = $lb("code")
-      Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
-      Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
-      Set c.Metadata."access_token_signed_response_alg" = "RS256"
-      Set c.Metadata."id_token_signed_response_alg" = "RS256"
-      ;Set c.Metadata."frontchannel_logout_uri" = fclouri
-      Set c.Metadata."frontchannel_logout_session_required" = 1 
-      ;Set c.Metadata."post_logout_redirect_uris" = postlorediruris
-      Set c.ClientId=json."client_id"
-      Set c.ClientSecret=json."client_secret"
-      Set tSC=c.%Save()
-      $$$ThrowOnError(tSC)
+      Set server=##class(OAuth2.ServerDefinition).%OpenId(2) ; Azure AD
+      If $ISOBJECT(server) {
+        Set AppName="APP-O365-MAIL"
+        Set c=##class(OAuth2.Client).%New() ;; $OpenId(AppName) to open exsisting one
+        Set c.ApplicationName=AppName
+        Set c.Description=AppName
+        Set c.SSLConfiguration="ISC.FeatureTracker.SSL.Config"
+        Set c.AuthenticationType="basic"
+        Set c.ClientType="confidential"
+        Set c.DefaultScope="https://outlook.office365.com/POP.AccessAsUser.All"
+        Set c.ServerDefinition=server
+        Set endpoint=##class(OAuth2.Endpoint).%New()
+        Set endpoint.Host = "localhost" ; using localhost for convenience
+        Set endpoint.Port = "52773"
+        Set endpoint.Prefix = ""
+        Set endpoint.UseSSL = 0   
+        Set c.RedirectionEndpoint=endpoint
+        Set c.Metadata."grant_types" =  $lb("authorization_code","jwt_authorization","refresh_token")
+        Set c.Metadata."client_name" = AppName
+        Set c.Metadata."response_types" = $lb("code")
+        Set c.Metadata."token_endpoint_auth_method" = "client_secret_basic"
+        Set c.Metadata."token_endpoint_auth_signing_alg" = "RS256"
+        Set c.Metadata."access_token_signed_response_alg" = "RS256"
+        Set c.Metadata."id_token_signed_response_alg" = "RS256"
+        ;Set c.Metadata."frontchannel_logout_uri" = fclouri
+        Set c.Metadata."frontchannel_logout_session_required" = 1 
+        ;Set c.Metadata."post_logout_redirect_uris" = postlorediruris
+        Set c.ClientId=json."client_id"
+        Set c.ClientSecret=json."client_secret"
+        Set tSC=c.%Save()
+        $$$ThrowOnError(tSC)
+      }
 
       Set $NAMESPACE=oldns
 #endif
@@ -554,6 +558,10 @@ XData ProductionDefinition
   </Item>
   <Item Name="Ens.Activity.Operation.Local" Category="" ClassName="Ens.Activity.Operation.Local" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordStatsInterval">30</Setting>
+  </Item>
+  <Item Name="Demo.Operation.MultiFiles" Category="" ClassName="Demo.Operation.MultiFiles" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="MultiFiles" Category="" ClassName="Demo.Service.MultiFiles" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
 </Production>
 }

@@ -143,16 +143,10 @@ services:
     - ./UserCPF:/home/irisowner/cpf
 
   webgateway:
-    #image: containers.intersystems.com/intersystems/webgateway:2024.1
-    # docker compose log に不要なロギングが出力され続けるのを回避したいので以前のバージョンを使用する。
-    image: containers.intersystems.com/intersystems/webgateway:2023.2
+    image: containers.intersystems.com/intersystems/webgateway:2025.1
     init: true
     container_name: webgateway
     hostname: webgateway
-    # 15秒間隔で出力され続ける下記メッセージを抑止するとされているオプションが2024.1時点で機能していない。
-    # 2023.2の使用に切り替えたことに伴いコメントアウト. 
-    # webgateway  | [INFO] Files /webgateway-shared/CSP.conf and /durable/webgateway/CSP.conf are the same; skipping copy
-    # webgateway  | [INFO] Files /webgateway-shared/CSP.ini and /durable/webgateway/CSP.ini.last_merge are the same; skipping merge
     # command: --monitorConf false --monitorIni false
     ports:
     - "8882:80"
