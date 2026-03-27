@@ -26,11 +26,13 @@ ClassMethod OnStart(pTimeStarted As %String) As %Status
 
       Set tSC=##class(Ens.Config.Credentials).SetCredential("mail-gmail",json.AccountName,"",1)
 
+      /*
       k p Do ##class(Ens.Director).GetAdapterSettings("IMAP-GMAIL",.p)
       Set p("ClientId")=json."client_id"
       Set p("ClientSecret")=json."client_secret"
       Set p("RefreshToken")=json."refresh_token"
       Merge settings("IMAP-GMAIL","Adapter")=p
+      */
       
 	    k p Do ##class(Ens.Director).GetAdapterSettings("SendMailExt2",.p)
       Set p("ClientId")=json."client_id"
@@ -330,6 +332,7 @@ XData ProductionDefinition
   <Item Name="EnsLib.JavaGateway.Service" Category="" ClassName="EnsLib.JavaGateway.Service" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AlertOnError">1</Setting>
     <Setting Target="Host" Name="AlertGroups">LOCAL</Setting>
+    <Setting Target="Host" Name="%gatewayName">%Java Server</Setting>
   </Item>
   <Item Name="FILEOrderInfo" Category="local2local" ClassName="EnsLib.RecordMap.Service.FileService" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="RecordMap">Order</Setting>

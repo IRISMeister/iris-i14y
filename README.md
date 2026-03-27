@@ -707,23 +707,29 @@ SQL>
 
 SendMailExt(製品のアダプタ使用),SendMailExt2(コミュニティアダプタ使用)にGMAIL用の設定を施してあります。テストファシリティで同BOを起動することで動作させます。
 
+テストファシリティへのパラメータ
 ```
 Body:適当
 Subject:適当
-MailFrom:自分のメアド
+MailFrom:自分のメアドなど(任意)
 MailTo:xxxxx@gmail.com (secrets/gmail_client_secret.jsonで指定したアカウント)
 ```
 
-#### 製品のアダプタの挙動。
+[secrets/gmail_client_secret.json](secrets/gmail_client_secret.json)への事前設定が要ります。
+
+https://azelpg.gitlab.io/azsky2/note/other/mail_oauth.html を参考にしました。
+
+#### SendMailExt(製品のアダプタ)の挙動
 
 下記の設定を施してあります。
 
 ```
-サーバー名: 	smtp.gmail.com
-ポート: 	587
-ユーザー名: 	xxxxx@gmail.com
-認証方式: 	OAuth2
-接続の保護: 	STARTTLS
+    <Setting Target="Adapter" Name="Credentials">mail-gmail</Setting>
+    <Setting Target="Adapter" Name="SMTPPort">587</Setting>
+    <Setting Target="Adapter" Name="SMTPServer">smtp.gmail.com</Setting>
+    <Setting Target="Adapter" Name="SSLConfig">ISC.FeatureTracker.SSL.Config*</Setting>
+    <Setting Target="Adapter" Name="OAuth2GrantType">AuthCode</Setting>
+    <Setting Target="Adapter" Name="OAuth2ApplicationName">APP-GMAIL</Setting>
 ```
 
 この時点でアクセストークンを取得するための認証フローを開始するためのリンクが、IRIS BIポータルにSuperUser宛てで届きます。

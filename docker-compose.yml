@@ -32,7 +32,7 @@ services:
       - o365_client_secret
 
   postgres:
-    image: postgres:16.3
+    image: postgres:18.3
     hostname: postgres
     ports: 
     - "5432:5432"
