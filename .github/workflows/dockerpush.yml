@@ -25,8 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Log into registry
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login irepo.intersystems.com -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Log into InterSystems registry
+        run: echo "${{ secrets.ISC_DOCKERHUB_TOKEN }}" | docker login irepo.intersystems.com -u ${{ secrets.ISC_DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Log into Docker registry
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Build image
         run: docker build ./ --file Dockerfile --tag image
