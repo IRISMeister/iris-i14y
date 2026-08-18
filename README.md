@@ -791,3 +791,17 @@ curl https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=ya29.xxxxxx
 リフレッシュトークンがあるので、Expire後には、自動で更新してくれると期待しましたがダメでした。
 > エラー #6167: 認証が期待されましたが失敗しました。
 
+## iris-agentic-dev評価
+
+iris-agentic-devの評価目的で、単純なBS,BP,BO及び起動用のルーチンを追加。
+
+```
+DEMO>d ^test
+```
+出力されたエラーをチャットにペーストし、エラー発生箇所の特定を依頼する。エラー発生箇所の情報から、生成されたコード(*.Thread)の生成されたエントリ(S3)から、どこまで特定できるか。
+```
+<Ens>ErrException0<DIVIDE>S3+3^Demo.Process.TestBP.Thread1.1 -- -#- @' s b=1,x=3/$$GetValue^test()
+```
+
+ソースコードがローカルにある場合、それらを使って解析を試みるので、./iris-agentic-dev-evalという空のプロジェクトを作成し、そこで実行する。中身はIRISの接続を行うための.vscode/.settings.jsonのみ。
+

@@ -566,6 +566,12 @@ XData ProductionDefinition
   </Item>
   <Item Name="MultiFiles" Category="" ClassName="Demo.Service.MultiFiles" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
+  <Item Name="Test" Category="" ClassName="Demo.Service.Test" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="TestBP" Category="" ClassName="Demo.Process.TestBP" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
+  <Item Name="TestOP" Category="" ClassName="Demo.Operation.TestOP" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item>
 </Production>
 }
 

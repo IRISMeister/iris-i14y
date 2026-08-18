@@ -1,0 +1,18 @@
+ROUTINE test
+#include %occStatus
+
+main() {
+	Set tSC = ##class(Ens.Director).CreateBusinessService("Test",.tService)
+	If ($IsObject(tService)) {
+		Set input = ##class(Ens.StringContainer).%New()
+		Set input.StringValue="テストメッセージ"
+		Set tSC = tService.ProcessInput(input,.output)
+		If $$$ISERR(tSC) { Write "Error :"_tSC,! }
+		zw output
+	}	
+
+}
+
+GetValue() public {
+	quit 0
+}
